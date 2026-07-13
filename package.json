@@ -1,0 +1,33 @@
+{
+  "name": "portfolio",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build:content": "bun scripts/buildContent.ts",
+    "build:client": "bun scripts/buildClient.ts",
+    "build": "bun run build:content && bun run build:client",
+    "dev": "bun run build && wrangler dev",
+    "deploy": "bun run build && wrangler deploy",
+    "check": "tsc --noEmit && biome check .",
+    "fix": "biome check --write .",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.5",
+    "@cloudflare/workers-types": "^5.20260722.1",
+    "@types/alpinejs": "^3.13.11",
+    "@types/bun": "latest",
+    "alpinejs": "^3.15.12",
+    "htmx.org": "^2.0.10",
+    "shiki": "^4.3.1",
+    "typed-htmx": "^0.3.1",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.113.0"
+  },
+  "dependencies": {
+    "hono": "^4.12.31",
+    "neverthrow": "^8.2.0",
+    "posthog-js": "^1.406.2",
+    "valibot": "^1.4.2"
+  }
+}

@@ -1,0 +1,176 @@
+#!/usr/bin/env bun
+
+/**
+ * Walks `content/`, highlights every file with Shiki's rose-pine theme, and writes the
+ * result to `src/content.generated.ts` as a flat, pre-rendered line index.
+ *
+ * The Worker never parses markdown: it slices arrays. Nvim shows markdown *source* with
+ * treesitter colours, so highlighting the source is both authentic and far simpler than
+ * rendering it.
+ *
+ * Bun-only — this never ships to the Worker.
+ */
+
+import bash from "@shikijs/langs/bash";
+import json from "@shikijs/langs/json";
+import lua from "@shikijs/langs/lua";
+import markdown from "@shikijs/langs/markdown";
+import nix from "@shikijs/langs/nix";
+import typescript from "@shikijs/langs/typescript";
+import rosePine from "@shikijs/themes/rose-pine";
+import type { ThemedToken } from "shiki";
+import { createHighlighterCore } from "shiki/core";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
+import type { Buffer, ContentIndex, Heading, Line, TreeNode } from "../src/core/content/content.ts";
+
+const CONTENT_DIR = "content";
+const OUT_FILE = "src/content.generated.ts";
+const ENTRY = "README.md";
+
+const LANG_BY_EXT: Readonly<Record<string, string>> = {
+  md: "markdown",
+  ts: "typescript",
+  lua: "lua",
+  nix: "nix",
+  sh: "bash",
+  json: "json",
+  txt: "markdown",
+};
+
+/** Nerd Font devicons, matching nvim-web-devicons. */
+const ICON_BY_EXT: Readonly<Record<string, string>> = {
+  md: "",
+  ts: "",
+  lua: "",
+  nix: "",
+  sh: "",
+  json: "",
+  txt: "",
+};
+
+const DIR_ICON = "";
+const FILE_ICON = "";
+
+const extensionOf = (path: string): string => path.split(".").pop() ?? "";
+
+const langOf = (path: string): string => LANG_BY_EXT[extensionOf(path)] ?? "markdown";
+
+const iconOf = (path: string): string => ICON_BY_EXT[extensionOf(path)] ?? FILE_ICON;
+
+const baseNameOf = (path: string): string => path.split("/").pop() ?? path;
+
+const indentOf = (source: string): number => source.match(/^ */)?.[0].length ?? 0;
+
+const escapeHtml = (text: string): string =>
+  text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+
+/** Shiki's fontStyle is a bitmask: 1 italic, 2 bold, 4 underline. */
+const styleOf = (token: ThemedToken): string => {
+  const parts = [`color:${token.color ?? "inherit"}`];
+  const font = token.fontStyle ?? 0;
+  if ((font & 1) !== 0) parts.push("font-style:italic");
+  if ((font & 2) !== 0) parts.push("font-weight:bold");
+  if ((font & 4) !== 0) parts.push("text-decoration:underline");
+  return parts.join(";");
+};
+
+/**
+ * Renders one source line of themed tokens to HTML.
+ *
+ * Built from tokens rather than by splitting `codeToHtml` output: Shiki nests spans, so
+ * any regex over the rendered string truncates at the first closing tag.
+ */
+const renderLine = (tokens: ReadonlyArray<ThemedToken>): string =>
+  tokens
+    .map((token) => `<span style="${styleOf(token)}">${escapeHtml(token.content)}</span>`)
+    .join("");
+
+const headingsOf = (source: readonly string[]): Heading[] =>
+  source.flatMap((text, index) => {
+    const match = /^(#{1,6})\s+(.*)$/.exec(text);
+    if (match === null) return [];
+    const [, hashes = "", label = ""] = match;
+    return [{ text: label.trim(), line: index + 1, level: hashes.length }];
+  });
+
+const treeOf = (paths: readonly string[]): TreeNode[] => {
+  const seen = new Set<string>();
+  const nodes: TreeNode[] = [];
+  for (const path of [...paths].sort()) {
+    const segments = path.split("/");
+    segments.forEach((segment, depth) => {
+      const partial = segments.slice(0, depth + 1).join("/");
+      if (seen.has(partial)) return;
+      seen.add(partial);
+      const isFile = depth === segments.length - 1;
+      nodes.push({
+        path: partial,
+        name: segment,
+        icon: isFile ? iconOf(partial) : DIR_ICON,
+        depth,
+        kind: isFile ? "file" : "directory",
+      });
+    });
+  }
+  return nodes;
+};
+
+const build = async (): Promise<void> => {
+  const highlighter = await createHighlighterCore({
+    themes: [rosePine],
+    langs: [markdown, typescript, lua, nix, bash, json],
+    engine: createJavaScriptRegexEngine(),
+  });
+
+  const paths = [...new Bun.Glob("**/*").scanSync({ cwd: CONTENT_DIR, dot: true })].sort();
+  if (paths.length === 0) throw new Error(`no content found in ${CONTENT_DIR}/`);
+
+  const buffers: Record<string, Buffer> = {};
+  for (const path of paths) {
+    const source = await Bun.file(`${CONTENT_DIR}/${path}`).text();
+    const sourceLines = source.replace(/\n$/, "").split("\n");
+    const lang = langOf(path);
+    const { tokens } = highlighter.codeToTokens(sourceLines.join("\n"), {
+      lang,
+      theme: "rose-pine",
+    });
+
+    const lines: Line[] = sourceLines.map((text, index) => ({
+      html: renderLine(tokens[index] ?? []),
+      indent: indentOf(text),
+    }));
+
+    buffers[path] = {
+      path,
+      name: baseNameOf(path),
+      lang,
+      icon: iconOf(path),
+      lines,
+      headings: lang === "markdown" ? headingsOf(sourceLines) : [],
+      readOnly: true,
+    };
+  }
+
+  const index: ContentIndex = { buffers, tree: treeOf(paths), entry: ENTRY };
+  const banner = [
+    "// GENERATED BY scripts/buildContent.ts — DO NOT EDIT.",
+    "// Edit the markdown in content/ and run `bun run build:content`.",
+    "",
+    'import type { ContentIndex } from "./core/content/content.ts";',
+    "",
+  ].join("\n");
+
+  await Bun.write(
+    OUT_FILE,
+    `${banner}export const CONTENT: ContentIndex = ${JSON.stringify(index, null, 2)};\n`,
+  );
+
+  const totalLines = Object.values(buffers).reduce((sum, buffer) => sum + buffer.lines.length, 0);
+  process.stdout.write(`content: ${paths.length} files, ${totalLines} lines → ${OUT_FILE}\n`);
+};
+
+await build();
