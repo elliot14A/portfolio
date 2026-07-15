@@ -35,12 +35,28 @@ export function BufferView(props: BufferViewProps) {
     >
       <div class="cursor" aria-hidden="true" />
       {buffer.lines.map((line, index) => (
-        <div class="ln" data-n={index + 1} style={`--indent:${line.indent}`}>
+        <div
+          class={line.deco ? `ln md-${line.deco}` : "ln"}
+          data-n={index + 1}
+          style={`--indent:${line.indent}`}
+        >
           <span class={line.sign ? `sign sign-${line.sign}` : "sign"}>
             {line.sign ? SIGN_GLYPH[line.sign] : ""}
           </span>
           <span class="num">{index + 1}</span>
-          <span class="txt">{raw(line.html)}</span>
+          {/*
+            Both representations ship; CSS shows the decorated one and swaps to raw when
+            the row is `.current`. That is conceallevel=2 with the cursor line revealed,
+            and it needs no JavaScript to be readable.
+          */}
+          {line.rendered === undefined ? (
+            <span class="txt">{raw(line.html)}</span>
+          ) : (
+            <>
+              <span class="txt md-view">{raw(line.rendered)}</span>
+              <span class="txt md-raw">{raw(line.html)}</span>
+            </>
+          )}
         </div>
       ))}
       <div class="eob" aria-hidden="true">

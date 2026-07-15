@@ -22,6 +22,9 @@ import type { ThemedToken } from "shiki";
 import { createHighlighterCore } from "shiki/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 import type { Buffer, ContentIndex, Heading, Line, TreeNode } from "../src/core/content/content.ts";
+import { type Decorated, decorateAll } from "../src/core/content/markdown.ts";
+
+type Decoration = Omit<Decorated, "state">;
 
 const CONTENT_DIR = "content";
 const OUT_FILE = "src/content.generated.ts";
@@ -139,10 +142,19 @@ const build = async (): Promise<void> => {
       theme: "rose-pine",
     });
 
-    const lines: Line[] = sourceLines.map((text, index) => ({
-      html: renderLine(tokens[index] ?? []),
-      indent: indentOf(text),
-    }));
+    // Markdown gets a second, concealed representation; other languages are code already.
+    const decorations: ReadonlyArray<Decoration> =
+      lang === "markdown" ? decorateAll(sourceLines) : sourceLines.map(() => ({}));
+
+    const lines: Line[] = sourceLines.map((text, index) => {
+      const decoration = decorations[index] ?? {};
+      return {
+        html: renderLine(tokens[index] ?? []),
+        indent: indentOf(text),
+        ...(decoration.rendered !== undefined ? { rendered: decoration.rendered } : {}),
+        ...(decoration.deco !== undefined ? { deco: decoration.deco } : {}),
+      };
+    });
 
     buffers[path] = {
       path,

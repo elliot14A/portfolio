@@ -32,7 +32,7 @@ see is real. Press `<Space>` to see what's bound.
 
 ## Elsewhere
 
-- GitHub  — github.com/akshith
-- Email   — akshithkatkuri14@gmail.com
+- GitHub  — [github.com/elliot14A](https://github.com/elliot14A)
+- Email   — [akshithkatkuri@gmail.com](mailto:akshithkatkuri@gmail.com)
 
 Press `<Space>ff` to find files, `<Space>e` for the tree, `:help` if lost.

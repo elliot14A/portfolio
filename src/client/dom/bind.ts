@@ -1,4 +1,5 @@
 import { applyMotion, type Motion, type Pos } from "../vim/motions.ts";
+import { attachAlpha } from "./alpha.ts";
 
 /**
  * The imperative shell: reads the DOM, delegates every decision to the pure motion core,
@@ -176,6 +177,11 @@ const onKeyDown = (event: KeyboardEvent): void => {
 };
 
 const attach = (): void => {
+  // On alpha there is no buffer to drive; the menu owns the keyboard.
+  if (attachAlpha()) {
+    state = undefined;
+    return;
+  }
   state = readBuffer();
   if (state === undefined) return;
   paint(state);

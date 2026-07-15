@@ -1,11 +1,19 @@
 import { err, ok } from "neverthrow";
 import { notFoundError, type PfResult } from "../error.ts";
+import type { LineDeco } from "./markdown.ts";
 
 export type GitSign = "add" | "change" | "delete";
 
 export type Line = Readonly<{
-  /** Pre-highlighted HTML for this single line, produced at build time by Shiki. */
+  /** Raw source, pre-highlighted by Shiki. Revealed when the cursor is on this line. */
   html: string;
+  /**
+   * Concealed markdown view, shown when the cursor is elsewhere — the render-markdown.nvim
+   * behaviour. Absent when decoration would change nothing.
+   */
+  rendered?: string;
+  /** Block-level class for the row: heading level, quote, table, fenced code. */
+  deco?: LineDeco;
   /** Leading indent in columns — drives the indent-blankline guides. */
   indent: number;
   sign?: GitSign;

@@ -4,6 +4,7 @@ import type { OpenBuffer } from "@/app/content/openBuffer.ts";
 import type { ReadIndex } from "@/core/content/ports.ts";
 import { errorToHttp } from "../errorMapper.ts";
 import { EditorPage } from "../views/pages/editor.tsx";
+import { StartPage } from "../views/pages/start.tsx";
 import { BufferView } from "../views/partials/buffer.tsx";
 import { Statusline } from "../views/partials/statusline.tsx";
 import { Tabline } from "../views/partials/tabline.tsx";
@@ -64,7 +65,20 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
     );
   };
 
-  app.get("/", (c) => render(c, deps.readIndex().entry));
+  // `/` is the alpha start screen, as nvim opens with no buffer loaded.
+  app.get("/", (c) => {
+    const index = deps.readIndex();
+    const buffers = Object.values(index.buffers);
+    c.header("Cache-Control", CACHE_CONTROL);
+    return c.html(
+      <StartPage
+        buffers={buffers.length}
+        lines={buffers.reduce((sum, buffer) => sum + buffer.lines.length, 0)}
+        branch={deps.branch}
+      />,
+    );
+  });
+
   app.get("/b/*", (c) => render(c, c.req.path.slice("/b/".length)));
 
   return app;
