@@ -1,4 +1,41 @@
 /*
+ * Self-hosted, subset, served by the Worker from /fonts. No CDN and no dependency on the
+ * visitor having JetBrains Mono or a Nerd Font installed — the site looks the same on a
+ * stranger's laptop as it does on mine.
+ */
+@font-face {
+  font-family: "NerdIcons";
+  src: url("/fonts/NerdIcons.woff2") format("woff2");
+  font-display: block;
+  /* Private Use Area only: every other character falls through to JetBrains Mono. */
+  unicode-range: U+E000-F8FF;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/*
  * rose-pine "main" — values taken from @shikijs/themes/rose-pine, the same palette the
  * editor uses, so highlighted text and chrome cannot drift apart.
  */
@@ -30,8 +67,8 @@
   --tree-w: 30ch;
 
   --font-mono:
-    "JetBrainsMono Nerd Font", "JetBrains Mono", "FiraCode Nerd Font", "Symbols Nerd Font",
-    ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    "NerdIcons", "JetBrains Mono", "JetBrainsMono Nerd Font", ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
 }
 
 * {
@@ -534,151 +571,4 @@ body:not(.js) .cursor {
   .alpha-menu {
     width: 100%;
   }
-}
-
-/* ── render-markdown: conceal, reveal the cursor line ──────────────────────── */
-
-/*
- * conceallevel=2 with concealcursor unset: the decorated view is what you read, and the
- * raw source comes back on the line the cursor is on. Driven entirely by the `.current`
- * class the cursor already sets — with JS off, `.current` never appears and the rendered
- * view simply stays.
- */
-/* Headings: coloured, with the hashes replaced by an icon. */
-.md-h1 .md-view,
-.md-h2 .md-view,
-.md-h3 .md-view,
-.md-h4 .md-view,
-.md-h5 .md-view,
-.md-h6 .md-view {
-  font-weight: 700;
-}
-
-.md-h1 .md-view {
-  color: var(--love);
-}
-.md-h2 .md-view {
-  color: var(--gold);
-}
-.md-h3 .md-view {
-  color: var(--foam);
-}
-.md-h4 .md-view {
-  color: var(--iris);
-}
-.md-h5 .md-view,
-.md-h6 .md-view {
-  color: var(--pine);
-}
-
-.md-h-icon {
-  opacity: 0.9;
-}
-
-/* Heading rows get a faint band, as render-markdown.nvim draws them. */
-.md-h1,
-.md-h2 {
-  background: linear-gradient(to right, rgba(64, 61, 82, 0.5), transparent 70%);
-}
-
-.md-bold {
-  color: var(--rose);
-  font-weight: 700;
-}
-
-.md-italic {
-  color: var(--iris);
-}
-
-.md-strike {
-  color: var(--muted);
-}
-
-.md-code {
-  color: var(--foam);
-  background: var(--hl-low);
-  border-radius: 3px;
-  padding: 0 0.4ch;
-}
-
-.md-link {
-  color: var(--pine);
-  text-decoration: none;
-}
-
-.md-link:hover {
-  text-decoration: underline;
-}
-
-.md-bullet {
-  color: var(--gold);
-}
-
-.md-task {
-  color: var(--muted);
-}
-
-.md-task-done {
-  color: var(--foam);
-}
-
-.md-quote-bar {
-  color: var(--iris);
-}
-
-.md-quote .md-view {
-  color: var(--subtle);
-  font-style: italic;
-}
-
-/* Horizontal rule: the source line is blanked and drawn as an actual rule. */
-.md-rule .md-view {
-  display: block;
-  width: 100%;
-  border-top: 1px solid var(--hl-med);
-  height: 0;
-  align-self: center;
-}
-
-/* Fenced code: a single slab, with the fences as its edges. */
-.md-code-open,
-.md-code-close,
-.md-code {
-  background: rgba(31, 29, 46, 0.55);
-}
-
-.md-code-open {
-  border-top: 1px solid var(--hl-med);
-  border-radius: 4px 4px 0 0;
-}
-
-.md-code-close {
-  border-bottom: 1px solid var(--hl-med);
-  border-radius: 0 0 4px 4px;
-}
-
-.md-fence-lang {
-  color: var(--muted);
-  font-size: 0.85em;
-}
-
-.md-table-bar {
-  color: var(--hl-high);
-}
-
-.md-table-rule {
-  color: var(--hl-high);
-}
-
-/* Conceal toggles last: highest specificity in this section, so nothing overrides them. */
-.md-raw {
-  display: none;
-}
-
-.ln.current .md-view {
-  display: none;
-}
-
-.ln.current .md-raw {
-  display: inline;
 }

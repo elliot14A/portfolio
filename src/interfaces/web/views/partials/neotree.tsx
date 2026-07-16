@@ -1,4 +1,5 @@
 import type { TreeNode } from "@/core/content/content.ts";
+import { ICON } from "@/core/content/icons.ts";
 
 export type NeoTreeProps = Readonly<{
   nodes: ReadonlyArray<TreeNode>;
@@ -13,7 +14,7 @@ export function NeoTree(props: NeoTreeProps) {
       {props.nodes.map((node) =>
         node.kind === "directory" ? (
           <div class="tree-row tree-dir" style={`--depth:${node.depth}`}>
-            <span class="tree-chevron"></span>
+            <span class="tree-chevron">{ICON.chevron}</span>
             <span class="tree-icon">{node.icon}</span>
             <span class="tree-name">{node.name}</span>
           </div>

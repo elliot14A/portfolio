@@ -1,4 +1,5 @@
 import { formatPosition, formatProgress } from "@/core/content/content.ts";
+import { ICON } from "@/core/content/icons.ts";
 
 export type StatuslineProps = Readonly<{
   mode: string;
@@ -25,7 +26,9 @@ export function Statusline(props: StatuslineProps) {
         {props.mode}
       </span>
       <span class="sl-b">
-        <span class="sl-branch"> {props.branch}</span>
+        <span class="sl-branch">
+          {ICON.branch} {props.branch}
+        </span>
       </span>
       <span class="sl-c">
         {props.path}

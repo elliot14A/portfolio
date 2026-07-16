@@ -1,3 +1,5 @@
+import { ICON } from "@/core/content/icons.ts";
+
 /**
  * The alpha-nvim start screen: what you land on before any buffer is open.
  *
@@ -28,13 +30,19 @@ type MenuEntry = Readonly<{
  * joins this list when it lands — an entry that does nothing is worse than no entry.
  */
 const MENU: ReadonlyArray<MenuEntry> = [
-  { icon: "", label: "Profile", key: "r", href: "/b/README.md" },
-  { icon: "", label: "Projects", key: "p", href: "/b/projects/portfolio.md" },
-  { icon: "", label: "Configuration", key: "c", href: "/b/.config/nvim/init.lua" },
-  { icon: "", label: "Help", key: "h", href: "/b/doc/help.txt" },
-  { icon: "", label: "GitHub", key: "g", href: "https://github.com/elliot14A", external: true },
+  { icon: ICON.user, label: "Profile", key: "r", href: "/b/README.md" },
+  { icon: ICON.folderOpen, label: "Projects", key: "p", href: "/b/projects/portfolio.md" },
+  { icon: ICON.cog, label: "Configuration", key: "c", href: "/b/.config/nvim/init.lua" },
+  { icon: ICON.question, label: "Help", key: "h", href: "/b/doc/help.txt" },
   {
-    icon: "",
+    icon: ICON.github,
+    label: "GitHub",
+    key: "g",
+    href: "https://github.com/elliot14A",
+    external: true,
+  },
+  {
+    icon: ICON.mail,
     label: "Email",
     key: "e",
     href: "mailto:akshithkatkuri@gmail.com",

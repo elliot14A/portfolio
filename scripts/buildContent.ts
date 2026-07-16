@@ -22,9 +22,7 @@ import type { ThemedToken } from "shiki";
 import { createHighlighterCore } from "shiki/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 import type { Buffer, ContentIndex, Heading, Line, TreeNode } from "../src/core/content/content.ts";
-import { type Decorated, decorateAll } from "../src/core/content/markdown.ts";
-
-type Decoration = Omit<Decorated, "state">;
+import { ICON, iconForPath } from "../src/core/content/icons.ts";
 
 const CONTENT_DIR = "content";
 const OUT_FILE = "src/content.generated.ts";
@@ -40,25 +38,11 @@ const LANG_BY_EXT: Readonly<Record<string, string>> = {
   txt: "markdown",
 };
 
-/** Nerd Font devicons, matching nvim-web-devicons. */
-const ICON_BY_EXT: Readonly<Record<string, string>> = {
-  md: "",
-  ts: "",
-  lua: "",
-  nix: "",
-  sh: "",
-  json: "",
-  txt: "",
-};
-
-const DIR_ICON = "";
-const FILE_ICON = "";
-
 const extensionOf = (path: string): string => path.split(".").pop() ?? "";
 
 const langOf = (path: string): string => LANG_BY_EXT[extensionOf(path)] ?? "markdown";
 
-const iconOf = (path: string): string => ICON_BY_EXT[extensionOf(path)] ?? FILE_ICON;
+const iconOf = (path: string): string => iconForPath(path);
 
 const baseNameOf = (path: string): string => path.split("/").pop() ?? path;
 
@@ -113,7 +97,7 @@ const treeOf = (paths: readonly string[]): TreeNode[] => {
       nodes.push({
         path: partial,
         name: segment,
-        icon: isFile ? iconOf(partial) : DIR_ICON,
+        icon: isFile ? iconOf(partial) : ICON.folder,
         depth,
         kind: isFile ? "file" : "directory",
       });
@@ -142,19 +126,10 @@ const build = async (): Promise<void> => {
       theme: "rose-pine",
     });
 
-    // Markdown gets a second, concealed representation; other languages are code already.
-    const decorations: ReadonlyArray<Decoration> =
-      lang === "markdown" ? decorateAll(sourceLines) : sourceLines.map(() => ({}));
-
-    const lines: Line[] = sourceLines.map((text, index) => {
-      const decoration = decorations[index] ?? {};
-      return {
-        html: renderLine(tokens[index] ?? []),
-        indent: indentOf(text),
-        ...(decoration.rendered !== undefined ? { rendered: decoration.rendered } : {}),
-        ...(decoration.deco !== undefined ? { deco: decoration.deco } : {}),
-      };
-    });
+    const lines: Line[] = sourceLines.map((text, index) => ({
+      html: renderLine(tokens[index] ?? []),
+      indent: indentOf(text),
+    }));
 
     buffers[path] = {
       path,
