@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific
-instructions as needed. *(Preface adapted from Andrej Karpathy's CLAUDE.md —
+instructions as needed. *(Preface adapted from Andrej Karpathy's CLAUDE.md -
 github.com/multica-ai/andrej-karpathy-skills.)*
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use
@@ -73,16 +73,16 @@ mistakes.
 # portfolio
 
 A portfolio site that **is** a working replica of my Neovim setup. `README.md` is the
-profile/resume, `projects/*.md` are the projects — they're rendered as real buffers in a
-faithful nvim clone. **SSR-only**: Hono returns HTML fragments to htmx; Alpine holds
-nothing but transient editor state. Ships as a single Cloudflare Worker.
+profile/resume, `projects/*.md` are the projects - they're rendered as real buffers in a
+faithful nvim clone. **SSR-only**: Hono returns HTML fragments to htmx. The only client
+code is a small vanilla-TS bundle that owns transient editor state (mode, cursor, pending
+keys). Ships as a single Cloudflare Worker.
 
 > This project follows the house Engineering Standards (Bun-first, hexagonal + functional,
-> errors-as-values), archetype **Hono + htmx + Alpine SSR**. This file is self-contained:
-> the rulings below are that standard applied to this project. Keep changes surgical,
-> simple, and verified.
+> errors-as-values), archetype **Hono + htmx SSR**. Code style and structure mirror the
+> minitraycer assignment exactly. Keep changes surgical, simple, and verified.
 
-## Runtime ruling — Bun is the toolchain, Workers is the target
+## Runtime ruling - Bun is the toolchain, Workers is the target
 
 The house standard is Bun-first; the deploy target is Cloudflare Workers. These do not
 conflict, but the boundary is strict:
@@ -98,18 +98,18 @@ conflict, but the boundary is strict:
 
 Never call `Bun.*` under `src/`. Never import from `src/infra/` inside `scripts/`.
 
-## Architecture — three inward rings + one surface
+## Architecture - three inward rings + one surface
 
 Dependencies point **inward only**: `infra → app → core`. `core` and `app` import no
 Hono, no `hono/jsx`, no CF binding, no `Bun.*`.
 
 | Dir | Owns |
 |---|---|
-| `core/` | Pure rules + **port definitions**. `content/` (buffer/line/heading model, path resolution), `editor/` (mode machine, motions, keymap trie, search — all pure), `guestbook/` (entry entity, validation rules). Returns `Result`. No I/O. |
+| `core/` | Pure rules + **port definitions**. `content/` (buffer/line/heading model, path resolution), `editor/` (mode machine, motions, keymap trie, search - all pure), `guestbook/` (entry entity, validation rules). Returns `Result`. No I/O. |
 | `app/` | Use-cases as **factory functions**: `makeOpenBuffer`, `makeSearchFiles`, `makeGrepContent`, `makeRunCommand`, `makeRunTermCommand`, `makeSignGuestbook`, `makeListGuestbook`. Take ports, return the operation. Framework-free. |
 | `infra/` | Adapters implementing the ports: `content/` (reads the build artifact), `git/` (GitHub API + KV cache), `guestbook/` (Durable Object), `analytics/` (PostHog), `http/` (Hono routes + error mapper), `views/` (`hono/jsx`), `config.ts`, `logger.ts`. |
-| `client/` | Browser bundle. `vim/` is a **pure** core (keymap trie, motions, mode machine — mirrors `core/editor`), `dom/` is the thin imperative shell that binds it to events and htmx. |
-| `app.tsx` | App factory — builds and exports the Hono app with **no** `fetch` export. `app.request()`-testable. |
+| `client/` | Browser bundle. `vim/` is a **pure** core (keymap trie, motions, mode machine - mirrors `core/editor`), `dom/` is the thin imperative shell that binds it to events and htmx. |
+| `app.tsx` | App factory - builds and exports the Hono app with **no** `fetch` export. `app.request()`-testable. |
 | `worker.ts` | Composition root: parse env → wire concrete adapters into use-cases → `export default app` + `export { GuestbookDO }`. |
 
 Feature-first slices, layers inside each slice. Views are pure `(props) => JSX` with no
@@ -133,88 +133,78 @@ scripts/buildContent.ts             # → src/content.generated.ts (never edit b
 
 ## Dependencies
 
-Golden path only. **Ask before adding anything not listed here.**
+Minimal by default. **Ask before adding anything not listed here.** A dependency goes
+in only when the feature that needs it lands, not before.
 
-**Runtime**
-- `hono` v4 — HTTP + `hono/jsx` for SSR (in-core, no extra view dep) + `jsxRenderer()`
-  layouts.
-- `neverthrow` — `Result` / `ResultAsync`.
-- `valibot` — all untrusted input (env, `:` command args, guestbook body, telescope query).
-  **Valibot, not Zod**: this is a bundle-critical edge target, which is the standard's own
-  carve-out (§4, §9.2). One validator, never two.
-- `typed-htmx` — type-checked `hx-*` attributes on `hono/jsx`.
-- `posthog-js` — client only (autocapture, session replay). Server-side capture is a
-  `fetch` to PostHog's capture API behind an `Analytics` port — **no `posthog-node`**, it
-  doesn't fit the Workers runtime.
-- `htmx.org`, `alpinejs` — vendored into `public/`, not bundled through `src/`.
+**Runtime (shipped in the Worker)**
+- `hono` v4 - HTTP + `hono/jsx` for SSR, in-core, no extra view dep.
+- `neverthrow` - `Result` / `ResultAsync`.
+
+That is the whole runtime surface. No validation library: the only env read is one
+optional string, done with a plain type guard in `infra/config.ts`. No analytics or
+client-state library yet; add one behind a port when the feature exists.
 
 **Build-time only** (`scripts/`, never shipped)
-- `shiki` — highlights markdown/code with the **`rose-pine`** theme into per-line HTML.
-  Use the **fine-grained core + JavaScript regex engine**, not the default bundle:
+- `shiki` - highlights markdown/code with the `rose-pine` theme into per-line HTML.
+  Use the fine-grained core + JavaScript regex engine, not the default bundle:
   `createHighlighterCore` from `shiki/core` + `createJavaScriptRegexEngine` from
-  `shiki/engine/javascript`, with themes/langs imported individually from
-  `@shikijs/themes/*` and `@shikijs/langs/*`. The full bundle resolves `shiki/wasm` in a way
-  Bun cannot load, and the JS engine keeps the build wasm-free.
+  `shiki/engine/javascript`, with themes/langs imported individually from `@shikijs/themes/*`
+  and `@shikijs/langs/*`. The full bundle resolves `shiki/wasm` in a way Bun cannot load,
+  and the JS engine keeps the build wasm-free.
+- `htmx.org` - vendored into `public/js/` by `scripts/buildClient.ts`, not bundled through
+  `src/`.
 
 **Platform (no dependency)**
-- Durable Object SQLite (`ctx.storage.sql`) for the guestbook — raw tagged SQL behind a
-  port. **No Drizzle**: one table, two queries; an ORM here is speculative abstraction.
-- Workers KV for the GitHub commit cache. `caches.default` for fragment caching.
+- `caches.default` for fragment caching; Workers KV / Durable Objects when a feature needs
+  them, always behind a port. No ORM.
 - `Bun.Glob` / `Bun.file` / `Bun.$` in `scripts/` only.
 
 **Dev**
 - `@types/bun`, `@cloudflare/workers-types`, `wrangler`, `typescript`, `@biomejs/biome`.
 
-**Noted deviation:** the standard lists LogTape for edge logging. This project uses
-`console` behind a `Logger` port, because Workers observability already ingests `console`
-as structured logs and one site does not justify the dep. The port is there — swap the
-adapter if the need appears.
+## Types & errors - errors as values
 
-## Types & errors — errors as values
-
-- **`neverthrow`.** `core` + `app` return `Result<T, AppError>` / `ResultAsync` and
-  **never throw** for expected failure. Adapters convert thrown/rejected I/O into
-  `AppError` at the boundary (`fromPromise` / `fromThrowable`); the core never sees an
-  exception.
-- **`AppError` taxonomy + codes.** One discriminated union with a fixed `ErrorCode` enum:
-  `VALIDATION | NOT_FOUND | RATE_LIMITED | DEPENDENCY_UNAVAILABLE | INTERNAL`. Shape
-  `{ code; message; cause?; meta? }` — the data in neverthrow's `E` channel. One central
-  pure `errorToHttp(AppError)` in `infra/http/errorMapper.ts` is the only place the taxonomy
-  meets HTTP; it maps to `{ status, partial }` where the partial is an **nvim-authentic
-  error line** (`E486: Pattern not found: foo`, `E45: 'readonly' option is set`). New
-  failure = new tag + one mapping line.
-- **Never leak a `Result` into a view.** neverthrow values are class-based and not
-  serializable (standard §9.1). Unwrap in the route handler; views receive plain props.
-- **Option.** Boundary absence is `Result<T, NotFoundError>`; `T | null` for pure in-core
-  optionality. Never run two error models.
-- **Exhaustiveness.** `switch` on the discriminant with a `never` `default`
-  (`assertNever`) — this carries the vim mode machine and command dispatch. Domain strings
-  are **string-literal unions** (no `enum`, no branded types).
+- **`neverthrow`.** `core` + `app` return `AppResult<T>` / `AppResultAsync<T>` and never
+  throw for expected failure. Adapters convert thrown/rejected I/O into `AppError` at the
+  boundary; the core never sees an exception.
+- **`AppError` taxonomy, minitraycer style.** Codes are grouped `const` objects of coded
+  strings (`ContentErrorCode.NOT_FOUND = "CONTENT_ERR_01"`) unioned into `AppErrorCode`, and
+  a single `appError(code, message, info?)` factory builds the value
+  `{ code; message; cause?; meta? }`. A new failure is a new code in `core/error.ts` plus one
+  line in the exhaustive `Record<AppErrorCode, ...>` mapper. Add a group only when a real
+  failure needs it.
+- **One central `errorToHttp(AppError)`** in `interfaces/web/errorMapper.ts` maps code to
+  `{ status, line }`, where the line is the nvim-authentic message the error already carries
+  (`E484: Can't open file x`). It is the only place the taxonomy meets HTTP.
+- **Never leak a `Result` into a view.** Unwrap in the route handler; views receive plain
+  props.
+- **Exhaustiveness.** `switch` on a discriminant with a `never` `default`, or an exhaustive
+  `Record` keyed by the union, so a new case fails to compile until handled. String unions,
+  no `enum`, no branded types.
 - **Immutability.** `readonly` fields, `Readonly<>` / `ReadonlyArray<>` on port signatures;
-  transforms produce new objects. Buffer lines are `ReadonlyArray<string>` throughout.
+  transforms produce new objects.
 
 ## Wiring
 
-- `worker.ts` validates env with valibot into a frozen config, builds the concrete adapters,
-  and passes them to the use-case factories. Missing a dependency is a **type error**, not a
-  boot crash. No DI container.
+- `worker.ts` reads env into a frozen `Config`, builds the concrete adapters, and passes
+  them to the use-case factories. Missing a dependency is a **type error**, not a boot
+  crash. No DI container.
 - **Use-cases are factories** closing over their ports:
-  `const makeOpenBuffer = (deps) => (path) => ResultAsync<Buffer, AppError>`. Tests pass
-  fakes.
-- **Ports live in `core/`**, split by cohesion: a **function type** for a single
-  capability (`type ReadBuffer = (path: string) => Result<Buffer, AppError>`); an
-  **`interface`** for the cohesive guestbook store.
-- **Functional core, imperative shell** — twice. Server: pure `core`, effects in `infra` +
+  `const makeOpenBuffer = (deps) => (path) => AppResult<Buffer>`. Tests pass fakes.
+- **Ports live in `core/`**, split by cohesion: a **function type** for a single capability
+  (`type ReadBuffer = (path: string) => AppResult<Buffer>`); an **`interface`** for a
+  cohesive multi-method store.
+- **Functional core, imperative shell**, twice. Server: pure `core`, effects in `infra` +
   `worker.ts`. Browser: pure `client/vim`, DOM/htmx effects only in `client/dom`.
 
 ## SSR & htmx rules
 
 - **The server owns what is displayed; the client owns where the cursor is.** Motions and
   mode changes resolve client-side with no round-trip. Anything that changes buffer content
-  — `:e`, `<S-l>`, `gd`, telescope select, harpoon jump — is an htmx request returning a
+  - `:e`, `<S-l>`, `gd`, telescope select, harpoon jump - is an htmx request returning a
   fragment plus `hx-swap-oob` tabline and statusline.
 - **Every route branches on `HX-Request`**: fragment for htmx, full page otherwise. The
-  no-JS path must render a usable site — tree entries and tabs are real `<a href>`.
+  no-JS path must render a usable site - tree entries and tabs are real `<a href>`.
 - Buffer fragments are cacheable (`s-maxage`, `ETag`); guestbook and presence are
   `no-store`.
 - `content.generated.ts` is a build artifact. Edit `content/*.md` and re-run the build;
@@ -222,35 +212,38 @@ adapter if the need appears.
 
 ## Code style
 
-- Bun + TypeScript, ESM. Explicit `.ts`/`.tsx` extensions in imports; `import type`
-  separated (`verbatimModuleSyntax`).
+Match the minitraycer assignment (`~/Desktop/files/assignments/minitraycer`) exactly.
+
+- Bun + TypeScript, ESM. Extensionless relative imports (`@/core/error`, not `.ts`);
+  `import type` separated (`verbatimModuleSyntax`).
 - `tsconfig` baseline: `strict`, `noUncheckedIndexedAccess`, `noUnusedLocals`,
   `noUnusedParameters`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax`,
-  `isolatedModules`, `moduleDetection: "force"`, `jsx: "react-jsx"`,
-  `jsxImportSource: "hono/jsx"`. Path alias `@/*` → `src/*`. `tsc --noEmit` is the
-  type-check gate.
-- **Biome** (formatter + linter): 2-space indent, 100 columns, double quotes, semicolons,
-  recommended rules, imports organized. No Prettier/ESLint.
-- **Functional, zero classes** — with one unavoidable exception: the Durable Object must be
-  a class. Keep `GuestbookDO` a thin shell that delegates to pure functions.
+  `moduleDetection: "force"`, `jsx: "react-jsx"`, `jsxImportSource: "hono/jsx"`. Path alias
+  `@/*` -> `src/*`. `tsc --noEmit` is the type-check gate.
+- **Biome** (formatter + linter): 2-space indent, 80 columns, double quotes, semicolons,
+  recommended rules, imports organized. No Prettier/ESLint. `check` runs `biome check`
+  then `tsc --noEmit`.
+- **Functional, zero classes.** A Durable Object, if one is ever added, must be a class;
+  keep it a thin shell delegating to pure functions.
 - Arrow-const for exported helpers; `function` declarations for route handlers, view
-  components, and pure utilities.
-- `type` over `interface` (except cohesive multi-method ports). `as const` for stable
-  literals; `satisfies` to type object literals without widening.
+  components, and the `appError` factory.
+- Types are `Readonly<{...}>`; `type` over `interface` (except cohesive multi-method ports).
+  `as const` for stable literals.
+- **Comments are rare and terse**, on the "why", never the "what". No decorative dividers.
+  No em dashes anywhere, in code or content; use a plain hyphen.
 - **camelCase** file names (no dashes); one primary exported function per file with an
-  explicit return type; `index.ts` barrels re-export **selectively** (no blanket
-  `export *`).
+  explicit return type; `index.ts` barrels re-export selectively (no blanket `export *`).
 
 ## Adding things
 
 - **A buffer / content file:** drop it in `content/`, re-run `bun run build:content`. No
-  code change — if one is needed, the content model is wrong.
+  code change - if one is needed, the content model is wrong.
 - **A `:` command:** add the handler to `core/editor/commands.ts` (pure: args →
   `Result<Action>`), then one dispatch arm in `app/editor/runCommand.ts`. Unknown commands
   must return `E492: Not an editor command: <cmd>`, never a silent no-op.
 - **A route:** add `infra/http/routes/<feature>.tsx` (validate input → call a use-case →
   map `Result` to a fragment or full page); register it in `app.tsx`.
-- **An external integration:** add `infra/<system>/` — one file per operation returning
+- **An external integration:** add `infra/<system>/` - one file per operation returning
   `Result`, an `error.ts` mapping its throws to `AppError`, and its **port defined in
   `core/`**.
 - **An analytics event:** add it to the union in `core/analytics/events.ts` and capture
@@ -258,24 +251,24 @@ adapter if the need appears.
 
 ## Testing
 
-`bun test`. Functional DI removes the need for a mocking framework — **inject in-memory
+`bun test`. Functional DI removes the need for a mocking framework - **inject in-memory
 fakes; never monkey-patch modules.**
 
 - **Unit (majority):** pure `core` + `app` use-cases with fake ports injected. The vim
-  motion/keymap/mode logic in `core/editor` and `client/vim` is pure and deterministic —
+  motion/keymap/mode logic in `core/editor` and `client/vim` is pure and deterministic -
   it should be the densest-tested part of the codebase, and it needs no DOM.
 - **Integration:** `app.request()` against the real Hono app with fake adapters; real
   adapters against `wrangler dev`'s local DO/KV via `@cloudflare/vitest-pool-workers`.
   Never mock the driver.
 - **Contract tests:** one adapter-agnostic suite per port, run against **both** the fake and
   the real adapter, so the fake can't silently diverge.
-- **SSR assertions:** assert on rendered HTML strings from `app.request()` — the fragment
+- **SSR assertions:** assert on rendered HTML strings from `app.request()` - the fragment
   contains the right lines, the oob statusline shows the right mode.
-- **DOM carve-out:** the standard's Vitest carve-out (§9.5) **applies here** — the modal
+- **DOM carve-out:** the standard's Vitest carve-out (§9.5) **applies here** - the modal
   input layer is real client logic. Pure `client/vim` is `bun test`; only `client/dom`
   event binding uses Vitest.
 - **Test `Result` values:** `expect(fn(x)).toEqual(ok(expected))` /
-  `toEqual(err({ code: "NOT_FOUND", … }))`. Test **both** branches of every use-case — error
+  `toEqual(err({ code: "NOT_FOUND", … }))`. Test **both** branches of every use-case - error
   paths are ordinary values here.
 - **Layout & naming:** colocate `foo.ts` + `foo.test.ts`; slow lanes in `test/integration`.
   Behaviour-statement names ("returns err when the buffer is readonly"). ~85–90% coverage on
@@ -287,5 +280,5 @@ The editor must match my actual config at `~/.config/home-manager/modules/nixvim
 generic dark theme. rose-pine `main` with transparent background; `number` +
 `relativenumber`; neo-tree on the **right** at width 30; lualine `globalstatus` with `|`
 component separators; indent-blankline `│`; leader = `<Space>`. When adding a keybinding,
-mirror `keymaps.nix` / `editor.nix` exactly — if it isn't in my config, it doesn't belong
+mirror `keymaps.nix` / `editor.nix` exactly - if it isn't in my config, it doesn't belong
 in the site.
