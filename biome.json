@@ -7,13 +7,20 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!**/.claude", "!src/content.generated.ts", "!public/js"]
+    "includes": [
+      "**",
+      "!**/.claude",
+      "!.playwright-mcp",
+      "!src/content.generated.ts",
+      "!public/js",
+      "!public/css/editor.css"
+    ]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 100
+    "lineWidth": 80
   },
   "assist": {
     "enabled": true,
