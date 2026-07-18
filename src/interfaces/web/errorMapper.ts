@@ -1,29 +1,26 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { assertNever, type PfError } from "@/core/error.ts";
+import {
+  type AppError,
+  type AppErrorCode,
+  ContentErrorCode,
+  SystemErrorCode,
+} from "@/core/error";
+
+// One status per error code. Record keeps this exhaustive: a new code in
+// core/error.ts will not compile until it is mapped here.
+const STATUS: Record<AppErrorCode, ContentfulStatusCode> = {
+  [ContentErrorCode.NOT_FOUND]: 404,
+  [SystemErrorCode.INTERNAL]: 500,
+};
 
 export type HttpError = Readonly<{
   status: ContentfulStatusCode;
-  /** The message as vim would print it on the command line. */
   line: string;
 }>;
 
-/**
- * The only place the error taxonomy meets HTTP. Messages are real nvim errors — the theme
- * and the typed taxonomy reinforce each other, so a new tag is one arm here and nothing else.
- */
-export const errorToHttp = (error: PfError): HttpError => {
-  switch (error.code) {
-    case "VALIDATION":
-      return { status: 400, line: error.message };
-    case "NOT_FOUND":
-      return { status: 404, line: error.message };
-    case "RATE_LIMITED":
-      return { status: 429, line: "E1234: Too many requests, slow down" };
-    case "DEPENDENCY_UNAVAILABLE":
-      return { status: 503, line: "E484: Can't open file (upstream unavailable)" };
-    case "INTERNAL":
-      return { status: 500, line: "E5108: Error executing lua: internal error" };
-    default:
-      return assertNever(error.code);
-  }
-};
+// The message is already the line vim would print (e.g. "E484: Can't open
+// file x"), so it doubles as the command-line text.
+export const errorToHttp = (error: AppError): HttpError => ({
+  status: STATUS[error.code],
+  line: error.message,
+});
