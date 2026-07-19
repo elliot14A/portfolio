@@ -1,6 +1,6 @@
-import type { PfResult } from "../error.ts";
-import type { Buffer, ContentIndex, TreeNode } from "./content.ts";
+import type { AppResult } from "../error";
+import type { Buffer, ContentIndex, TreeNode } from "./content";
 
-export type ReadBuffer = (path: string) => PfResult<Buffer>;
+export type ReadBuffer = (path: string) => AppResult<Buffer>;
 export type ReadTree = () => ReadonlyArray<TreeNode>;
 export type ReadIndex = () => ContentIndex;

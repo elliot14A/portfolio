@@ -1,14 +1,15 @@
 import { err, ok } from "neverthrow";
-import { notFoundError, type PfResult } from "../error.ts";
+import { type AppResult, appError, ContentErrorCode } from "../error";
 
 export type GitSign = "add" | "change" | "delete";
 
 export type Line = Readonly<{
-  /** Pre-highlighted HTML for this single line, produced at build time by Shiki. */
   html: string;
-  /** Leading indent in columns — drives the indent-blankline guides. */
   indent: number;
   sign?: GitSign;
+  // Alignment-sensitive lines (tables, aligned blocks) that must not soft-wrap
+  // on narrow screens; the buffer scrolls horizontally for them instead.
+  nowrap?: boolean;
 }>;
 
 export type Heading = Readonly<{
@@ -24,7 +25,6 @@ export type Buffer = Readonly<{
   icon: string;
   lines: ReadonlyArray<Line>;
   headings: ReadonlyArray<Heading>;
-  /** Buffers are read-only except the guestbook — `:w` errors with E45 elsewhere. */
   readOnly: boolean;
 }>;
 
@@ -42,7 +42,8 @@ export type ContentIndex = Readonly<{
   entry: string;
 }>;
 
-/** Strips the leading slash and any `../` games, so `/b/*` can never escape the index. */
+// Drop the leading slash and any "." or ".." segments so a request path can
+// never escape the baked index.
 export const normalizePath = (raw: string): string =>
   raw
     .replace(/^\/+/, "")
@@ -50,18 +51,23 @@ export const normalizePath = (raw: string): string =>
     .filter((segment) => segment !== "" && segment !== "." && segment !== "..")
     .join("/");
 
-export const findBuffer = (index: ContentIndex, raw: string): PfResult<Buffer> => {
+export const findBuffer = (
+  index: ContentIndex,
+  raw: string,
+): AppResult<Buffer> => {
   const path = normalizePath(raw);
   const buffer = index.buffers[path];
   return buffer === undefined
-    ? err(notFoundError(`E484: Can't open file ${path}`, { meta: { path } }))
+    ? err(
+        appError(ContentErrorCode.NOT_FOUND, `E484: Can't open file ${path}`, {
+          meta: { path },
+        }),
+      )
     : ok(buffer);
 };
 
-export const lineCount = (buffer: Buffer): number => buffer.lines.length;
-
-/** vim reports an empty buffer as 0 lines but a 1-line buffer as "1,1  All". */
-export const formatPosition = (line: number, column: number): string => `${line},${column}`;
+export const formatPosition = (line: number, column: number): string =>
+  `${line},${column}`;
 
 export const formatProgress = (line: number, total: number): string => {
   if (total <= 1) return "All";
