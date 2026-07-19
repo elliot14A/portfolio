@@ -1,15 +1,7 @@
-/**
- * Nerd Font glyphs, written as `\uXXXX` escapes.
- *
- * These live in the Unicode Private Use Area. Pasting the literal characters through
- * editors and tooling loses them silently — you ship empty strings and only find out from
- * a screenshot. Escapes survive any round-trip, so they are the only safe form here.
- *
- * Every codepoint below must exist in `public/fonts/NerdIcons.woff2`, which is subset from
- * exactly this list by `scripts/buildFonts.sh`. The site self-hosts that file; nothing
- * depends on the visitor having a Nerd Font installed.
- */
-
+// Nerd Font glyphs as \uXXXX escapes. They live in the Private Use Area;
+// pasted literals get stripped silently by tooling, so escapes are the only
+// safe form. Every codepoint must also be in public/fonts/NerdIcons.woff2,
+// which scripts/buildFonts.sh subsets from exactly this list.
 export const ICON = {
   markdown: "\ue73e",
   typescript: "\ue628",
