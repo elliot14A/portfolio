@@ -1,9 +1,9 @@
-import type { Buffer } from "@/core/content/content.ts";
-import type { ReadBuffer } from "@/core/content/ports.ts";
-import type { PfResult } from "@/core/error.ts";
+import type { Buffer } from "@/core/content/content";
+import type { ReadBuffer } from "@/core/content/ports";
+import type { AppResult } from "@/core/error";
 
 export type OpenBufferDeps = { readBuffer: ReadBuffer };
-export type OpenBuffer = (path: string) => PfResult<Buffer>;
+export type OpenBuffer = (path: string) => AppResult<Buffer>;
 
 export const makeOpenBuffer =
   (deps: OpenBufferDeps): OpenBuffer =>
