@@ -1,5 +1,5 @@
-import { formatPosition, formatProgress } from "@/core/content/content.ts";
-import { ICON } from "@/core/content/icons.ts";
+import { formatPosition, formatProgress } from "@/core/content/content";
+import { ICON } from "@/core/content/icons";
 
 export type StatuslineProps = Readonly<{
   mode: string;
@@ -12,12 +12,8 @@ export type StatuslineProps = Readonly<{
   readOnly: boolean;
 }>;
 
-/**
- * lualine with `globalstatus`, `|` component separators and empty section separators —
- * so sections butt together with no powerline arrows, exactly as in style.nix.
- *
- * Sections: a=mode  b=branch/diff  c=filename | x=filetype  y=progress  z=position
- */
+// lualine with globalstatus and "|" component separators, matching style.nix.
+// Sections: a=mode b=branch c=filename | x=filetype y=progress z=position.
 export function Statusline(props: StatuslineProps) {
   const modeKey = props.mode.toLowerCase().split(" ")[0] ?? "normal";
   return (

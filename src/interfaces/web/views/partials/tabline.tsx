@@ -1,11 +1,11 @@
-import type { Buffer } from "@/core/content/content.ts";
+import type { Buffer } from "@/core/content/content";
 
 export type TablineProps = Readonly<{
   buffers: ReadonlyArray<Buffer>;
   active: string;
 }>;
 
-/** bufferline-style tabs. Real anchors, so right-click-open and no-JS both work. */
+// Real anchors, so right-click-open and the no-JS path both work.
 export function Tabline(props: TablineProps) {
   return (
     <nav id="tabline" class="tabline" hx-swap-oob="true">
