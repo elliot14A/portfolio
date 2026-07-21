@@ -1,5 +1,5 @@
 import { raw } from "hono/html";
-import type { Buffer } from "@/core/content/content.ts";
+import type { Buffer } from "@/core/content/content";
 
 export type BufferViewProps = Readonly<{ buffer: Buffer }>;
 
@@ -9,19 +9,13 @@ const SIGN_GLYPH: Readonly<Record<string, string>> = {
   delete: "_",
 };
 
-/** `fillchars=eob:~` — the filler below the last line. Clipped by `.eob { overflow: hidden }`. */
+// fillchars=eob:~ - filler below the last line, clipped by `.eob`.
 const EOB_ROWS = 60;
 
-/**
- * One row per source line: sign · number · text.
- *
- * The server prints absolute line numbers — with JS off that is exactly `number` without
- * `relativenumber`, a correct degradation. The client rewrites visible rows to the hybrid
- * relative form on cursor move.
- *
- * `line.html` is trusted: it is Shiki output generated at build time from our own content,
- * never user input.
- */
+// The server prints absolute line numbers; with JS off that is `number`
+// without `relativenumber`, which is a valid config. The client rewrites
+// visible rows to the hybrid relative form on cursor move. `line.html` is
+// trusted Shiki output built from our own content, never user input.
 export function BufferView(props: BufferViewProps) {
   const { buffer } = props;
   return (
@@ -35,7 +29,11 @@ export function BufferView(props: BufferViewProps) {
     >
       <div class="cursor" aria-hidden="true" />
       {buffer.lines.map((line, index) => (
-        <div class="ln" data-n={index + 1} style={`--indent:${line.indent}`}>
+        <div
+          class={line.nowrap ? "ln nowrap" : "ln"}
+          data-n={index + 1}
+          style={`--indent:${line.indent}`}
+        >
           <span class={line.sign ? `sign sign-${line.sign}` : "sign"}>
             {line.sign ? SIGN_GLYPH[line.sign] : ""}
           </span>
