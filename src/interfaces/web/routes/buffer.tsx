@@ -1,13 +1,15 @@
 import { type Context, Hono } from "hono";
-import type { ListTree } from "@/app/content/listTree.ts";
-import type { OpenBuffer } from "@/app/content/openBuffer.ts";
-import type { ReadIndex } from "@/core/content/ports.ts";
-import { errorToHttp } from "../errorMapper.ts";
-import { EditorPage } from "../views/pages/editor.tsx";
-import { StartPage } from "../views/pages/start.tsx";
-import { BufferView } from "../views/partials/buffer.tsx";
-import { Statusline } from "../views/partials/statusline.tsx";
-import { Tabline } from "../views/partials/tabline.tsx";
+import { raw } from "hono/html";
+import type { ListTree } from "@/app/content/listTree";
+import type { OpenBuffer } from "@/app/content/openBuffer";
+import type { ReadIndex } from "@/core/content/ports";
+import { errorToHttp } from "../errorMapper";
+import { EditorPage } from "../views/pages/editor";
+import { ErrorPage } from "../views/pages/errorPage";
+import { StartPage } from "../views/pages/start";
+import { BufferView } from "../views/partials/buffer";
+import { Statusline } from "../views/partials/statusline";
+import { Tabline } from "../views/partials/tabline";
 
 export type BufferRoutesDeps = Readonly<{
   openBuffer: OpenBuffer;
@@ -16,7 +18,24 @@ export type BufferRoutesDeps = Readonly<{
   branch: string;
 }>;
 
-/** Buffers are immutable per deploy, so the edge can serve them for the whole hour. */
+const isHtmx = (c: Context): boolean => c.req.header("HX-Request") === "true";
+
+// The line count telescope's preview shows; enough for any content file here.
+const PREVIEW_LINES = 120;
+
+function PreviewBody(props: {
+  buffer: import("@/core/content/content").Buffer;
+}) {
+  return (
+    <>
+      {props.buffer.lines.slice(0, PREVIEW_LINES).map((line) => (
+        <div class="pv-line">{raw(line.html || " ")}</div>
+      ))}
+    </>
+  );
+}
+
+// Buffers are immutable per deploy, so the edge can serve them for an hour.
 const CACHE_CONTROL = "public, max-age=0, s-maxage=3600";
 
 export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
@@ -26,22 +45,26 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
     const result = deps.openBuffer(path);
     if (result.isErr()) {
       const { status, line } = errorToHttp(result.error);
-      return c.html(
-        <div id="cmdline" class="cmdline error" hx-swap-oob="true">
-          {line}
-        </div>,
-        status,
-      );
+      // Inside the editor a failed :e is just a command-line message; a cold
+      // request for a dead URL gets a full page.
+      return isHtmx(c)
+        ? c.html(
+            <div id="cmdline" class="cmdline error" hx-swap-oob="true">
+              {line}
+            </div>,
+            status,
+          )
+        : c.html(
+            <ErrorPage status={status} line={line} branch={deps.branch} />,
+            status,
+          );
     }
 
     const buffer = result.value;
-    const index = deps.readIndex();
-    const buffers = Object.values(index.buffers);
+    const buffers = Object.values(deps.readIndex().buffers);
     c.header("Cache-Control", CACHE_CONTROL);
 
-    // htmx swaps the buffer and picks up tabline + statusline out of band; a cold request
-    // gets the whole editor.
-    if (c.req.header("HX-Request") === "true") {
+    if (isHtmx(c)) {
       return c.html(
         <>
           <BufferView buffer={buffer} />
@@ -61,25 +84,30 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
     }
 
     return c.html(
-      <EditorPage buffer={buffer} buffers={buffers} tree={deps.listTree()} branch={deps.branch} />,
-    );
-  };
-
-  // `/` is the alpha start screen, as nvim opens with no buffer loaded.
-  app.get("/", (c) => {
-    const index = deps.readIndex();
-    const buffers = Object.values(index.buffers);
-    c.header("Cache-Control", CACHE_CONTROL);
-    return c.html(
-      <StartPage
-        buffers={buffers.length}
-        lines={buffers.reduce((sum, buffer) => sum + buffer.lines.length, 0)}
+      <EditorPage
+        buffer={buffer}
+        buffers={buffers}
+        tree={deps.listTree()}
         branch={deps.branch}
       />,
     );
+  };
+
+  // "/" is the start screen, as nvim opens with no buffer loaded.
+  app.get("/", (c) => {
+    c.header("Cache-Control", CACHE_CONTROL);
+    return c.html(<StartPage branch={deps.branch} />);
   });
 
   app.get("/b/*", (c) => render(c, c.req.path.slice("/b/".length)));
+
+  // Highlighted lines for the telescope preview pane. No chrome, just content.
+  app.get("/preview/*", (c) => {
+    const result = deps.openBuffer(c.req.path.slice("/preview/".length));
+    if (result.isErr()) return c.body("", 404);
+    c.header("Cache-Control", CACHE_CONTROL);
+    return c.html(<PreviewBody buffer={result.value} />);
+  });
 
   return app;
 };

@@ -3,6 +3,7 @@ import type { Child } from "hono/jsx";
 export type ShellProps = Readonly<{
   title: string;
   description: string;
+  noIndex?: boolean;
   children: Child;
 }>;
 
@@ -11,11 +12,14 @@ export function Shell(props: ShellProps) {
     <html lang="en">
       <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
         <title>{props.title}</title>
         <meta name="description" content={props.description} />
         <meta name="color-scheme" content="dark" />
-        {/* Both are on the critical path: body text and the chrome icons. */}
+        {props.noIndex ? <meta name="robots" content="noindex" /> : null}
         <link
           rel="preload"
           href="/fonts/JetBrainsMono-Regular.woff2"

@@ -1,9 +1,10 @@
-import type { Buffer, TreeNode } from "@/core/content/content.ts";
-import { Shell } from "../layouts/shell.tsx";
-import { BufferView } from "../partials/buffer.tsx";
-import { NeoTree } from "../partials/neotree.tsx";
-import { Statusline } from "../partials/statusline.tsx";
-import { Tabline } from "../partials/tabline.tsx";
+import type { Buffer, TreeNode } from "@/core/content/content";
+import { Shell } from "../layouts/shell";
+import { BufferView } from "../partials/buffer";
+import { CommandLine } from "../partials/commandLine";
+import { NeoTree } from "../partials/neotree";
+import { Statusline } from "../partials/statusline";
+import { Tabline } from "../partials/tabline";
 
 export type EditorPageProps = Readonly<{
   buffer: Buffer;
@@ -16,10 +17,10 @@ export function EditorPage(props: EditorPageProps) {
   const { buffer } = props;
   return (
     <Shell
-      title={`${buffer.name} — Akshith Katkuri`}
+      title={`${buffer.name} - Akshith Katkuri`}
       description="Backend developer. Neovim, as a website."
     >
-      <div class="editor">
+      <div class="editor" x-data="editor">
         <Tabline buffers={props.buffers} active={buffer.path} />
         <main class="windows">
           <div class="win win-focused">
@@ -37,7 +38,7 @@ export function EditorPage(props: EditorPageProps) {
           branch={props.branch}
           readOnly={buffer.readOnly}
         />
-        <div id="cmdline" class="cmdline" aria-live="polite" />
+        <CommandLine />
       </div>
     </Shell>
   );
