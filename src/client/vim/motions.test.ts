@@ -1,7 +1,10 @@
 import { describe, expect, test } from "bun:test";
-import { applyMotion, type MotionContext, type Pos } from "./motions.ts";
+import { applyMotion, type MotionContext, type Pos } from "./motions";
 
-const ctx = (lines: string[], height = 20): MotionContext => ({ lines, height });
+const ctx = (lines: string[], height = 20): MotionContext => ({
+  lines,
+  height,
+});
 const at = (line: number, column: number): Pos => ({ line, column });
 
 describe("applyMotion", () => {
@@ -25,7 +28,9 @@ describe("applyMotion", () => {
 
   test("0 and ^ differ on an indented line", () => {
     expect(applyMotion(ctx(lines), at(3, 10), "lineStart")).toEqual(at(3, 1));
-    expect(applyMotion(ctx(lines), at(3, 10), "firstNonBlank")).toEqual(at(3, 3));
+    expect(applyMotion(ctx(lines), at(3, 10), "firstNonBlank")).toEqual(
+      at(3, 3),
+    );
   });
 
   test("$ lands on the last character, not past it", () => {
@@ -63,7 +68,15 @@ describe("applyMotion", () => {
   });
 
   test("never leaves the buffer, for any motion", () => {
-    const motions = ["left", "down", "up", "right", "wordForward", "wordBack", "lineEnd"] as const;
+    const motions = [
+      "left",
+      "down",
+      "up",
+      "right",
+      "wordForward",
+      "wordBack",
+      "lineEnd",
+    ] as const;
     for (const motion of motions) {
       for (let line = 1; line <= lines.length; line += 1) {
         const result = applyMotion(ctx(lines), at(line, 1), motion, 99);

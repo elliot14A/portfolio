@@ -1,10 +1,5 @@
-/**
- * Pure cursor motions over a plain array of source lines.
- *
- * No DOM, no globals — every function is `(lines, pos, …) => Pos`, which is what makes the
- * whole input layer testable under `bun test` without a browser.
- */
-
+// Pure cursor motions over a plain array of source lines. No DOM and no
+// globals, so the whole input layer is testable under bun test.
 export type Pos = Readonly<{ line: number; column: number }>;
 
 export type Motion =
@@ -24,29 +19,36 @@ export type Motion =
 
 export type MotionContext = Readonly<{
   lines: ReadonlyArray<string>;
-  /** Visible rows — only `halfPage*` needs it. */
+  // Visible rows, needed only by the half-page motions.
   height: number;
 }>;
 
 const clamp = (value: number, low: number, high: number): number =>
   Math.min(Math.max(value, low), high);
 
-const lineAt = (lines: ReadonlyArray<string>, line: number): string => lines[line - 1] ?? "";
+const lineAt = (lines: ReadonlyArray<string>, line: number): string =>
+  lines[line - 1] ?? "";
 
-/** Normal mode sits *on* a character, so the last valid column is length, not length+1. */
+// Normal mode sits on a character, so the last valid column is length.
 const lastColumn = (text: string): number => Math.max(1, text.length);
 
 const clampToLine = (lines: ReadonlyArray<string>, pos: Pos): Pos => ({
   line: clamp(pos.line, 1, Math.max(1, lines.length)),
-  column: clamp(pos.column, 1, lastColumn(lineAt(lines, clamp(pos.line, 1, lines.length)))),
+  column: clamp(
+    pos.column,
+    1,
+    lastColumn(lineAt(lines, clamp(pos.line, 1, lines.length))),
+  ),
 });
 
 const WORD = /[A-Za-z0-9_]/;
 
-const isWordChar = (char: string | undefined): boolean => char !== undefined && WORD.test(char);
-const isBlank = (char: string | undefined): boolean => char === undefined || /\s/.test(char);
+const isWordChar = (char: string | undefined): boolean =>
+  char !== undefined && WORD.test(char);
+const isBlank = (char: string | undefined): boolean =>
+  char === undefined || /\s/.test(char);
 
-/** `w` — start of the next word, crossing line boundaries like vim does. */
+// w: start of the next word, crossing line boundaries like vim.
 const wordForward = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   let { line, column } = pos;
   let text = lineAt(lines, line);
@@ -55,7 +57,11 @@ const wordForward = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   if (startedOnWord) {
     while (column <= text.length && isWordChar(text[column - 1])) column += 1;
   } else if (!isBlank(text[column - 1])) {
-    while (column <= text.length && !isWordChar(text[column - 1]) && !isBlank(text[column - 1])) {
+    while (
+      column <= text.length &&
+      !isWordChar(text[column - 1]) &&
+      !isBlank(text[column - 1])
+    ) {
       column += 1;
     }
   }
@@ -70,7 +76,7 @@ const wordForward = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   }
 };
 
-/** `b` — start of the previous word. */
+// b: start of the previous word.
 const wordBack = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   let { line, column } = pos;
   let text = lineAt(lines, line);
@@ -102,7 +108,12 @@ const firstNonBlank = (text: string): number => {
   return index === -1 ? 1 : index + 1;
 };
 
-export const applyMotion = (ctx: MotionContext, pos: Pos, motion: Motion, count = 1): Pos => {
+export const applyMotion = (
+  ctx: MotionContext,
+  pos: Pos,
+  motion: Motion,
+  count = 1,
+): Pos => {
   const { lines, height } = ctx;
   const repeat = Math.max(1, count);
 
@@ -126,9 +137,15 @@ export const applyMotion = (ctx: MotionContext, pos: Pos, motion: Motion, count 
     case "bufferEnd":
       return clampToLine(lines, { line: lines.length, column: 1 });
     case "halfPageDown":
-      return clampToLine(lines, { ...pos, line: pos.line + Math.floor(height / 2) * repeat });
+      return clampToLine(lines, {
+        ...pos,
+        line: pos.line + Math.floor(height / 2) * repeat,
+      });
     case "halfPageUp":
-      return clampToLine(lines, { ...pos, line: pos.line - Math.floor(height / 2) * repeat });
+      return clampToLine(lines, {
+        ...pos,
+        line: pos.line - Math.floor(height / 2) * repeat,
+      });
     case "wordForward": {
       let next = pos;
       for (let i = 0; i < repeat; i += 1) next = wordForward(lines, next);
