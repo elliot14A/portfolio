@@ -1,20 +1,13 @@
-import { ICON } from "@/core/content/icons.ts";
+import { ICON } from "@/core/content/icons";
 
-/**
- * The alpha-nvim start screen: what you land on before any buffer is open.
- *
- * The tabline and file tree are deliberately absent — nothing is open yet, which is
- * exactly what nvim shows. They appear once a buffer is loaded.
- */
-
-/** "elliot14A" in ANSI Shadow, the font alpha-nvim uses for its own header. */
+// "elliot14A" in ANSI Regular, solid blocks (the shadow variant renders as a
+// wireframe mesh at this size).
 const BANNER: ReadonlyArray<string> = [
-  "███████╗██╗     ██╗     ██╗ ██████╗ ████████╗ ██╗██╗  ██╗ █████╗ ",
-  "██╔════╝██║     ██║     ██║██╔═══██╗╚══██╔══╝███║██║  ██║██╔══██╗",
-  "█████╗  ██║     ██║     ██║██║   ██║   ██║   ╚██║███████║███████║",
-  "██╔══╝  ██║     ██║     ██║██║   ██║   ██║    ██║╚════██║██╔══██║",
-  "███████╗███████╗███████╗██║╚██████╔╝   ██║    ██║     ██║██║  ██║",
-  "╚══════╝╚══════╝╚══════╝╚═╝ ╚═════╝    ╚═╝    ╚═╝     ╚═╝╚═╝  ╚═╝",
+  "███████ ██      ██      ██  ██████  ████████  ██ ██   ██  █████  ",
+  "██      ██      ██      ██ ██    ██    ██    ███ ██   ██ ██   ██ ",
+  "█████   ██      ██      ██ ██    ██    ██     ██ ███████ ███████ ",
+  "██      ██      ██      ██ ██    ██    ██     ██      ██ ██   ██ ",
+  "███████ ███████ ███████ ██  ██████     ██     ██      ██ ██   ██ ",
 ];
 
 type MenuEntry = Readonly<{
@@ -25,14 +18,22 @@ type MenuEntry = Readonly<{
   external?: boolean;
 }>;
 
-/**
- * Only bindings that actually work are listed. Telescope (`f` find files, `t` find text)
- * joins this list when it lands — an entry that does nothing is worse than no entry.
- */
+// Only bindings that already work are listed; an entry that does nothing is
+// worse than no entry.
 const MENU: ReadonlyArray<MenuEntry> = [
   { icon: ICON.user, label: "Profile", key: "r", href: "/b/README.md" },
-  { icon: ICON.folderOpen, label: "Projects", key: "p", href: "/b/projects/portfolio.md" },
-  { icon: ICON.cog, label: "Configuration", key: "c", href: "/b/.config/nvim/init.lua" },
+  {
+    icon: ICON.folderOpen,
+    label: "Projects",
+    key: "p",
+    href: "/b/projects/gaur.md",
+  },
+  {
+    icon: ICON.cog,
+    label: "Configuration",
+    key: "c",
+    href: "/b/.config/nvim/init.lua",
+  },
   { icon: ICON.question, label: "Help", key: "h", href: "/b/doc/help.txt" },
   {
     icon: ICON.github,
@@ -45,37 +46,31 @@ const MENU: ReadonlyArray<MenuEntry> = [
     icon: ICON.mail,
     label: "Email",
     key: "e",
-    href: "mailto:akshithkatkuri@gmail.com",
+    href: "mailto:akshithkatkuri14@gmail.com",
     external: true,
   },
 ];
 
-export type DashboardProps = Readonly<{
-  buffers: number;
-  lines: number;
-}>;
-
-export function Dashboard(props: DashboardProps) {
+export function Dashboard() {
   return (
     <div id="buffer" class="alpha" data-path="alpha" tabindex={0}>
       <div class="alpha-inner">
-        {/* Text that is really a picture — screen readers get the name, not 390 box glyphs. */}
         <pre class="alpha-banner" role="img" aria-label="elliot14A">
           {BANNER.join("\n")}
         </pre>
 
         <h1 class="alpha-name">Akshith Katkuri</h1>
-        <p class="alpha-role">backend developer</p>
+        <p class="alpha-role">backend engineer &amp; cofounder</p>
 
         <nav class="alpha-menu">
           {MENU.map((entry) => (
-            // Plain navigation, not htmx: leaving alpha swaps the whole layout in — the
-            // tabline and tree do not exist on this screen to be updated out of band.
             <a
               class="alpha-item"
               href={entry.href}
               data-key={entry.key}
-              {...(entry.external ? { rel: "me noopener", target: "_blank" } : {})}
+              {...(entry.external
+                ? { rel: "me noopener", target: "_blank" }
+                : {})}
             >
               <span class="alpha-icon">{entry.icon}</span>
               <span class="alpha-label">{entry.label}</span>
@@ -85,15 +80,16 @@ export function Dashboard(props: DashboardProps) {
         </nav>
 
         <footer class="alpha-footer">
-          <a class="alpha-link" href="mailto:akshithkatkuri@gmail.com">
-            akshithkatkuri@gmail.com
+          <a class="alpha-link" href="mailto:akshithkatkuri14@gmail.com">
+            akshithkatkuri14@gmail.com
           </a>
-          <a class="alpha-link" href="https://github.com/elliot14A" rel="me noopener">
+          <a
+            class="alpha-link"
+            href="https://github.com/elliot14A"
+            rel="me noopener"
+          >
             github.com/elliot14A
           </a>
-          <p class="alpha-stats">
-            {props.buffers} buffers · {props.lines} lines loaded
-          </p>
         </footer>
       </div>
     </div>

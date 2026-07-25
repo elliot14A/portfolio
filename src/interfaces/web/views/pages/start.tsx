@@ -1,23 +1,21 @@
-import { Shell } from "../layouts/shell.tsx";
-import { Dashboard } from "../partials/dashboard.tsx";
-import { Statusline } from "../partials/statusline.tsx";
+import { Shell } from "../layouts/shell";
+import { Dashboard } from "../partials/dashboard";
+import { Statusline } from "../partials/statusline";
 
 export type StartPageProps = Readonly<{
-  buffers: number;
-  lines: number;
   branch: string;
 }>;
 
 export function StartPage(props: StartPageProps) {
   return (
     <Shell
-      title="Akshith Katkuri — backend developer"
-      description="Backend developer. TypeScript, Go, Postgres. This portfolio is my Neovim config, running on a Cloudflare Worker."
+      title="Akshith Katkuri - backend engineer"
+      description="Backend engineer and technical cofounder. TypeScript, Node.js, Rust, Go. This portfolio is a working Neovim clone on a Cloudflare Worker."
     >
-      <div class="editor editor-alpha">
+      <div class="editor editor-alpha" x-data="startMenu">
         <main class="windows">
           <div class="win win-focused">
-            <Dashboard buffers={props.buffers} lines={props.lines} />
+            <Dashboard />
           </div>
         </main>
         <Statusline
