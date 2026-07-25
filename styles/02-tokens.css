@@ -1,0 +1,33 @@
+/* rose-pine "main", the palette from @shikijs/themes/rose-pine, so highlighted
+   text and chrome cannot drift apart. */
+:root {
+  --base: #191724;
+  --surface: #1f1d2e;
+  --overlay: #26233a;
+  --muted: #6e6a86;
+  --subtle: #908caa;
+  --text: #e0def4;
+  --love: #eb6f92;
+  --gold: #f6c177;
+  --rose: #ebbcba;
+  --pine: #31748f;
+  --foam: #9ccfd8;
+  --iris: #c4a7e7;
+  --hl-low: #21202e;
+  --hl-med: #403d52;
+  --hl-high: #524f67;
+
+  /* transparent_background = true: chrome floats over the page. */
+  --bg-page: #14121d;
+  --bg-editor: rgba(25, 23, 36, 0.72);
+  --bg-chrome: rgba(31, 29, 46, 0.66);
+
+  --line-h: 1.55;
+  --gutter-num: 4ch;
+  --gutter-sign: 2ch;
+  --tree-w: 30ch;
+
+  --font-mono:
+    "NerdIcons", "JetBrains Mono", "JetBrainsMono Nerd Font", ui-monospace,
+    SFMono-Regular, Menlo, Consolas, monospace;
+}

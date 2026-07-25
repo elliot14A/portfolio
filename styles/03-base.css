@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  /* Stands in for the terminal wallpaper transparency reveals. */
+  background-image:
+    radial-gradient(
+      120ch 80ch at 12% -10%,
+      rgba(49, 116, 143, 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      90ch 70ch at 105% 110%,
+      rgba(196, 167, 231, 0.12),
+      transparent 60%
+    );
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: var(--line-h);
+  -webkit-font-smoothing: antialiased;
+  /* This is a code editor: no ligatures, so "->" and "--" stay literal. */
+  font-variant-ligatures: none;
+  font-feature-settings:
+    "liga" 0,
+    "calt" 0;
+}
+
+.editor {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  height: 100dvh;
+  background: var(--bg-editor);
+}
+
+.windows {
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.win {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hl-med) transparent;
+}
