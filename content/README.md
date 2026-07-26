@@ -1,38 +1,74 @@
 # Akshith Katkuri
 
-> Backend developer. Distributed systems, APIs, and the unglamorous parts
-> that keep them up at 3am.
+> `technical cofounder @ gaurdata` · `backend & data infra` · `ai agents & tooling`
 
-<!-- PLACEHOLDER: replaced from the real resume in phase 3 -->
+<!-- this whole site is my Neovim config; the resume is just a file in it. -->
+<!-- press <Space>ff to jump around, or read straight down. -->
 
 ## whoami
 
-I build backends. Type-safe TypeScript, Go when it needs to be fast, Postgres
-when it needs to be true. I care about boundaries, error handling as a
-first-class concern, and systems that fail loudly instead of quietly.
+I like owning problems end to end, from the first idea to the service running in
+production. I'm mostly backend-focused but happy to work across the stack when it
+helps.
 
-This site is my Neovim config, running as a Cloudflare Worker. Every file you
-see is real. Press `<Space>` to see what's bound.
+I'm a polyglot and try not to box myself into one language: TypeScript/JavaScript,
+Rust, Go, and Python, whichever fits the problem. Lately I've been enjoying
+functional programming, with OCaml as my current personal-project language.
 
-## Stack
+## what I'm building
 
-| Layer      | What I reach for                       |
-| ---------- | -------------------------------------- |
-| Language   | TypeScript, Go, Rust                   |
-| Runtime    | Bun, Cloudflare Workers                |
-| HTTP       | Hono                                   |
-| Data       | Postgres, SQLite, Redis                |
-| Infra      | Nix, Docker, Terraform                 |
+**GaurData**, as technical cofounder: a default backend for data apps, built for
+application developers and AI engineers like me. You shouldn't have to become a
+data engineer just because your app needs analytics.
 
-## Principles
+  the full story lives in `projects/gaur.md`
 
-1. **Errors are values.** If it can fail, say so in the type.
-2. **The core is sacred.** Business logic imports no framework.
-3. **Boring where it matters.** Novelty belongs in the UI, not the database.
+Outside of that, I'm having a lot of fun building MCP servers that make coding
+agents work better and improve DX.
 
-## Elsewhere
+  one of them lives in `projects/minitraycer.md`
 
-- GitHub  — [github.com/elliot14A](https://github.com/elliot14A)
-- Email   — [akshithkatkuri@gmail.com](mailto:akshithkatkuri@gmail.com)
+## how I build
 
-Press `<Space>ff` to find files, `<Space>e` for the tree, `:help` if lost.
+I'd rather fix something myself than wait on someone for a trivial change. If
+shipping my backend work needs a small frontend tweak or a deploy change, I'll
+just do it instead of handing it off.
+
+I learn while I build, not before. Recently that meant writing complex AI agents
+from scratch in Rust instead of reaching for LangChain.
+
+## the toolbox
+
+| area          | what I reach for                                  |
+| ------------- | ------------------------------------------------- |
+| languages     | TypeScript, Rust, Go, Python, OCaml, SQL          |
+| data          | Postgres, DuckDB, ClickHouse, Redis, Kafka        |
+| web, personal | Hono + htmx + Alpine.js                           |
+| web, work     | TanStack Start, on Cloudflare                     |
+| infra         | Cloudflare, Nix / NixOS, Docker, Caddy, cheap VPS |
+| ai            | MCP servers, agents from scratch in Rust          |
+
+For backend-only services I lean on a custom Nix/NixOS deployment framework I
+built, and GaurData's whole microservices setup runs on it.
+
+## the road here
+
+* Feb 2026 - now       GaurData · Technical Cofounder
+|
+* Apr 2024 - Jan 2026  Factly · Senior Backend Developer
+|
+* Feb 2023 - Mar 2024  Factly · Backend Developer
+|
+* Sep 2022 - Jan 2023  Factly · Backend Developer Intern
+
+## education
+
+B.Tech, Electronics & Computer Engineering
+Sreenidhi Institute of Science and Technology, Hyderabad · Jun 2023
+
+## elsewhere
+
+web    -> [elliot14A.work](https://elliot14A.work)
+github -> [github.com/elliot14A](https://github.com/elliot14A)
+email  -> [akshithkatkuri14@gmail.com](mailto:akshithkatkuri14@gmail.com)
+resume -> [Akshith_Katkuri_Resume.pdf](/Akshith_Katkuri_Resume.pdf)
