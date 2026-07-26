@@ -1,0 +1,101 @@
+.editor-alpha {
+  grid-template-rows: 1fr auto auto;
+}
+
+.alpha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 2rem 1rem;
+  outline: none;
+}
+
+.alpha-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Solid block letters (ANSI Regular). line-height 1 so rows touch. */
+.alpha-banner {
+  margin: 0 0 1.4rem;
+  color: var(--iris);
+  font-size: clamp(6px, 1.5vw, 14px);
+  line-height: 1;
+  white-space: pre;
+  user-select: none;
+}
+
+.alpha-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.alpha-role {
+  margin: 0 0 1.6rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.alpha-menu {
+  display: flex;
+  flex-direction: column;
+  width: min(46ch, 100%);
+}
+
+.alpha-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5ch;
+  padding: 0.3em 1.5ch;
+  color: var(--subtle);
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.alpha-item:hover,
+.alpha-item:focus-visible,
+.alpha-item.selected {
+  background: var(--hl-low);
+  color: var(--text);
+  outline: none;
+}
+
+.alpha-icon {
+  color: var(--foam);
+  width: 2ch;
+  text-align: center;
+}
+
+.alpha-label {
+  flex: 1;
+}
+
+/* The shortcut hint, right-aligned and italic, as the dashboard plugins draw it. */
+.alpha-key {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.alpha-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  margin-top: 1.8rem;
+  font-size: 0.86rem;
+}
+
+.alpha-link {
+  color: var(--rose);
+  text-decoration: none;
+}
+
+.alpha-link:hover {
+  text-decoration: underline;
+}

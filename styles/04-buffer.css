@@ -1,0 +1,161 @@
+.buffer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0.25em 0 0;
+  outline: none;
+  /* wrap = false */
+  white-space: pre;
+  tab-size: 2;
+}
+
+.ln {
+  display: flex;
+  align-items: baseline;
+  min-height: calc(1em * var(--line-h));
+  position: relative;
+}
+
+/* indent-blankline: one guide per shiftwidth (2 cols). */
+.ln[style*="--indent"] .txt::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--gutter-sign) + var(--gutter-num));
+  top: 0;
+  bottom: 0;
+  width: calc(var(--indent, 0) * 1ch);
+  background-image: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--muted) 40%, transparent) 0 1px,
+    transparent 1px 2ch
+  );
+  pointer-events: none;
+}
+
+.sign {
+  flex: 0 0 var(--gutter-sign);
+  text-align: center;
+  color: var(--muted);
+}
+
+.sign-add {
+  color: var(--foam);
+}
+
+.sign-change {
+  color: var(--gold);
+}
+
+.sign-delete {
+  color: var(--love);
+}
+
+.num {
+  flex: 0 0 var(--gutter-num);
+  padding-right: 1ch;
+  text-align: right;
+  color: var(--subtle);
+  user-select: none;
+}
+
+/* The cursor row shows its absolute number, brighter and left-aligned. */
+.ln.current .num {
+  color: var(--text);
+  text-align: left;
+  padding-left: 1ch;
+  padding-right: 0;
+}
+
+.ln.current {
+  background: rgba(33, 32, 46, 0.55);
+}
+
+.txt {
+  flex: 1;
+  min-width: 0;
+  padding-right: 2ch;
+}
+
+/* Markdown links: clickable without disturbing the monospace grid. The Shiki
+   spans keep their colour; the anchor only adds the underline and pointer. */
+.txt a.lnk {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--foam) 60%, transparent);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.txt a.lnk:hover {
+  text-decoration-color: var(--foam);
+}
+
+.eob {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* fillchars=eob:~ */
+.eob .num {
+  color: var(--hl-high);
+  text-align: left;
+  padding-left: 1ch;
+  padding-right: 0;
+}
+
+.cursor {
+  position: absolute;
+  left: calc(var(--gutter-sign) + var(--gutter-num));
+  top: 0.25em;
+  width: 1ch;
+  height: calc(1em * var(--line-h));
+  background: #fff;
+  transform: translate(
+    calc(var(--col, 0) * 1ch),
+    calc(var(--row, 0) * 1em * var(--line-h))
+  );
+  transition: transform 40ms linear;
+  pointer-events: none;
+  /* Solid block that blinks, like a terminal cursor (on longer than off). */
+  animation: cursor-blink 1.1s steps(1, end) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  57% {
+    opacity: 1;
+  }
+  57.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+body:not(.js) .cursor {
+  display: none;
+}
+
+/* Search highlight via the CSS Custom Highlight API: no DOM mutation. */
+::highlight(hlsearch) {
+  background-color: var(--hl-med);
+  color: var(--text);
+}
+
+::highlight(incsearch) {
+  background-color: var(--gold);
+  color: var(--base);
+}
+
+::selection {
+  background: rgba(110, 106, 134, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    transition: none;
+    animation: none;
+    opacity: 1;
+  }
+}

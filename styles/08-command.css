@@ -1,0 +1,282 @@
+/* Hide the overlays until Alpine processes them. The extra class raises
+   specificity over their own display rules, so no !important is needed. */
+.noice[x-cloak],
+.whichkey[x-cloak] {
+  display: none;
+}
+
+.neotree.hidden {
+  display: none;
+}
+
+/* noice command palette: a centered float with a labelled border, matching
+   the noice command_palette preset. */
+.noice {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.noice-box {
+  position: relative;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.2ch;
+  width: min(70ch, 86vw);
+  margin-bottom: 12vh;
+  padding: 0.8em 2ch;
+  background: color-mix(in srgb, var(--overlay) 97%, transparent);
+  border: 1px solid var(--hl-high);
+  border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+/* The title sits on the top border, breaking it like a fieldset legend. */
+.noice-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 1ch;
+  background: var(--overlay);
+  color: var(--iris);
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+}
+
+.noice-prompt {
+  color: var(--foam);
+  font-weight: 700;
+}
+
+.noice-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  caret-color: var(--foam);
+}
+
+/* which-key: a full-width bar pinned above the statusline, matching folke's
+   which-key. Entries flow down columns, four rows tall. */
+.whichkey {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 3em;
+  padding: 0.7em 2ch 0.4em;
+  /* Near-opaque so buffer text does not bleed through. */
+  background: color-mix(in srgb, var(--overlay) 97%, transparent);
+  border-top: 1px solid var(--hl-med);
+  border-bottom: 1px solid var(--hl-med);
+  font-size: 0.94em;
+  z-index: 40;
+}
+
+.wk-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0.1em 3ch;
+  align-items: baseline;
+}
+
+.wk-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.wk-key {
+  flex: 0 0 auto;
+  min-width: 1.5ch;
+  text-align: right;
+  color: var(--rose);
+}
+
+.wk-sep {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.wk-label {
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wk-group {
+  color: var(--foam);
+}
+
+.wk-hint {
+  margin-top: 0.6em;
+  text-align: center;
+  color: var(--muted);
+}
+
+.wk-esc {
+  color: var(--gold);
+}
+
+/* telescope: two-panel picker (Results + Preview) with a prompt box, matching
+   the telescope layout. */
+.telescope {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh 3vw;
+  background: rgba(20, 18, 29, 0.3);
+  z-index: 40;
+}
+
+.tel-cols {
+  display: flex;
+  gap: 1.2ch;
+  width: 100%;
+  max-width: 1500px;
+  height: 88vh;
+}
+
+.tel-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2ch;
+  flex: 1;
+  min-width: 0;
+}
+
+.tel-results {
+  flex: 1;
+  min-height: 0;
+}
+
+.tel-promptbox {
+  flex: 0 0 auto;
+}
+
+.tel-preview {
+  flex: 1;
+  min-width: 0;
+}
+
+.tel-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: color-mix(in srgb, var(--overlay) 97%, transparent);
+  border: 1px solid var(--hl-high);
+  border-radius: 10px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+/* Panel title on the top border, like a fieldset legend. */
+.tel-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 1ch;
+  background: var(--overlay);
+  color: var(--iris);
+  font-size: 0.82em;
+  letter-spacing: 0.08em;
+}
+
+.tel-list {
+  margin: 0;
+  padding: 1.1em 0 0.4em;
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hl-med) transparent;
+}
+
+.tel-item {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  padding: 0.12em 1.6ch;
+  color: var(--subtle);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tel-icon {
+  flex: 0 0 auto;
+  color: var(--foam);
+}
+
+.tel-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tel-item:hover {
+  color: var(--text);
+}
+
+.tel-sel {
+  background: var(--hl-low);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 var(--love);
+}
+
+.tel-prompt {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  padding: 0.9em 1.6ch 0.6em;
+}
+
+.tel-caret {
+  flex: 0 0 auto;
+  color: var(--foam);
+  font-weight: 700;
+}
+
+.tel-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font: inherit;
+  caret-color: var(--foam);
+}
+
+.tel-count {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.tel-preview-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 1.3em 1.6ch 0.6em;
+  white-space: pre;
+  font-size: 0.94em;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hl-med) transparent;
+}
+
+.pv-line {
+  min-height: calc(1em * var(--line-h));
+}

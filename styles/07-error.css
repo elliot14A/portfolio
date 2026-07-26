@@ -1,0 +1,15 @@
+/* error page (:e on a missing file, 404) */
+
+.err-status {
+  margin: 0;
+  color: var(--hl-high);
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.err-code {
+  margin: 0.6rem 0 1.6rem;
+  color: var(--love);
+  font-weight: 700;
+}
