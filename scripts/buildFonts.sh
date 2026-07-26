@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 OUT="public/fonts"
 mkdir -p "$OUT"
 
-# Keep in sync with src/core/content/icons.ts — these are exactly the glyphs it names.
+# Keep in sync with src/core/content/icons.ts - these are exactly the glyphs it names.
 # Subset by codepoint, never by pasted characters: PUA literals do not survive tooling.
 ICON_CODEPOINTS="U+E0A0,U+E60B,U+E620,U+E628,U+E73E,U+F007,U+F013,U+F016,U+F059,U+F07B,U+F07C,U+F09B,U+F0E0,U+F105,U+F15C,U+F313,U+F489"
 
