@@ -1,46 +1,53 @@
-# help.txt                                    portfolio editor reference
+# help.txt                            portfolio editor keymap reference
 
-Everything below is bound the way it is bound in my real config.
-Press <Space> at any time to see the leader menu.
+This editor mirrors my real Neovim setup, but only some of it is wired up here.
+Everything listed below actually works. Press <Space> for the leader menu, type
+: for the command line, / to search.
 
-## Navigation
+## Commands ( : )
 
-  h j k l        move left / down / up / right
-  w b e          word forward / back / end
-  0 ^ $          start of line / first non-blank / end of line
-  gg G           top / bottom of buffer
-  <C-d> <C-u>    half page down / up
+  :e <file>      open a file, e.g. :e README.md
+  :e #           open the alternate (previous) buffer
+  :bn  :bp       next / previous buffer
+  :b <n>         open buffer number n
+  :bd  :q        close the current buffer
+  :<number>      jump to a line, e.g. :42
+  :noh           clear the search highlight
+  :help          this file
+  :Neotree       toggle the file tree
+  :Alpha         back to the start screen
+
+Unknown commands answer with E492, the way nvim does.
+
+## Search ( / )
+
+  /text          search the buffer, jump to the first match
+  <Esc>          clear the highlight
+
+## Leader ( <Space> )
+
+  <Space>e             toggle the file tree
+  <Space>ff            find files (telescope)
+  <Space>fb            find buffers (telescope)
+  <Space>bb  <Space>`  alternate buffer
+  <Space>bd            close the buffer
+
+The popup lists a few more bindings from my real config; those aren't wired up
+here, and they say so when you pick them.
+
+## Motion
+
+  h j k l        left / down / up / right
+  w  b           word forward / back
+  0  ^  $        start / first non-blank / end of line
+  gg  G          top / bottom of buffer
+  <C-d>  <C-u>   half page down / up
+  5j             counts work on any motion
 
 ## Buffers
 
-  <S-l>          next buffer
-  <S-h>          previous buffer
-  <S-q>          close buffer
-  <leader>bb     alternate buffer
-  :e <file>      edit a file
+  <S-l>  <S-h>   next / previous buffer
+  clicking a tab or a tree entry opens it
 
-## Finding
-
-  <leader>ff     find files
-  <leader>fg     live grep
-  <leader>fb     buffers
-  /              search in buffer
-  n N            next / previous match
-  <Esc>          clear highlights
-
-## Windows
-
-  <leader>|      vertical split
-  <leader>-      horizontal split
-  <C-h/j/k/l>    move between windows
-  <leader>wd     close window
-
-## Misc
-
-  <leader>e      toggle file tree
-  <C-\>          toggle terminal
-  :help          this file
-  :q             close buffer
-
-Not every mapping is implemented yet. The ones that aren't will tell you so
-rather than doing nothing.
+Buffers are read-only, so :w answers with E45. Every file renders as the raw
+markdown source with treesitter colours, the way nvim shows it.
