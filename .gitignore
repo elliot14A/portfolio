@@ -17,6 +17,7 @@ public/js/htmx.js
 public/css/editor.css
 .playwright-mcp
 *.png
+!public/og.png
 
 # code coverage
 coverage
