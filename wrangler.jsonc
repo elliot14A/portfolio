@@ -8,6 +8,10 @@
     "directory": "public",
     "binding": "ASSETS"
   },
+  // elliot14a.work is the single canonical URL; the workers.dev subdomain is
+  // deliberately off so there is no duplicate-content copy of the site.
+  "routes": [{ "pattern": "elliot14a.work", "custom_domain": true }],
+  "workers_dev": false,
   "vars": {
     "GIT_BRANCH": "main"
   },
