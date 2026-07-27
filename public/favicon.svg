@@ -2,12 +2,12 @@
   <title>elliot14A</title>
   <rect width="100" height="100" rx="22" fill="#191724" />
   <text
-    x="26"
-    y="73"
+    x="50"
+    y="74"
+    text-anchor="middle"
     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
-    font-size="66"
+    font-size="74"
     font-weight="700"
     fill="#c4a7e7"
   >e</text>
-  <rect x="60" y="28" width="11" height="46" rx="2" fill="#e0def4" />
 </svg>
