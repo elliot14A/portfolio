@@ -115,6 +115,20 @@ const setStatusMode = (mode: string): void => {
   chip.dataset.mode = mode;
 };
 
+// Focus an input as soon as it is actually focusable. Alpine reveals the command
+// and telescope boxes reactively, so the input can still be hidden on the first
+// frame and .focus() silently no-ops. Retry across frames until the focus sticks
+// (activeElement matches) or we give up, so it works regardless of browser
+// timing rather than betting on a single frame.
+const focusSoon = (id: string, tries = 12): void => {
+  const el = document.getElementById(id);
+  if (el === null) return;
+  el.focus();
+  if (document.activeElement !== el && tries > 0) {
+    requestAnimationFrame(() => focusSoon(id, tries - 1));
+  }
+};
+
 // The Alpine editor controller. Reactive UI state lives on the object; the
 // Buffer and key buffers are closure vars so Alpine does not proxy them.
 export const editor = (): Editor => {
@@ -323,13 +337,7 @@ export const editor = (): Editor => {
       this.cmd = "";
       this.flash("");
       setStatusMode("command");
-      // Focus the input once Alpine has revealed it. rAF runs after Alpine's
-      // reactive DOM flush (a microtask), so the input is visible and focusable.
-      // An x-effect on the input tries the same thing, but that race is not
-      // reliable across browsers, so we also do it imperatively here.
-      requestAnimationFrame(() => {
-        document.getElementById("cmd-input")?.focus();
-      });
+      focusSoon("cmd-input");
     },
 
     exitCommand() {
@@ -443,9 +451,7 @@ export const editor = (): Editor => {
       this.previewHtml = "";
       this.telescopeOpen = true;
       this.loadPreview();
-      requestAnimationFrame(() => {
-        document.getElementById("tel-input")?.focus();
-      });
+      focusSoon("tel-input");
     },
 
     closeTelescope() {
