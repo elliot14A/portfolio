@@ -1,5 +1,8 @@
 import type { Child } from "hono/jsx";
 
+const SITE_URL = "https://elliot14a.work";
+const OG_IMAGE = `${SITE_URL}/og.png`;
+
 export type ShellProps = Readonly<{
   title: string;
   description: string;
@@ -20,6 +23,18 @@ export function Shell(props: ShellProps) {
         <meta name="description" content={props.description} />
         <meta name="color-scheme" content="dark" />
         {props.noIndex ? <meta name="robots" content="noindex" /> : null}
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:title" content={props.title} />
+        <meta property="og:description" content={props.description} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={props.title} />
+        <meta name="twitter:description" content={props.description} />
+        <meta name="twitter:image" content={OG_IMAGE} />
         <link
           rel="preload"
           href="/fonts/JetBrainsMono-Regular.woff2"
