@@ -1,6 +1,3 @@
-// The Alpine controller for the file tree: clicking a directory row collapses
-// or expands it. Row visibility is applied imperatively (a flat server-rendered
-// list, not Alpine's job), keyed off each row's data-parent chain.
 export type Tree = {
   init(): void;
   toggle(path: string | undefined): void;

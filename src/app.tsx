@@ -12,8 +12,6 @@ import { errorToHttp } from "@/interfaces/web/errorMapper";
 import { makeBufferRoutes } from "@/interfaces/web/routes/buffer";
 import { ErrorPage } from "@/interfaces/web/views/pages/errorPage";
 
-// App factory: wires adapters into use-cases and mounts the routes. No fetch
-// export and no side effects, so tests drive it with app.request().
 export const makeApp = (config: Config): Hono => {
   const openBuffer = makeOpenBuffer({ readBuffer: makeReadBuffer() });
   const listTree = makeListTree({ readTree: makeReadTree() });

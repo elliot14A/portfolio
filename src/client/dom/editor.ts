@@ -3,7 +3,6 @@ import { resolveLeader, type WhichKeyEntry } from "../vim/keymap";
 import type { Motion } from "../vim/motions";
 import { attachBuffer, type Buffer } from "./buffer";
 
-// htmx is loaded as a global script, not bundled.
 type Htmx = {
   ajax: (verb: string, url: string, opts: object) => Promise<void>;
 };
@@ -61,8 +60,6 @@ export type Editor = {
   loadPreview(): void;
 };
 
-// A telescope candidate carries the devicon rendered in the tree, so the
-// results list matches the sidebar without recomputing icons on the client.
 type TelItem = { path: string; icon: string };
 
 const iconFrom = (el: HTMLElement, selector: string): string =>
@@ -79,7 +76,6 @@ const tabItems = (): TelItem[] =>
     icon: iconFrom(el, ".tab-icon"),
   }));
 
-// Subsequence fuzzy match, telescope-style: query characters appear in order.
 const matches = (query: string, path: string): boolean => {
   const q = query.trim().toLowerCase();
   if (q === "") return true;
@@ -115,11 +111,6 @@ const setStatusMode = (mode: string): void => {
   chip.dataset.mode = mode;
 };
 
-// Focus an input as soon as it is actually focusable. Alpine reveals the command
-// and telescope boxes reactively, so the input can still be hidden on the first
-// frame and .focus() silently no-ops. Retry across frames until the focus sticks
-// (activeElement matches) or we give up, so it works regardless of browser
-// timing rather than betting on a single frame.
 const focusSoon = (id: string, tries = 12): void => {
   const el = document.getElementById(id);
   if (el === null) return;
@@ -129,8 +120,6 @@ const focusSoon = (id: string, tries = 12): void => {
   }
 };
 
-// The Alpine editor controller. Reactive UI state lives on the object; the
-// Buffer and key buffers are closure vars so Alpine does not proxy them.
 export const editor = (): Editor => {
   let buffer: Buffer | null = null;
   let alternate: string | null = null;
@@ -161,8 +150,7 @@ export const editor = (): Editor => {
 
     init() {
       buffer = attachBuffer();
-      // The keydown listener lives here rather than as an @keydown.window
-      // directive because Alpine's dotted modifiers are not valid JSX.
+
       document.addEventListener("keydown", (event) => this.onKey(event));
       document.body.addEventListener("htmx:afterSwap", () => {
         buffer = attachBuffer();
@@ -170,8 +158,7 @@ export const editor = (): Editor => {
         this.closeWhichkey();
         this.closeTelescope();
         this.flash("");
-        // The tree is not re-rendered on an htmx swap, so move its highlight
-        // to the file that is now open.
+
         const path = activePath();
         for (const row of document.querySelectorAll<HTMLElement>(
           ".tree-file",
@@ -187,8 +174,6 @@ export const editor = (): Editor => {
     },
 
     onKey(event) {
-      // Telescope owns the keyboard while open: the prompt takes typing, and
-      // Enter / Escape / arrows (or Ctrl-n/p) drive the list.
       if (this.telescopeOpen) {
         const key = event.key;
         if (key === "Escape") {
@@ -213,8 +198,6 @@ export const editor = (): Editor => {
         return;
       }
 
-      // In command mode the input owns text entry; only Enter and Escape are
-      // intercepted here.
       if (this.mode === "command") {
         if (event.key === "Enter") {
           event.preventDefault();
@@ -493,7 +476,6 @@ export const editor = (): Editor => {
       fetch(`/preview/${pick.path}`)
         .then((res) => (res.ok ? res.text() : ""))
         .then((html) => {
-          // Ignore a slow response once the selection has moved on.
           if (token === previewToken) this.previewHtml = html;
         })
         .catch(() => {});

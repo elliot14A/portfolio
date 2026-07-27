@@ -1,7 +1,5 @@
 import { ICON } from "@/core/content/icons";
 
-// "elliot14A" in ANSI Regular, solid blocks (the shadow variant renders as a
-// wireframe mesh at this size).
 const BANNER: ReadonlyArray<string> = [
   "███████ ██      ██      ██  ██████  ████████  ██ ██   ██  █████  ",
   "██      ██      ██      ██ ██    ██    ██    ███ ██   ██ ██   ██ ",
@@ -18,8 +16,6 @@ type MenuEntry = Readonly<{
   external?: boolean;
 }>;
 
-// Only bindings that already work are listed; an entry that does nothing is
-// worse than no entry.
 const MENU: ReadonlyArray<MenuEntry> = [
   { icon: ICON.user, label: "Profile", key: "r", href: "/b/README.md" },
   {

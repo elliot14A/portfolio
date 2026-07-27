@@ -1,6 +1,3 @@
-// The reactive chrome driven by the Alpine `editor` component: the message
-// line, the noice-style command palette, and the which-key popup. Alpine
-// directives are dot-free so they parse as JSX.
 export function CommandLine() {
   return (
     <>

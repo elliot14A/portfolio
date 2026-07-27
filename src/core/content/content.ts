@@ -7,8 +7,7 @@ export type Line = Readonly<{
   html: string;
   indent: number;
   sign?: GitSign;
-  // Alignment-sensitive lines (tables, aligned blocks) that must not soft-wrap
-  // on narrow screens; the buffer scrolls horizontally for them instead.
+
   nowrap?: boolean;
 }>;
 
@@ -42,8 +41,6 @@ export type ContentIndex = Readonly<{
   entry: string;
 }>;
 
-// Drop the leading slash and any "." or ".." segments so a request path can
-// never escape the baked index.
 export const normalizePath = (raw: string): string =>
   raw
     .replace(/^\/+/, "")

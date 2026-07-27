@@ -9,8 +9,6 @@ export type NeoTreeProps = Readonly<{
 const parentOf = (path: string): string =>
   path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
 
-// neo-tree, on the right at width 30, matching editor.nix. The `tree` Alpine
-// component makes directories collapsible.
 export function NeoTree(props: NeoTreeProps) {
   return (
     <aside

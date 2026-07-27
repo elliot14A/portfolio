@@ -1,10 +1,5 @@
 import { applyMotion, type Motion, type Pos } from "../vim/motions";
 
-// Imperative cursor + motion rendering for a buffer. Alpine drives the reactive
-// chrome (command line, which-key); the per-line DOM here is not Alpine's job,
-// so it stays plain and fast. The controller calls attachBuffer() on load and
-// after every htmx swap.
-
 const SCROLLOFF = 8;
 
 export type Buffer = Readonly<{
@@ -16,7 +11,7 @@ export type Buffer = Readonly<{
 
 type State = {
   el: HTMLElement;
-  // The scrollable ancestor (.win); the buffer itself does not scroll.
+
   container: HTMLElement;
   rows: HTMLElement[];
   lines: string[];
@@ -28,7 +23,6 @@ const windowHeight = (state: State): number => {
   return Math.max(1, Math.floor(state.container.clientHeight / row));
 };
 
-// Hybrid number + relativenumber, applied only to rows near the cursor.
 const paintNumbers = (state: State): void => {
   const { line } = state.pos;
   state.rows.forEach((row, index) => {
@@ -67,9 +61,6 @@ const paintStatus = (state: State): void => {
           : `${Math.floor(((state.pos.line - 1) / (total - 1)) * 100)}%`;
 };
 
-// scrolloff=8: keep eight rows of context above and below the cursor. The
-// bounding rects make this correct regardless of where the row's offsetParent
-// sits relative to the scroll container.
 const keepInView = (state: State): void => {
   const row = state.rows[state.pos.line - 1];
   if (row === undefined) return;
@@ -93,8 +84,6 @@ const paint = (state: State): void => {
   keepInView(state);
 };
 
-// Highlight every occurrence of `term` via the CSS Custom Highlight API, which
-// styles ranges without touching Shiki's spans. No-op where unsupported.
 const highlight = (state: State, term: string): void => {
   const api = CSS as unknown as {
     highlights?: {

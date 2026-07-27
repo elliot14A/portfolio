@@ -1,8 +1,5 @@
 #!/usr/bin/env bun
 
-// Builds the browser assets: bundles the client entry, vendors htmx, and
-// concatenates styles/*.css into public/css/editor.css. Bun only.
-
 const JS_DIR = "public/js";
 const CSS_OUT = "public/css/editor.css";
 
@@ -22,7 +19,6 @@ if (!bundle.success) {
 const htmx = await Bun.file("node_modules/htmx.org/dist/htmx.min.js").text();
 await Bun.write(`${JS_DIR}/htmx.js`, htmx);
 
-// Numeric prefixes give a stable cascade order (fonts, tokens, base, ...).
 const parts = [...new Bun.Glob("*.css").scanSync({ cwd: "styles" })].sort();
 const css = (
   await Promise.all(parts.map((p) => Bun.file(`styles/${p}`).text()))

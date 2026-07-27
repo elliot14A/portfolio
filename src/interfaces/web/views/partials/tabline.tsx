@@ -5,7 +5,6 @@ export type TablineProps = Readonly<{
   active: string;
 }>;
 
-// Real anchors, so right-click-open and the no-JS path both work.
 export function Tabline(props: TablineProps) {
   return (
     <nav id="tabline" class="tabline" hx-swap-oob="true">

@@ -9,13 +9,8 @@ const SIGN_GLYPH: Readonly<Record<string, string>> = {
   delete: "_",
 };
 
-// fillchars=eob:~ - filler below the last line, clipped by `.eob`.
 const EOB_ROWS = 60;
 
-// The server prints absolute line numbers; with JS off that is `number`
-// without `relativenumber`, which is a valid config. The client rewrites
-// visible rows to the hybrid relative form on cursor move. `line.html` is
-// trusted Shiki output built from our own content, never user input.
 export function BufferView(props: BufferViewProps) {
   const { buffer } = props;
   return (

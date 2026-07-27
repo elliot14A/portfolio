@@ -1,9 +1,5 @@
 import type { Command } from "./commands";
 
-// The which-key tree for the leader (<Space>) key, transcribed from
-// keymaps.nix / editor.nix / lsp.nix. Leaves resolve to a Command; groups
-// nest. Bindings whose plugins are not built yet resolve to `unimplemented` so
-// the popup still lists them honestly.
 type Leaf = { label: string; command: Command };
 type Group = { label: string; children: Record<string, Node> };
 type Node = Leaf | Group;
@@ -74,7 +70,6 @@ const entriesOf = (nodes: Record<string, Node>): WhichKeyEntry[] =>
     .map(([key, node]) => ({ key, label: node.label, group: isGroup(node) }))
     .sort((a, b) => a.key.localeCompare(b.key));
 
-// Walk the leader tree by the keys pressed so far.
 export const resolveLeader = (keys: ReadonlyArray<string>): WhichKey => {
   let level: Record<string, Node> = LEADER;
   const prefix: string[] = [];

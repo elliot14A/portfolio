@@ -1,11 +1,5 @@
 #!/usr/bin/env bun
 
-// Walks content/, highlights each file with Shiki's rose-pine theme, and
-// writes src/content.generated.ts as a flat, pre-rendered line index. The
-// Worker never parses markdown at request time; it slices arrays. nvim shows
-// markdown source with treesitter colours, so highlighting the source is both
-// authentic and simpler than rendering it. Bun only.
-
 import bash from "@shikijs/langs/bash";
 import json from "@shikijs/langs/json";
 import lua from "@shikijs/langs/lua";
@@ -47,9 +41,6 @@ const baseNameOf = (path: string): string => path.split("/").pop() ?? path;
 const indentOf = (source: string): number =>
   source.match(/^ */)?.[0].length ?? 0;
 
-// A line whose alignment carries meaning: a markdown table row, or any line
-// that uses runs of 2+ internal spaces to line columns up (the git-graph,
-// the arrow links). These must not soft-wrap on mobile; the buffer scrolls.
 const isNowrap = (source: string): boolean =>
   source.trimStart().startsWith("|") || /\S {2,}\S/.test(source);
 
@@ -60,7 +51,6 @@ const escapeHtml = (text: string): string =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
-// Shiki's fontStyle is a bitmask: 1 italic, 2 bold, 4 underline.
 const styleOf = (token: ThemedToken): string => {
   const parts = [`color:${token.color ?? "inherit"}`];
   const font = token.fontStyle ?? 0;
@@ -70,8 +60,6 @@ const styleOf = (token: ThemedToken): string => {
   return parts.join(";");
 };
 
-// Markdown links `[label](url)` render as inert source in nvim; here they
-// become real anchors so recruiters (and `gx` muscle memory) can click through.
 type LinkSpan = Readonly<{ start: number; end: number; href: string }>;
 
 const LINK_RE = /\[[^\]]+\]\(([^)]+)\)/g;
@@ -83,7 +71,6 @@ const linksOf = (line: string): LinkSpan[] =>
     href: match[1] ?? "",
   }));
 
-// Assets (leading slash) download; mail opens the client; the rest open a tab.
 const anchorFor = (href: string): string => {
   const safe = escapeHtml(href);
   if (href.startsWith("/")) return `<a class="lnk" href="${safe}" download>`;
@@ -91,9 +78,6 @@ const anchorFor = (href: string): string => {
   return `<a class="lnk" href="${safe}" target="_blank" rel="noopener noreferrer">`;
 };
 
-// Built from tokens rather than by splitting codeToHtml output: Shiki nests
-// spans, so a regex over the rendered string truncates at the first close tag.
-// An anchor opens when tokens cross into a link range and closes on the way out.
 const renderLine = (
   tokens: ReadonlyArray<ThemedToken>,
   source: string,

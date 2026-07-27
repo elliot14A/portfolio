@@ -12,8 +12,6 @@ export type StatuslineProps = Readonly<{
   readOnly: boolean;
 }>;
 
-// lualine with globalstatus and "|" component separators, matching style.nix.
-// Sections: a=mode b=branch c=filename | x=filetype y=progress z=position.
 export function Statusline(props: StatuslineProps) {
   const modeKey = props.mode.toLowerCase().split(" ")[0] ?? "normal";
   return (

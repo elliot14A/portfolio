@@ -20,7 +20,6 @@ export type BufferRoutesDeps = Readonly<{
 
 const isHtmx = (c: Context): boolean => c.req.header("HX-Request") === "true";
 
-// The line count telescope's preview shows; enough for any content file here.
 const PREVIEW_LINES = 120;
 
 function PreviewBody(props: {
@@ -35,7 +34,6 @@ function PreviewBody(props: {
   );
 }
 
-// Buffers are immutable per deploy, so the edge can serve them for an hour.
 const CACHE_CONTROL = "public, max-age=0, s-maxage=3600";
 
 export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
@@ -45,8 +43,7 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
     const result = deps.openBuffer(path);
     if (result.isErr()) {
       const { status, line } = errorToHttp(result.error);
-      // Inside the editor a failed :e is just a command-line message; a cold
-      // request for a dead URL gets a full page.
+
       return isHtmx(c)
         ? c.html(
             <div id="cmdline" class="cmdline error" hx-swap-oob="true">
@@ -93,7 +90,6 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
     );
   };
 
-  // "/" is the start screen, as nvim opens with no buffer loaded.
   app.get("/", (c) => {
     c.header("Cache-Control", CACHE_CONTROL);
     return c.html(<StartPage branch={deps.branch} />);
@@ -101,7 +97,6 @@ export const makeBufferRoutes = (deps: BufferRoutesDeps): Hono => {
 
   app.get("/b/*", (c) => render(c, c.req.path.slice("/b/".length)));
 
-  // Highlighted lines for the telescope preview pane. No chrome, just content.
   app.get("/preview/*", (c) => {
     const result = deps.openBuffer(c.req.path.slice("/preview/".length));
     if (result.isErr()) return c.body("", 404);

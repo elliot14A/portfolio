@@ -1,5 +1,3 @@
-// The Alpine controller for the start-screen menu: j/k walk it, Enter follows,
-// and each entry's own letter jumps straight to it.
 export type StartMenu = {
   selected: number;
   init(): void;

@@ -1,5 +1,3 @@
-// Pure cursor motions over a plain array of source lines. No DOM and no
-// globals, so the whole input layer is testable under bun test.
 export type Pos = Readonly<{ line: number; column: number }>;
 
 export type Motion =
@@ -19,7 +17,7 @@ export type Motion =
 
 export type MotionContext = Readonly<{
   lines: ReadonlyArray<string>;
-  // Visible rows, needed only by the half-page motions.
+
   height: number;
 }>;
 
@@ -29,7 +27,6 @@ const clamp = (value: number, low: number, high: number): number =>
 const lineAt = (lines: ReadonlyArray<string>, line: number): string =>
   lines[line - 1] ?? "";
 
-// Normal mode sits on a character, so the last valid column is length.
 const lastColumn = (text: string): number => Math.max(1, text.length);
 
 const clampToLine = (lines: ReadonlyArray<string>, pos: Pos): Pos => ({
@@ -48,7 +45,6 @@ const isWordChar = (char: string | undefined): boolean =>
 const isBlank = (char: string | undefined): boolean =>
   char === undefined || /\s/.test(char);
 
-// w: start of the next word, crossing line boundaries like vim.
 const wordForward = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   let { line, column } = pos;
   let text = lineAt(lines, line);
@@ -76,7 +72,6 @@ const wordForward = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   }
 };
 
-// b: start of the previous word.
 const wordBack = (lines: ReadonlyArray<string>, pos: Pos): Pos => {
   let { line, column } = pos;
   let text = lineAt(lines, line);
