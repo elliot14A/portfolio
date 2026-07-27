@@ -323,8 +323,13 @@ export const editor = (): Editor => {
       this.cmd = "";
       this.flash("");
       setStatusMode("command");
-      // Focus is handled by an x-effect on the input, which fires after Alpine
-      // has shown it. Focusing here would race that render.
+      // Focus the input once Alpine has revealed it. rAF runs after Alpine's
+      // reactive DOM flush (a microtask), so the input is visible and focusable.
+      // An x-effect on the input tries the same thing, but that race is not
+      // reliable across browsers, so we also do it imperatively here.
+      requestAnimationFrame(() => {
+        document.getElementById("cmd-input")?.focus();
+      });
     },
 
     exitCommand() {
@@ -438,6 +443,9 @@ export const editor = (): Editor => {
       this.previewHtml = "";
       this.telescopeOpen = true;
       this.loadPreview();
+      requestAnimationFrame(() => {
+        document.getElementById("tel-input")?.focus();
+      });
     },
 
     closeTelescope() {
