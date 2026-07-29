@@ -8,11 +8,18 @@ export const SystemErrorCode = {
   INTERNAL: "SYS_ERR_01",
 } as const;
 
+export const ChatErrorCode = {
+  RATE_LIMITED: "CHAT_ERR_01",
+  PROVIDER: "CHAT_ERR_02",
+  BAD_REQUEST: "CHAT_ERR_03",
+} as const;
+
 type CodeOf<T> = T[keyof T];
 
 export type AppErrorCode =
   | CodeOf<typeof ContentErrorCode>
-  | CodeOf<typeof SystemErrorCode>;
+  | CodeOf<typeof SystemErrorCode>
+  | CodeOf<typeof ChatErrorCode>;
 
 export type AppError = Readonly<{
   code: AppErrorCode;

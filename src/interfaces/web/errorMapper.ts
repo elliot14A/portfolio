@@ -2,6 +2,7 @@ import type { ContentfulStatusCode } from "hono/utils/http-status";
 import {
   type AppError,
   type AppErrorCode,
+  ChatErrorCode,
   ContentErrorCode,
   SystemErrorCode,
 } from "@/core/error";
@@ -9,6 +10,9 @@ import {
 const STATUS: Record<AppErrorCode, ContentfulStatusCode> = {
   [ContentErrorCode.NOT_FOUND]: 404,
   [SystemErrorCode.INTERNAL]: 500,
+  [ChatErrorCode.RATE_LIMITED]: 429,
+  [ChatErrorCode.PROVIDER]: 502,
+  [ChatErrorCode.BAD_REQUEST]: 400,
 };
 
 export type HttpError = Readonly<{
