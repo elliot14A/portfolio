@@ -146,8 +146,12 @@ const build = async (): Promise<void> => {
     throw new Error(`no content found in ${CONTENT_DIR}/`);
 
   const buffers: Record<string, Buffer> = {};
+  const contextParts: string[] = [];
   for (const path of paths) {
     const source = await Bun.file(`${CONTENT_DIR}/${path}`).text();
+    if (path === ENTRY || path.startsWith("projects/")) {
+      contextParts.push(`# FILE: ${path}\n\n${source.trim()}`);
+    }
     const sourceLines = source.replace(/\n$/, "").split("\n");
     const lang = langOf(path);
     const { tokens } = highlighter.codeToTokens(sourceLines.join("\n"), {
@@ -181,9 +185,10 @@ const build = async (): Promise<void> => {
     "",
   ].join("\n");
 
+  const agentContext = contextParts.join("\n\n---\n\n");
   await Bun.write(
     OUT_FILE,
-    `${banner}export const CONTENT: ContentIndex = ${JSON.stringify(index, null, 2)};\n`,
+    `${banner}export const CONTENT: ContentIndex = ${JSON.stringify(index, null, 2)};\n\nexport const AGENT_CONTEXT = ${JSON.stringify(agentContext)};\n`,
   );
 
   const totalLines = Object.values(buffers).reduce(

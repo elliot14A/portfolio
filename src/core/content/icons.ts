@@ -14,6 +14,7 @@ export const ICON = {
   user: "\uf007",
   cog: "\uf013",
   question: "\uf059",
+  chat: "\uf075",
   github: "\uf09b",
   mail: "\uf0e0",
 } as const;

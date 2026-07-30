@@ -16,6 +16,7 @@ Everything listed below actually works. Press <Space> for the leader menu, type
   :help          this file
   :Neotree       toggle the file tree
   :Alpha         back to the start screen
+  :chat [q]      ask the AI assistant about Akshith (opens a sidebar)
 
 Unknown commands answer with E492, the way nvim does.
 

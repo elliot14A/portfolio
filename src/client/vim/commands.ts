@@ -13,6 +13,7 @@ export type Command =
   | { kind: "help" }
   | { kind: "nohlsearch" }
   | { kind: "toggleTerm" }
+  | { kind: "chat"; text: string }
   | { kind: "noop" }
   | { kind: "unimplemented"; feature: string }
   | { kind: "unknown"; input: string };
@@ -74,6 +75,10 @@ export const parseCommand = (raw: string): Command => {
     case "term":
     case "terminal":
       return { kind: "toggleTerm" };
+    case "chat":
+    case "ask":
+    case "ai":
+      return { kind: "chat", text: arg };
     default:
       return { kind: "unknown", input };
   }

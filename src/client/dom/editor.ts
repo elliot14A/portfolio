@@ -58,9 +58,27 @@ export type Editor = {
   telescopeMove(delta: number): void;
   telescopeConfirm(path?: string): void;
   loadPreview(): void;
+  chatOpen: boolean;
+  chatBusy: boolean;
+  chatInput: string;
+  chatTurns: ChatTurn[];
+  openChat(text: string): void;
+  closeChat(): void;
+  chatKey(event: KeyboardEvent): void;
+  sendChat(preset?: string): void;
+  updateTurn(index: number, patch: Partial<ChatTurn>): void;
+  streamReply(body: ReadableStream<Uint8Array>, index: number): void;
+  applyActions(index: number, line: string): void;
+  runAct(act: ChatAct): void;
 };
 
 type TelItem = { path: string; icon: string };
+
+type ChatAct = { label: string; kind: "open" | "resume"; path: string };
+
+type ChatTurn = { q: string; a: string; acts: ChatAct[] };
+
+type ServerAction = { kind: "open"; path: string } | { kind: "resume" };
 
 const iconFrom = (el: HTMLElement, selector: string): string =>
   el.querySelector(selector)?.textContent ?? "";
@@ -120,6 +138,33 @@ const focusSoon = (id: string, tries = 12): void => {
   }
 };
 
+const scrollChat = (): void => {
+  requestAnimationFrame(() => {
+    const log = document.getElementById("chat-log");
+    if (log !== null) log.scrollTop = log.scrollHeight;
+  });
+};
+
+const isMobile = (): boolean => window.matchMedia("(max-width: 820px)").matches;
+
+const RESUME_FILE = "Akshith_Katkuri_Resume.pdf";
+
+const downloadResume = (): void => {
+  const link = document.createElement("a");
+  link.href = `/${RESUME_FILE}`;
+  link.download = RESUME_FILE;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+const toActs = (actions: ServerAction[]): ChatAct[] =>
+  actions.map((action) =>
+    action.kind === "open"
+      ? { label: action.path, kind: "open" as const, path: action.path }
+      : { label: RESUME_FILE, kind: "resume" as const, path: "" },
+  );
+
 export const editor = (): Editor => {
   let buffer: Buffer | null = null;
   let alternate: string | null = null;
@@ -147,6 +192,10 @@ export const editor = (): Editor => {
     telescopeSel: 0,
     telescopeAll: [],
     previewHtml: "",
+    chatOpen: false,
+    chatBusy: false,
+    chatInput: "",
+    chatTurns: [],
 
     init() {
       buffer = attachBuffer();
@@ -166,6 +215,11 @@ export const editor = (): Editor => {
           row.classList.toggle("active", row.dataset.path === path);
         }
       });
+
+      if (window.location.hash === "#ask") {
+        history.replaceState(null, "", window.location.pathname);
+        this.openChat("");
+      }
     },
 
     flash(message, error = false) {
@@ -395,6 +449,9 @@ export const editor = (): Editor => {
         case "toggleTerm":
           this.flash("not implemented yet: terminal");
           return;
+        case "chat":
+          this.openChat(command.text);
+          return;
         case "unimplemented":
           this.flash(`not implemented yet: ${command.feature}`);
           return;
@@ -479,6 +536,128 @@ export const editor = (): Editor => {
           if (token === previewToken) this.previewHtml = html;
         })
         .catch(() => {});
+    },
+
+    openChat(text) {
+      this.chatOpen = true;
+      focusSoon("chat-input");
+      const question = text.trim();
+      if (question !== "") this.sendChat(question);
+    },
+
+    closeChat() {
+      this.chatOpen = false;
+    },
+
+    chatKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        this.sendChat();
+      } else if (event.key === "Escape") {
+        event.preventDefault();
+        this.closeChat();
+      }
+    },
+
+    async sendChat(preset) {
+      const text = (preset ?? this.chatInput).trim();
+      if (text === "" || this.chatBusy) return;
+      this.chatInput = "";
+
+      const history = this.chatTurns.flatMap((turn) =>
+        turn.a === ""
+          ? []
+          : [
+              { role: "user" as const, content: turn.q },
+              { role: "assistant" as const, content: turn.a },
+            ],
+      );
+      this.chatTurns = [...this.chatTurns, { q: text, a: "", acts: [] }];
+      const index = this.chatTurns.length - 1;
+      this.chatBusy = true;
+      scrollChat();
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [...history, { role: "user", content: text }],
+          }),
+        });
+        if (!res.ok || res.body === null) {
+          const data = (await res.json().catch(() => ({}))) as {
+            error?: string;
+          };
+          this.updateTurn(index, { a: data.error ?? "something went wrong." });
+        } else {
+          await this.streamReply(res.body, index);
+        }
+      } catch {
+        this.updateTurn(index, {
+          a: "the assistant is unreachable right now.",
+        });
+      }
+
+      this.chatBusy = false;
+      scrollChat();
+      focusSoon("chat-input");
+    },
+
+    updateTurn(index, patch) {
+      const turn = this.chatTurns[index];
+      if (turn !== undefined) Object.assign(turn, patch);
+    },
+
+    async streamReply(body, index) {
+      const reader = body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let meta = false;
+      let reply = "";
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        if (!meta) {
+          const newline = buffer.indexOf("\n");
+          if (newline === -1) continue;
+          this.applyActions(index, buffer.slice(0, newline));
+          buffer = buffer.slice(newline + 1);
+          meta = true;
+        }
+        if (buffer !== "") {
+          reply += buffer;
+          buffer = "";
+          this.updateTurn(index, { a: reply });
+          scrollChat();
+        }
+      }
+    },
+
+    applyActions(index, line) {
+      let actions: ServerAction[] = [];
+      try {
+        const parsed = JSON.parse(line) as { actions?: ServerAction[] };
+        actions = Array.isArray(parsed.actions) ? parsed.actions : [];
+      } catch {
+        return;
+      }
+      this.updateTurn(index, { acts: toActs(actions) });
+      const firstOpen = actions.find((action) => action.kind === "open");
+      if (firstOpen !== undefined && firstOpen.kind === "open") {
+        this.editPath(firstOpen.path);
+      }
+      if (actions.some((action) => action.kind === "resume")) downloadResume();
+    },
+
+    runAct(act) {
+      if (act.kind === "open") {
+        this.editPath(act.path);
+        if (isMobile()) this.closeChat();
+      } else {
+        downloadResume();
+      }
     },
   };
 };

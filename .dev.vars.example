@@ -1,0 +1,14 @@
+# Copy to `.dev.vars` (gitignored) for local `wrangler dev`, or set these as
+# Worker secrets/vars for production. The chat assistant speaks the OpenAI
+# chat-completions API, so any compatible provider works: OpenRouter, OpenAI,
+# Groq, Together, a local server, etc. Just point the base URL at it.
+
+PORTFOLIO_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+PORTFOLIO_OPENAI_API_KEY=sk-your-key-here
+PORTFOLIO_OPENAI_MODEL=deepseek/deepseek-v4-flash-0731
+
+# Optional: extra JSON merged into every chat-completions request body. Used
+# here for OpenRouter specifics: turn off deepseek's reasoning so it streams
+# answer text directly, and pin one provider so prompt caching (which needs a
+# stable provider) actually hits. Leave empty for a plain OpenAI-compatible API.
+PORTFOLIO_OPENAI_EXTRA_BODY={"reasoning":{"enabled":false},"provider":{"order":["DeepInfra"],"allow_fallbacks":true}}

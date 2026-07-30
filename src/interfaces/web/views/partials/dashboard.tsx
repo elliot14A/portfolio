@@ -18,6 +18,7 @@ type MenuEntry = Readonly<{
 
 const MENU: ReadonlyArray<MenuEntry> = [
   { icon: ICON.user, label: "Profile", key: "r", href: "/b/README.md" },
+  { icon: ICON.chat, label: "Ask", key: "a", href: "/b/README.md#ask" },
   {
     icon: ICON.folderOpen,
     label: "Projects",

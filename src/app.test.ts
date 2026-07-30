@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { makeApp } from "./app";
 
-const app = makeApp({ branch: "main" });
+const app = makeApp({});
 
 describe("GET /", () => {
   test("serves the start screen, not a buffer", async () => {
@@ -41,6 +41,7 @@ describe("GET /", () => {
 
     expect(entries.map((entry) => entry[2])).toEqual([
       "r",
+      "a",
       "p",
       "c",
       "h",
