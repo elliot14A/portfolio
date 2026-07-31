@@ -8,13 +8,25 @@
     "directory": "public",
     "binding": "ASSETS"
   },
-  // elliot14a.work is the single canonical URL; the workers.dev subdomain is
-  // deliberately off so there is no duplicate-content copy of the site.
-  "routes": [{ "pattern": "elliot14a.work", "custom_domain": true }],
+  "routes": [
+    {
+      "pattern": "elliot14a.work",
+      "custom_domain": true
+    }
+  ],
   "workers_dev": false,
   "vars": {
-    "GIT_BRANCH": "main"
+    "PORTFOLIO_OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
+    "PORTFOLIO_OPENAI_MODEL": "deepseek/deepseek-v4-flash-0731",
+    "PORTFOLIO_OPENAI_EXTRA_BODY": "{\"reasoning\":{\"enabled\":false},\"provider\":{\"order\":[\"DeepInfra\"],\"allow_fallbacks\":true}}"
   },
+  "kv_namespaces": [
+    {
+      "binding": "CHAT",
+      "id": "46eb82aaed3c4074a4721d47e320e008",
+      "remote": true
+    }
+  ],
   "observability": {
     "enabled": true
   }
