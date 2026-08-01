@@ -28,6 +28,11 @@ server-rendered, with my resume as README.md and every project as a buffer.
   only things that change what's displayed hit the server.
 - **A framework-free vim core** in its own module, pure and unit-tested, so the
   editor logic can be built and tested without a browser.
+- **An in-editor AI assistant**: a chat panel bound to `:ask` that answers
+  questions about my work and drives the editor as it does, opening the relevant
+  project buffers mid-answer. Tokens stream in over a plain fetch, an intent
+  classifier turns away off-topic prompts, and it runs on any OpenAI-compatible
+  provider with per-IP rate limits.
 
 ## stack
 
@@ -37,3 +42,4 @@ server-rendered, with my resume as README.md and every project as a buffer.
 | ui     | htmx, Alpine.js          |
 | build  | Shiki, Bun               |
 | lang   | TypeScript               |
+| ai     | OpenAI-compatible LLM    |
