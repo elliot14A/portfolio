@@ -4,7 +4,7 @@
  */
 @font-face {
   font-family: "NerdIcons";
-  src: url("/fonts/NerdIcons.woff2") format("woff2");
+  src: url("/fonts/NerdIcons.woff2?v=2") format("woff2");
   font-display: block;
   /* Private Use Area only: everything else falls through to JetBrains Mono. */
   unicode-range: U+E000-F8FF;

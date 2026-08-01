@@ -22,7 +22,7 @@
 .alpha-banner {
   margin: 0 0 1.4rem;
   color: var(--iris);
-  font-size: clamp(6px, 1.5vw, 14px);
+  font-size: clamp(6px, 2.1vw, 14px);
   line-height: 1;
   white-space: pre;
   user-select: none;

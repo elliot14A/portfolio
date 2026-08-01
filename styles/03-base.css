@@ -28,6 +28,10 @@ body {
   font-size: 15px;
   line-height: var(--line-h);
   -webkit-font-smoothing: antialiased;
+  /* Stop mobile Chromium from inflating text; it shears the monospace grid
+     and garbles the ASCII banner. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   /* This is a code editor: no ligatures, so "->" and "--" stay literal. */
   font-variant-ligatures: none;
   font-feature-settings:

@@ -3,10 +3,11 @@
 > this site: a working replica of my Neovim setup that serves itself as a single
 > Cloudflare Worker.
 
-| role | solo build                               |
-| ---- | ---------------------------------------- |
-| when | 2026                                     |
-| link | [elliot14A.work](https://elliot14A.work) |
+| role | solo build                                                    |
+| ---- | ------------------------------------------------------------- |
+| when | 2026                                                          |
+| link | [elliot14A.work](https://elliot14A.work)                      |
+| repo | [elliot14A/portfolio](https://github.com/elliot14A/portfolio) |
 
 ## the problem
 
