@@ -35,7 +35,7 @@ shipping my backend work needs a small frontend tweak or a deploy change, I'll
 just do it instead of handing it off.
 
 I learn while I build, not before. Recently that meant writing complex AI agents
-from scratch in Rust instead of reaching for LangChain.
+from scratch instead of reaching for LangChain.
 
 ## the toolbox
 
@@ -46,7 +46,7 @@ from scratch in Rust instead of reaching for LangChain.
 | web, personal | Hono + htmx + Alpine.js                           |
 | web, work     | TanStack Start, on Cloudflare                     |
 | infra         | Cloudflare, Nix / NixOS, Docker, Caddy, cheap VPS |
-| ai            | MCP servers, agents from scratch in Rust          |
+| ai            | MCP servers, AI agents                            |
 
 For backend-only services I lean on a custom Nix/NixOS deployment framework I
 built, and GaurData's whole microservices setup runs on it.
