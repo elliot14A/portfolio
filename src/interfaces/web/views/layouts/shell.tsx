@@ -26,7 +26,7 @@ export function Shell(props: ShellProps) {
           <meta name="description" content={props.description} />
           <meta name="color-scheme" content="dark" />
           {props.noIndex ? <meta name="robots" content="noindex" /> : null}
-          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          <link rel="icon" href="/favicon.ico" sizes="any" />
           <meta property="og:type" content="website" />
           <meta property="og:url" content={SITE_URL} />
           <meta property="og:title" content={props.title} />
