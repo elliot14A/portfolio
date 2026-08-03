@@ -2,6 +2,8 @@
 
 > `technical cofounder @ gaurdata` · `backend & data infra` · `ai agents & tooling`
 
+![Akshith Katkuri](/fightclub.jpg)
+
 <!-- this whole site is my Neovim config; the resume is just a file in it. -->
 <!-- press <Space>ff to jump around, or read straight down. -->
 

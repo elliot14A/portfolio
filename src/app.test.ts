@@ -72,7 +72,9 @@ describe("GET /b/README.md", () => {
   test("renders one row per source line", async () => {
     const html = await (await app.request("/b/README.md")).text();
     const rows = [...html.matchAll(/class="ln[^"]*" data-n="/g)];
-    expect(rows.length).toBe(74);
+    const declared = Number(html.match(/data-lines="(\d+)"/)?.[1]);
+    expect(declared).toBeGreaterThan(0);
+    expect(rows.length).toBe(declared);
   });
 
   test("marks buffers read-only", async () => {

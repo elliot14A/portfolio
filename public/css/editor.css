@@ -293,6 +293,15 @@ body:not(.js) .cursor {
   }
 }
 
+.md-img {
+  display: block;
+  max-width: min(100%, 360px);
+  max-height: 52vh;
+  height: auto;
+  margin: 0.4em 0;
+  border-radius: 4px;
+}
+
 /* tabline (bufferline) */
 
 .tabline {

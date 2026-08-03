@@ -60,6 +60,11 @@ const styleOf = (token: ThemedToken): string => {
   return parts.join(";");
 };
 
+const IMAGE_RE = /^\s*!\[([^\]]*)\]\(([^)]+)\)\s*$/;
+
+const imageHtml = (alt: string, src: string): string =>
+  `<img class="md-img" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+
 type LinkSpan = Readonly<{ start: number; end: number; href: string }>;
 
 const LINK_RE = /\[[^\]]+\]\(([^)]+)\)/g;
@@ -159,11 +164,18 @@ const build = async (): Promise<void> => {
       theme: "rose-pine",
     });
 
-    const lines: Line[] = sourceLines.map((text, index) => ({
-      html: renderLine(tokens[index] ?? [], text),
-      indent: indentOf(text),
-      ...(isNowrap(text) ? { nowrap: true } : {}),
-    }));
+    const lines: Line[] = sourceLines.map((text, index) => {
+      const image = IMAGE_RE.exec(text);
+      if (image !== null) {
+        const [, alt = "", src = ""] = image;
+        return { html: imageHtml(alt, src), indent: indentOf(text) };
+      }
+      return {
+        html: renderLine(tokens[index] ?? [], text),
+        indent: indentOf(text),
+        ...(isNowrap(text) ? { nowrap: true } : {}),
+      };
+    });
 
     buffers[path] = {
       path,
