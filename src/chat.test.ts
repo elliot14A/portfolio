@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { makeApp } from "@/app";
 import { parsePlan } from "@/core/chat/chat";
+import { makeCounter } from "@/infra/chat/counter";
 
 const app = makeApp({});
 
@@ -66,5 +67,22 @@ describe("parsePlan", () => {
       known,
     );
     expect(result.isOk() && result.value.allowed).toBe(false);
+  });
+});
+
+describe("makeCounter", () => {
+  test("increments the persistent total per call", async () => {
+    const store = new Map<string, string>();
+    const kv = {
+      get: async (key: string) => store.get(key) ?? null,
+      put: async (key: string, value: string) => {
+        store.set(key, value);
+      },
+    };
+    const count = makeCounter(kv);
+    await count();
+    await count();
+    await count();
+    expect(store.get("stats:chat:total")).toBe("3");
   });
 });

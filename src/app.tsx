@@ -4,6 +4,7 @@ import { makeListTree } from "@/app/content/listTree";
 import { makeOpenBuffer } from "@/app/content/openBuffer";
 import { AGENT_CONTEXT, CONTENT } from "@/content.generated";
 import { appError, SystemErrorCode } from "@/core/error";
+import { makeCounter, noopCount } from "@/infra/chat/counter";
 import { makePlan, makeStreamAnswer } from "@/infra/chat/llm";
 import {
   type KvStore,
@@ -47,6 +48,7 @@ const makeChatAnswer = (env: unknown): Answer => {
           globalPerDay: GLOBAL_PER_DAY,
         })
       : noopRateLimit,
+    count: kv ? makeCounter(kv) : noopCount,
     plan: client
       ? makePlan(client, llm.model, llm.extraBody, knownPaths)
       : stubPlan,

@@ -8,3 +8,5 @@ export type StreamAnswer = (
 ) => Promise<AppResult<ReadableStream<Uint8Array>>>;
 
 export type RateLimit = (ip: string) => Promise<AppResult<void>>;
+
+export type CountHit = () => Promise<void>;
