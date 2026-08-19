@@ -18,7 +18,9 @@
   "vars": {
     "PORTFOLIO_OPENAI_BASE_URL": "https://openrouter.ai/api/v1",
     "PORTFOLIO_OPENAI_MODEL": "deepseek/deepseek-v4-flash-0731",
-    "PORTFOLIO_OPENAI_EXTRA_BODY": "{\"reasoning\":{\"enabled\":false},\"provider\":{\"order\":[\"DeepInfra\"],\"allow_fallbacks\":true}}"
+    "PORTFOLIO_OPENAI_EXTRA_BODY": "{\"reasoning\":{\"enabled\":false},\"provider\":{\"order\":[\"DeepInfra\"],\"allow_fallbacks\":true}}",
+    "PORTFOLIO_GITHUB_API_URL": "https://api.github.com/graphql",
+    "PORTFOLIO_GITHUB_LOGIN": "elliot14A"
   },
   "kv_namespaces": [
     {

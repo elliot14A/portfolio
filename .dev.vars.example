@@ -12,3 +12,13 @@ PORTFOLIO_OPENAI_MODEL=deepseek/deepseek-v4-flash-0731
 # answer text directly, and pin one provider so prompt caching (which needs a
 # stable provider) actually hits. Leave empty for a plain OpenAI-compatible API.
 PORTFOLIO_OPENAI_EXTRA_BODY={"reasoning":{"enabled":false},"provider":{"order":["DeepInfra"],"allow_fallbacks":true}}
+
+# The README's contribution grid reads the official GitHub GraphQL API on every
+# view. `LOGIN` is just the github username (the API calls it `login`); it is
+# public and also lives in wrangler.jsonc. The token needs no scopes for public
+# contributions - add `read:user` and turn on "include private contributions in
+# my profile" if you want the private ones counted. With no token the grid falls
+# back to clearly-labelled sample data, so local dev works unauthenticated.
+
+PORTFOLIO_GITHUB_LOGIN=your-username
+PORTFOLIO_GITHUB_TOKEN=github_pat_...

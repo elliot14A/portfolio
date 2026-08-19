@@ -40,3 +40,19 @@ export const readLlmConfig = (env: unknown): LlmConfig => ({
   ),
   extraBody: envJson(env, "PORTFOLIO_OPENAI_EXTRA_BODY"),
 });
+
+export type GithubConfig = Readonly<{
+  apiUrl: string;
+  login: string;
+  token: string;
+}>;
+
+export const readGithubConfig = (env: unknown): GithubConfig => ({
+  apiUrl: envString(
+    env,
+    "PORTFOLIO_GITHUB_API_URL",
+    "https://api.github.com/graphql",
+  ),
+  login: envString(env, "PORTFOLIO_GITHUB_LOGIN"),
+  token: envString(env, "PORTFOLIO_GITHUB_TOKEN"),
+});
