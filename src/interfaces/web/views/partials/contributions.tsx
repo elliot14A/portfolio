@@ -36,23 +36,21 @@ export function ContributionsView(props: ContributionsViewProps) {
       data-source={sample ? "sample" : "github"}
       style={`--cols:${graph.weeks}`}
     >
-      <span class="cg-scroll">
-        <span class="cg-grid">
-          <span class="cg-corner" />
-          {graph.months.map((month) => (
-            <span class="cg-month" style={`--span:${month.span}`}>
-              {month.label}
-            </span>
-          ))}
-          {graph.rows.map((row, weekday) => (
-            <>
-              <span class="cg-weekday">{WEEKDAYS[weekday]}</span>
-              {row.map((cell) => (
-                <CellSpan cell={cell} />
-              ))}
-            </>
-          ))}
-        </span>
+      <span class="cg-grid">
+        <span class="cg-corner" />
+        {graph.months.map((month) => (
+          <span class="cg-month" style={`--span:${month.span}`}>
+            {month.label}
+          </span>
+        ))}
+        {graph.rows.map((row, weekday) => (
+          <>
+            <span class="cg-weekday">{WEEKDAYS[weekday]}</span>
+            {row.map((cell) => (
+              <CellSpan cell={cell} />
+            ))}
+          </>
+        ))}
       </span>
       <span class="cg-foot">
         <span class="cg-count">

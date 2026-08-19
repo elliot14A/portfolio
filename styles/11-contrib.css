@@ -5,11 +5,19 @@
  * would be invalid phrasing content there.
  */
 /* Sized to the calendar itself, not to the buffer, so the footer's two ends
-   land under the first and last week rather than at the window edges. */
+   land under the first and last week rather than at the window edges.
+   Deliberately uncapped: a year is wider than a phone, and `.win` already
+   scrolls horizontally for tables and other aligned blocks. Capping this at
+   100% instead would clip the calendar into a second, nested scroll area that
+   the outer one cannot reach. */
 .cg {
   display: block;
   width: max-content;
-  max-width: 100%;
+  /* content-box so `max-content` sizes to the grid and the trailing padding
+     lands outside it: that keeps the footer aligned to the last week while
+     still counting toward the scroll width, which a right margin does not. */
+  box-sizing: content-box;
+  padding-right: 2ch;
   margin: 0.5em 0 0.8em;
   line-height: 1;
   --cg-cell: 14px;
@@ -18,19 +26,6 @@
 
 .cg-slot {
   color: var(--muted);
-}
-
-/* The year is wider than a phone. Scroll it locally instead of folding it,
-   which would destroy the week columns. */
-.cg-scroll {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.cg-scroll::-webkit-scrollbar {
-  display: none;
 }
 
 /* One grid for the whole calendar, so the month header cannot drift out of
@@ -133,14 +128,5 @@
   .cg {
     --cg-cell: 11px;
     --cg-gap: 3px;
-  }
-
-  .cg-scroll {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .cg-foot {
-    flex-wrap: wrap;
-    gap: 0.5ch 2ch;
   }
 }
