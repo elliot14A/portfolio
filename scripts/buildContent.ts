@@ -65,6 +65,15 @@ const IMAGE_RE = /^\s*!\[([^\]]*)\]\(([^)]+)\)\s*$/;
 const imageHtml = (alt: string, src: string): string =>
   `<img class="md-img" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
 
+// Tight form, no inner spaces: the prose `<!-- ... -->` comments in the content
+// are meant to render as visible text and must not match.
+const GRAPH_RE = /^\s*<!--contributions-->\s*$/;
+
+// The slot text is the permanent fallback. htmx replaces it only on success, so
+// it also stands in for no-JS and for github being unreachable.
+const graphHtml = (): string =>
+  `<span class="cg-slot" hx-get="/contributions" hx-trigger="load" hx-swap="outerHTML">-- contributions --</span>`;
+
 type LinkSpan = Readonly<{ start: number; end: number; href: string }>;
 
 const LINK_RE = /\[[^\]]+\]\(([^)]+)\)/g;
@@ -165,6 +174,8 @@ const build = async (): Promise<void> => {
     });
 
     const lines: Line[] = sourceLines.map((text, index) => {
+      if (GRAPH_RE.test(text))
+        return { html: graphHtml(), indent: indentOf(text) };
       const image = IMAGE_RE.exec(text);
       if (image !== null) {
         const [, alt = "", src = ""] = image;

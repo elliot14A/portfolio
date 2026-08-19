@@ -4,6 +4,10 @@
 
 ![Akshith Katkuri](/fightclub.jpg)
 
+## the last year in commits
+
+<!--contributions-->
+
 <!-- this whole site is my Neovim config; the resume is just a file in it. -->
 <!-- press <Space>ff to jump around, or read straight down. -->
 
