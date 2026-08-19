@@ -14,12 +14,18 @@ export const ChatErrorCode = {
   BAD_REQUEST: "CHAT_ERR_03",
 } as const;
 
+export const GitErrorCode = {
+  UNAVAILABLE: "GIT_ERR_01",
+  MALFORMED: "GIT_ERR_02",
+} as const;
+
 type CodeOf<T> = T[keyof T];
 
 export type AppErrorCode =
   | CodeOf<typeof ContentErrorCode>
   | CodeOf<typeof SystemErrorCode>
-  | CodeOf<typeof ChatErrorCode>;
+  | CodeOf<typeof ChatErrorCode>
+  | CodeOf<typeof GitErrorCode>;
 
 export type AppError = Readonly<{
   code: AppErrorCode;
