@@ -17,6 +17,12 @@
   --hl-med: #403d52;
   --hl-high: #524f67;
 
+  /* Contribution ramp: pine -> foam, so intensity stays inside the palette. */
+  --cg-1: #2a5f75;
+  --cg-2: #31748f;
+  --cg-3: #6ba9bd;
+  --cg-4: #9ccfd8;
+
   /* transparent_background = true: chrome floats over the page. */
   --bg-page: #14121d;
   --bg-editor: rgba(25, 23, 36, 0.72);

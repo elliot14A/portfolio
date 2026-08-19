@@ -2,6 +2,10 @@ import { Hono } from "hono";
 import { type Answer, makeAnswer } from "@/app/chat/answer";
 import { makeListTree } from "@/app/content/listTree";
 import { makeOpenBuffer } from "@/app/content/openBuffer";
+import {
+  type GetContributions,
+  makeGetContributions,
+} from "@/app/git/getContributions";
 import { AGENT_CONTEXT, CONTENT } from "@/content.generated";
 import { appError, SystemErrorCode } from "@/core/error";
 import { makeCounter, noopCount } from "@/infra/chat/counter";
@@ -12,16 +16,23 @@ import {
   noopRateLimit,
 } from "@/infra/chat/rateLimit";
 import { stubPlan, stubStreamAnswer } from "@/infra/chat/stubLlm";
-import { readLlmConfig } from "@/infra/config";
+import {
+  type GithubConfig,
+  readGithubConfig,
+  readLlmConfig,
+} from "@/infra/config";
 import {
   makeReadBuffer,
   makeReadIndex,
   makeReadTree,
 } from "@/infra/content/contentAdapter";
+import { makeFetchCalendar } from "@/infra/git/githubCalendar";
+import { stubFetchCalendar } from "@/infra/git/stubCalendar";
 import { makeClient } from "@/infra/openai/client";
 import { errorToHttp } from "@/interfaces/web/errorMapper";
 import { makeBufferRoutes } from "@/interfaces/web/routes/buffer";
 import { makeChatRoutes } from "@/interfaces/web/routes/chat";
+import { makeContributionRoutes } from "@/interfaces/web/routes/contributions";
 import { ErrorPage } from "@/interfaces/web/views/pages/errorPage";
 
 const BRANCH = "main";
@@ -59,13 +70,35 @@ const makeChatAnswer = (env: unknown): Answer => {
   });
 };
 
+const isLive = (github: GithubConfig): boolean =>
+  github.token !== "" && github.login !== "";
+
+const makeGithubGraph = (github: GithubConfig): GetContributions =>
+  makeGetContributions({
+    fetchCalendar: isLive(github)
+      ? makeFetchCalendar(github)
+      : stubFetchCalendar,
+  });
+
 export const makeApp = (env: unknown): Hono => {
   const openBuffer = makeOpenBuffer({ readBuffer: makeReadBuffer() });
   const listTree = makeListTree({ readTree: makeReadTree() });
   const readIndex = makeReadIndex();
 
+  const github = readGithubConfig(env);
+  if (!isLive(github)) {
+    console.warn("github: no login or token, serving sample contributions");
+  }
+
   const app = new Hono();
   app.route("/", makeChatRoutes({ answer: makeChatAnswer(env) }));
+  app.route(
+    "/",
+    makeContributionRoutes({
+      getContributions: makeGithubGraph(github),
+      sample: !isLive(github),
+    }),
+  );
   app.route(
     "/",
     makeBufferRoutes({

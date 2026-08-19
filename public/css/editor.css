@@ -53,6 +53,12 @@
   --hl-med: #403d52;
   --hl-high: #524f67;
 
+  /* Contribution ramp: pine -> foam, so intensity stays inside the palette. */
+  --cg-1: #2a5f75;
+  --cg-2: #31748f;
+  --cg-3: #6ba9bd;
+  --cg-4: #9ccfd8;
+
   /* transparent_background = true: chrome floats over the page. */
   --bg-page: #14121d;
   --bg-editor: rgba(25, 23, 36, 0.72);
@@ -1168,5 +1174,152 @@ body:not(.js) .cursor {
     font: inherit;
     box-shadow: 0 2px 10px rgb(0 0 0 / 45%);
     cursor: pointer;
+  }
+}
+
+/*
+ * The contribution calendar: one buffer line hosting a month header, a weekday
+ * gutter and 7 x ~53 day cells. It is swapped into `<span class="txt">`, so
+ * every element is a span promoted to grid or block rather than a div, which
+ * would be invalid phrasing content there.
+ */
+/* Sized to the calendar itself, not to the buffer, so the footer's two ends
+   land under the first and last week rather than at the window edges. */
+.cg {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 0.5em 0 0.8em;
+  line-height: 1;
+  --cg-cell: 14px;
+  --cg-gap: 4px;
+}
+
+.cg-slot {
+  color: var(--muted);
+}
+
+/* The year is wider than a phone. Scroll it locally instead of folding it,
+   which would destroy the week columns. */
+.cg-scroll {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cg-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* One grid for the whole calendar, so the month header cannot drift out of
+   alignment with the columns underneath it: the gutter plus one track per week,
+   filled row by row. */
+.cg-grid {
+  display: grid;
+  grid-template-columns: 4ch repeat(var(--cols), var(--cg-cell));
+  gap: var(--cg-gap);
+  width: max-content;
+}
+
+.cg-corner,
+.cg-month,
+.cg-weekday {
+  color: var(--muted);
+  font-size: 0.8em;
+  line-height: 1;
+}
+
+.cg-month {
+  grid-column: span var(--span);
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.cg-weekday {
+  align-self: center;
+  text-align: right;
+  padding-right: 0.5ch;
+}
+
+.cg-c {
+  display: block;
+  width: var(--cg-cell);
+  height: var(--cg-cell);
+  border-radius: 3px;
+  background: var(--hl-low);
+}
+
+/* A day outside the window: no cell, but the column stays. */
+.cg-gap {
+  background: none;
+}
+
+.cg-0 {
+  background: var(--hl-med);
+}
+
+.cg-1 {
+  background: var(--cg-1);
+}
+
+.cg-2 {
+  background: var(--cg-2);
+}
+
+.cg-3 {
+  background: var(--cg-3);
+}
+
+.cg-4 {
+  background: var(--cg-4);
+}
+
+/* The markdown heading above titles the section, so the count reads as the
+   calendar's caption: total on the left, scale on the right. */
+.cg-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2ch;
+  margin-top: 0.7em;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.cg-count {
+  color: var(--subtle);
+}
+
+/* Sample data must not pass for the real thing when no token is configured. */
+.cg-badge {
+  margin-left: 1.5ch;
+  color: var(--gold);
+  font-size: 0.9em;
+}
+
+/* The legend reuses the day cell, so it needs its own inline run. */
+.cg-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  --cg-cell: 11px;
+}
+
+/* This partial sorts after 09-mobile.css, so it carries its own breakpoint. */
+@media (max-width: 820px) {
+  .cg {
+    --cg-cell: 11px;
+    --cg-gap: 3px;
+  }
+
+  .cg-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cg-foot {
+    flex-wrap: wrap;
+    gap: 0.5ch 2ch;
   }
 }
