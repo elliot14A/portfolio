@@ -24,7 +24,7 @@ const CATALOG = [
   "projects/ruspie.md - ruspie: query engine over CSV/Parquet; Rust, Apache Arrow, DataFusion",
   "projects/meterus.md - Meterus: usage metering and API keys; Rust, Redpanda, ClickHouse, data streaming",
   "projects/minitraycer.md - minitraycer: planning tool for coding agents; TypeScript, MCP, AI agents",
-  "projects/abel.md - abel: reproduce a failing CI job locally and serve the failure to a coding agent; Go, Docker, MCP, CI",
+  "projects/fincher.md - Fincher: autonomous operations engine for media post-production release pipelines, Google Agentic Cinema hackathon submission; Go, Gemini, ClickHouse, MCP, SQLite",
   "projects/portfolio.md - this site, a Neovim clone; TypeScript, Hono, htmx, Cloudflare Workers",
   "doc/help.txt - the editor's keymap reference",
 ].join("\n");

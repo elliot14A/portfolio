@@ -1,6 +1,6 @@
 # Akshith Katkuri
 
-> `technical cofounder @ gaurdata` · `fullstack & data infra` · `ai agents & tooling`
+> `technical cofounder @ gaurdata` · `backend & data infra` · `ai agents & tooling`
 
 ![Akshith Katkuri](/fightclub.jpg)
 
