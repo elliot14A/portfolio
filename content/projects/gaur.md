@@ -18,18 +18,14 @@ redefined in each place and the numbers quietly drift apart.
 
 Gaur fixes both. You define your metrics, dimensions, and access rules once as a
 contract, and every consumer queries that same contract, so the numbers match
-everywhere. A query returns a correct answer or a clear error, never a silently
-wrong number.
+everywhere. `A query returns a correct answer or a clear error, never a silently wrong number.`
 
 ## what I built
 
 The whole product, solo: backend, frontend, and the infrastructure under it.
 
-- **Backend, entirely in Rust**, including the AI agents. The whole data path is
-  Rust, so there's no Python sitting in the middle of it.
-- **The contract layer**: define data sources, dimensions, measures, and
-  row-level security once, and Gaur validates the model so a contract can't fan
-  out into a wrong aggregate.
+- **Backend, entirely in Rust**, including the AI agents. `The whole data path is Rust, so there is no Python sitting in the middle of it.`
+- **The contract layer**: `Define metrics, dimensions, and row-level security once, and Gaur validates the model so a contract cannot fan out into a wrong aggregate.`
 - **Three ways to consume a contract**: a REST query API, an OpenAI-compatible
   chat endpoint that streams answers, and an MCP server so agents query it
   directly.
@@ -40,11 +36,7 @@ The whole product, solo: backend, frontend, and the infrastructure under it.
   web console and the rest run on Hetzner, shipped with a custom Nix framework I
   built.
 
-The piece I'm most proud of is **webhook ingestion**. Plenty of SaaS platforms
-already push their events over webhooks, so rather than build a bespoke
-integration per source, I built one webhook path that a wide range of them can
-push straight into. It came out of early testers wanting more SaaS connectors
-supported.
+The piece I'm most proud of is **webhook ingestion**. `Rather than build a bespoke integration per source, I built one webhook path that a wide range of SaaS platforms can push straight into.` It came out of early testers wanting more SaaS connectors supported.
 
 ## stack
 

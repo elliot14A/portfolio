@@ -20,22 +20,15 @@ and place delivery holds.
 
 ## what I built
 
-Built as a submission for the Google Agentic Cinema hackathon: an autonomous
-operations engine that detects defects, investigates root causes, and executes
-remediation in a closed loop.
+Built as a submission for the Google Agentic Cinema hackathon:
+`An autonomous operations engine that detects defects, investigates root causes, and executes remediation in a closed loop.`
 
 - **Asynchronous workflow graphs in Go**: event-driven graphs for incident
   triage, asset allocation, and auto-resolution running over Echo, with SSE
   streaming live execution traces.
-- **Read-only AI agents with Gemini 2.5**: agents never mutate state directly.
-  They query ClickHouse via MCP and operational SQLite through six structured
-  tools to draft action plans.
-- **Deterministic policy verifier**: every LLM proposal must pass strict Go
-  invariants (market isolation, vendor accuracy >= 90%, turnaround inside
-  premiere countdowns) before execution.
-- **Closed-loop execution & scheduler**: a time-compressed scheduler (1 second =
-  1 operational hour) runs turnaround tasks and triggers simulated QC callbacks
-  to auto-resolve deliveries and title health.
+- **Read-only AI agents with Gemini 2.5**: `Agents never mutate state directly, querying ClickHouse and operational SQLite through structured tools to draft action plans.`
+- **Deterministic policy verifier**: `Every LLM proposal must pass strict Go invariants (market isolation, vendor accuracy >= 90%, turnaround inside countdowns) before execution.`
+- **Closed-loop execution & scheduler**: `A time-compressed scheduler runs turnaround tasks and triggers simulated QC callbacks to auto-resolve deliveries and title health.`
 - **Real-time operations UI**: Preact frontend with TanStack Router, Table, and
   Vanilla Extract, featuring territory matrix views, lineage DAGs, and a live
   defect simulator.
