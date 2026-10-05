@@ -1,3 +1,8 @@
+/**
+ * Intentionally dead code: Chat UI (floating chat FAB and drawer) is deactivated
+ * and preserved for future revival.
+ */
+
 import { ICON } from "@/core/content/icons";
 
 export function ChatPanel() {

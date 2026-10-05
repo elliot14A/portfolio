@@ -201,7 +201,18 @@ export const editor = (): Editor => {
       buffer = attachBuffer();
 
       document.addEventListener("keydown", (event) => this.onKey(event));
-      document.body.addEventListener("htmx:afterSwap", () => {
+      document.body.addEventListener("htmx:afterSwap", (event) => {
+        const detail = (event as CustomEvent).detail;
+        const target = detail?.target as HTMLElement | undefined;
+        if (
+          !target ||
+          (target.id !== "buffer" &&
+            !target.classList?.contains("buffer") &&
+            !target.classList?.contains("win"))
+        ) {
+          return;
+        }
+
         buffer = attachBuffer();
         this.exitCommand();
         this.closeWhichkey();

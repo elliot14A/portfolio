@@ -1,7 +1,8 @@
 import type { Buffer, TreeNode } from "@/core/content/content";
 import { Shell } from "../layouts/shell";
 import { BufferView } from "../partials/buffer";
-import { ChatPanel } from "../partials/chatPanel";
+// Intentionally dead code: ChatPanel is deactivated and preserved for future revival
+// import { ChatPanel } from "../partials/chatPanel";
 import { CommandLine } from "../partials/commandLine";
 import { NeoTree } from "../partials/neotree";
 import { Statusline } from "../partials/statusline";
@@ -28,7 +29,7 @@ export function EditorPage(props: EditorPageProps) {
             <BufferView buffer={buffer} />
           </div>
           <NeoTree nodes={props.tree} active={buffer.path} />
-          <ChatPanel />
+          {/* ChatPanel intentionally deactivated */}
         </main>
         <Statusline
           mode="NORMAL"

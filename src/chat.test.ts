@@ -1,9 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { makeApp } from "@/app";
+import { Hono } from "hono";
+import { makeChatAnswer } from "@/app";
 import { parsePlan } from "@/core/chat/chat";
 import { makeCounter } from "@/infra/chat/counter";
+import { makeChatRoutes } from "@/interfaces/web/routes/chat";
 
-const app = makeApp({});
+const app = new Hono();
+app.route("/", makeChatRoutes({ answer: makeChatAnswer({}) }));
 
 const post = (body: unknown) =>
   app.request("/chat", {

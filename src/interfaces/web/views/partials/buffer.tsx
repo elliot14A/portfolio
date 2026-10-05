@@ -1,5 +1,7 @@
 import { raw } from "hono/html";
 import type { Buffer } from "@/core/content/content";
+import { normalizeSlug } from "@/core/social/slug";
+import { DiscussionSection } from "./discussion";
 
 export type BufferViewProps = Readonly<{ buffer: Buffer }>;
 
@@ -36,6 +38,10 @@ export function BufferView(props: BufferViewProps) {
           <span class="txt">{raw(line.html)}</span>
         </div>
       ))}
+      {buffer.path.startsWith("blogs/") &&
+        buffer.path !== "blogs/README.md" && (
+          <DiscussionSection slug={normalizeSlug(buffer.path)} />
+        )}
       <div class="eob" aria-hidden="true">
         {Array.from({ length: EOB_ROWS }, () => (
           <div class="ln">

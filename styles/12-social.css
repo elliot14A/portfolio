@@ -1,0 +1,201 @@
+/* discussion & likes (pure markdown-style text matching Neovim buffer) */
+
+.discussion-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  padding: 1.5em 2ch 1.5em calc(var(--gutter-sign) + var(--gutter-num));
+  font-family: var(--font-mono);
+  font-size: 1em;
+  line-height: var(--line-h);
+  color: var(--text);
+  user-select: text;
+  max-width: 80ch;
+}
+
+.discussion-section .md-hr {
+  color: var(--muted);
+  user-select: none;
+}
+
+.discussion-section .md-h2 {
+  color: var(--foam);
+  font-weight: bold;
+}
+
+.discussion-section .md-h3 {
+  color: var(--rose);
+  font-weight: bold;
+  margin-top: 0.4em;
+}
+
+.discussion-section .md-bullet,
+.discussion-section .md-quote {
+  color: var(--subtle);
+  user-select: none;
+}
+
+/* Likes link / button */
+.discussion-likes-container {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.btn-like {
+  display: inline;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--foam);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--foam) 60%, transparent);
+  text-underline-offset: 2px;
+  transition:
+    color 0.1s ease,
+    text-decoration-color 0.1s ease;
+}
+
+.btn-like:hover {
+  color: var(--foam);
+  text-decoration-color: var(--foam);
+}
+
+.btn-like.liked {
+  color: var(--rose);
+  text-decoration-color: color-mix(in srgb, var(--rose) 60%, transparent);
+}
+
+.btn-like.liked:hover {
+  color: var(--rose);
+  text-decoration-color: var(--rose);
+}
+
+.btn-like:active {
+  color: var(--gold);
+}
+
+/* Comments List */
+.discussion-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.discussion-empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.discussion-comments-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.discussion-comment-item {
+  color: var(--text);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.discussion-comment-author {
+  color: var(--foam);
+  font-weight: 600;
+}
+
+.discussion-comment-date {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.discussion-comment-body {
+  color: var(--text);
+}
+
+/* Comments Form - Pure Markdown Lines */
+.discussion-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  margin-top: 0.5em;
+}
+
+.discussion-form-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5ch;
+  flex-wrap: wrap;
+}
+
+.discussion-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--muted);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: inherit;
+  outline: none;
+  padding: 0 0.3ch;
+  line-height: inherit;
+  transition: border-color 0.1s ease;
+}
+
+.discussion-input:focus {
+  border-bottom-color: var(--foam);
+}
+
+.discussion-input::placeholder {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.discussion-input-author {
+  width: 14ch;
+  color: var(--foam);
+}
+
+.discussion-handle-locked {
+  color: var(--foam);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5ch;
+}
+
+.discussion-input-msg {
+  flex: 1 1 24ch;
+  min-width: 18ch;
+  max-width: 50ch;
+}
+
+.discussion-submit-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 0.5ch;
+  color: var(--foam);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--foam) 60%, transparent);
+  text-underline-offset: 2px;
+  transition:
+    color 0.1s ease,
+    text-decoration-color 0.1s ease;
+}
+
+.discussion-submit-btn:hover {
+  color: var(--foam);
+  text-decoration-color: var(--foam);
+}
+
+.discussion-submit-btn:active {
+  color: var(--gold);
+}

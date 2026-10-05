@@ -6,7 +6,13 @@ import {
   type GetContributions,
   makeGetContributions,
 } from "@/app/git/getContributions";
-import { AGENT_CONTEXT, CONTENT } from "@/content.generated";
+import {
+  makeAddComment,
+  makeGetComments,
+  makeGetLikes,
+  makeToggleLike,
+} from "@/app/social/useCases";
+import { AGENT_CONTEXT, CONTENT, RSS_XML } from "@/content.generated";
 import { appError, SystemErrorCode } from "@/core/error";
 import { makeCounter, noopCount } from "@/infra/chat/counter";
 import { makePlan, makeStreamAnswer } from "@/infra/chat/llm";
@@ -29,10 +35,13 @@ import {
 import { makeFetchCalendar } from "@/infra/git/githubCalendar";
 import { stubFetchCalendar } from "@/infra/git/stubCalendar";
 import { makeClient } from "@/infra/openai/client";
+import { type D1Database, makeD1SocialStore } from "@/infra/social/d1Store";
 import { errorToHttp } from "@/interfaces/web/errorMapper";
 import { makeBufferRoutes } from "@/interfaces/web/routes/buffer";
-import { makeChatRoutes } from "@/interfaces/web/routes/chat";
+// Intentionally dead code: chat routes deactivated and preserved for future revival
+// import { makeChatRoutes } from "@/interfaces/web/routes/chat";
 import { makeContributionRoutes } from "@/interfaces/web/routes/contributions";
+import { makeSocialRoutes } from "@/interfaces/web/routes/social";
 import { ErrorPage } from "@/interfaces/web/views/pages/errorPage";
 
 const BRANCH = "main";
@@ -46,7 +55,12 @@ const kvOf = (env: unknown): KvStore | undefined =>
     ? (env as { CHAT?: KvStore }).CHAT
     : undefined;
 
-const makeChatAnswer = (env: unknown): Answer => {
+const dbOf = (env: unknown): D1Database | undefined =>
+  typeof env === "object" && env !== null
+    ? (env as { DB?: D1Database }).DB
+    : undefined;
+
+export const makeChatAnswer = (env: unknown): Answer => {
   const llm = readLlmConfig(env);
   const kv = kvOf(env);
   const knownPaths = new Set(Object.keys(CONTENT.buffers));
@@ -90,8 +104,35 @@ export const makeApp = (env: unknown): Hono => {
     console.warn("github: no login or token, serving sample contributions");
   }
 
+  const db = dbOf(env);
+  const socialStore = makeD1SocialStore({ db });
+  const getLikes = makeGetLikes(socialStore);
+  const toggleLike = makeToggleLike(socialStore);
+  const getComments = makeGetComments(socialStore);
+  const addComment = makeAddComment(socialStore);
+
   const app = new Hono();
-  app.route("/", makeChatRoutes({ answer: makeChatAnswer(env) }));
+  // Intentionally dead code: chat endpoint is deactivated and preserved for future revival.
+  // app.route("/", makeChatRoutes({ answer: makeChatAnswer(env) }));
+  app.route(
+    "/api",
+    makeSocialRoutes({
+      getLikes,
+      toggleLike,
+      getComments,
+      addComment,
+    }),
+  );
+  app.get("/rss.xml", (c) => {
+    c.header("Content-Type", "application/xml; charset=utf-8");
+    c.header("Cache-Control", "public, max-age=0, s-maxage=3600");
+    return c.body(RSS_XML);
+  });
+  app.get("/feed.xml", (c) => {
+    c.header("Content-Type", "application/xml; charset=utf-8");
+    c.header("Cache-Control", "public, max-age=0, s-maxage=3600");
+    return c.body(RSS_XML);
+  });
   app.route(
     "/",
     makeContributionRoutes({
