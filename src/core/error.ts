@@ -19,13 +19,20 @@ export const GitErrorCode = {
   MALFORMED: "GIT_ERR_02",
 } as const;
 
+export const SocialErrorCode = {
+  BAD_REQUEST: "SOCIAL_ERR_01",
+  NOT_FOUND: "SOCIAL_ERR_02",
+  FORBIDDEN: "SOCIAL_ERR_03",
+} as const;
+
 type CodeOf<T> = T[keyof T];
 
 export type AppErrorCode =
   | CodeOf<typeof ContentErrorCode>
   | CodeOf<typeof SystemErrorCode>
   | CodeOf<typeof ChatErrorCode>
-  | CodeOf<typeof GitErrorCode>;
+  | CodeOf<typeof GitErrorCode>
+  | CodeOf<typeof SocialErrorCode>;
 
 export type AppError = Readonly<{
   code: AppErrorCode;

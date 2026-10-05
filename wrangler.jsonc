@@ -29,6 +29,13 @@
       "remote": true
     }
   ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio-db",
+      "database_id": "ce60229a-53b4-45c6-b219-94b42496e731"
+    }
+  ],
   "observability": {
     "enabled": true
   }

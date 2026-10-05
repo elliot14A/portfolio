@@ -10,7 +10,9 @@
     "deploy": "bun run build && wrangler deploy",
     "check": "biome check && tsc --noEmit",
     "check:fix": "biome check --write",
-    "test": "bun test"
+    "test": "bun test",
+    "db:migrate:local": "wrangler d1 migrations apply portfolio-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply portfolio-db --remote"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",

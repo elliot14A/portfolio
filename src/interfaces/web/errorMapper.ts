@@ -5,6 +5,7 @@ import {
   ChatErrorCode,
   ContentErrorCode,
   GitErrorCode,
+  SocialErrorCode,
   SystemErrorCode,
 } from "@/core/error";
 
@@ -16,6 +17,9 @@ const STATUS: Record<AppErrorCode, ContentfulStatusCode> = {
   [ChatErrorCode.BAD_REQUEST]: 400,
   [GitErrorCode.UNAVAILABLE]: 502,
   [GitErrorCode.MALFORMED]: 502,
+  [SocialErrorCode.BAD_REQUEST]: 400,
+  [SocialErrorCode.NOT_FOUND]: 404,
+  [SocialErrorCode.FORBIDDEN]: 403,
 };
 
 export type HttpError = Readonly<{
