@@ -41,7 +41,7 @@ describe("GET /", () => {
 
     expect(entries.map((entry) => entry[2])).toEqual([
       "r",
-      "a",
+      "b",
       "p",
       "c",
       "h",
@@ -86,6 +86,25 @@ describe("GET /b/README.md", () => {
   test("caches at the edge", async () => {
     const res = await app.request("/b/README.md");
     expect(res.headers.get("Cache-Control")).toContain("s-maxage=3600");
+  });
+
+  test("renders inline backtick code in secondary color with .md-code", async () => {
+    const html = await (await app.request("/b/README.md")).text();
+    expect(html).toContain('class="md-code"');
+    expect(html).toContain('style="color:#9CCFD8"');
+    expect(html).toContain(
+      '<span class="md-code" style="color:#9CCFD8">technical cofounder @ gaurdata</span>',
+    );
+  });
+
+  test("renders markdown-style bottom discussion strictly for blogs, not README", async () => {
+    const readmeHtml = await (await app.request("/b/README.md")).text();
+    expect(readmeHtml).not.toContain('class="discussion-section"');
+
+    const blogsIndexHtml = await (
+      await app.request("/b/blogs/README.md")
+    ).text();
+    expect(blogsIndexHtml).not.toContain('class="discussion-section"');
   });
 });
 
@@ -174,5 +193,36 @@ describe("error pages", () => {
   test("error pages are not indexed", async () => {
     const html = await (await app.request("/nope")).text();
     expect(html).toContain('name="robots" content="noindex"');
+  });
+});
+
+describe("GET /rss.xml", () => {
+  test("serves RSS feed with xml content type and cache header", async () => {
+    const res = await app.request("/rss.xml");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe(
+      "application/xml; charset=utf-8",
+    );
+    expect(res.headers.get("Cache-Control")).toBe(
+      "public, max-age=0, s-maxage=3600",
+    );
+  });
+
+  test("serves /feed.xml alias", async () => {
+    const res = await app.request("/feed.xml");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe(
+      "application/xml; charset=utf-8",
+    );
+  });
+});
+
+describe("GET /b/blogs/*", () => {
+  test("serves blogs/README.md with dataview table of posts", async () => {
+    const res = await app.request("/b/blogs/README.md");
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('data-path="blogs/README.md"');
+    expect(html).toContain("no posts yet");
   });
 });
