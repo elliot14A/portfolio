@@ -223,6 +223,6 @@ describe("GET /b/blogs/*", () => {
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain('data-path="blogs/README.md"');
-    expect(html).toContain("no posts yet");
+    expect(html).toContain("001-first-blog.md");
   });
 });

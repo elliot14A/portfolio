@@ -4,4 +4,4 @@
 
 | date | post | tags |
 | :--- | :--- | :--- |
-| — | (no posts yet) | — |
+| 2026-10-06 | [Building something in public for the first time](/b/blogs/001-first-blog.md) | `#kuma` `#build-in-public` `#devlog` |

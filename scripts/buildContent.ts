@@ -59,11 +59,17 @@ const styleOf = (token: ThemedToken): string => {
   if ((font & 4) !== 0) parts.push("text-decoration:underline");
   return parts.join(";");
 };
-
 const IMAGE_RE = /^\s*!\[([^\]]*)\]\(([^)]+)\)\s*$/;
+const VIDEO_EXT_RE = /\.(mp4|webm)$/i;
 
-const imageHtml = (alt: string, src: string): string =>
-  `<img class="md-img" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+const imageHtml = (alt: string, src: string): string => {
+  const safeSrc = escapeHtml(src);
+  const safeAlt = escapeHtml(alt);
+  if (VIDEO_EXT_RE.test(src.split("?")[0] ?? src)) {
+    return `<video class="md-img" src="${safeSrc}" autoplay loop muted playsinline aria-label="${safeAlt}"></video>`;
+  }
+  return `<img class="md-img" src="${safeSrc}" alt="${safeAlt}" loading="lazy" />`;
+};
 
 // Tight form, no inner spaces: the prose `<!-- ... -->` comments in the content
 // are meant to render as visible text and must not match.
@@ -77,22 +83,54 @@ const graphHtml = (): string =>
 type LinkSpan = Readonly<{ start: number; end: number; href: string }>;
 
 const LINK_RE = /\[[^\]]+\]\(([^)]+)\)/g;
-const CODE_RE = /(?<!`)`([^`\r\n]+)`(?!`)/g;
+const MULTI_CODE_RE = /(?<!`)(`((?:[^`\n]|\n(?!\s*\n))+?)`)(?!`)/g;
 
 type CodeSpan = Readonly<{
   start: number;
   end: number;
   innerStart: number;
   innerEnd: number;
+  hasStartDelimiter: boolean;
+  hasEndDelimiter: boolean;
 }>;
 
-const codeSpansOf = (line: string): CodeSpan[] =>
-  [...line.matchAll(CODE_RE)].map((match) => ({
-    start: match.index,
-    end: match.index + match[0].length,
-    innerStart: match.index + 1,
-    innerEnd: match.index + match[0].length - 1,
-  }));
+const codeSpansByLineOf = (lines: readonly string[]): CodeSpan[][] => {
+  const fullText = lines.join("\n");
+  const lineOffsets: number[] = [];
+  let currOffset = 0;
+  for (const line of lines) {
+    lineOffsets.push(currOffset);
+    currOffset += line.length + 1;
+  }
+
+  const result: CodeSpan[][] = lines.map(() => []);
+
+  for (const match of fullText.matchAll(MULTI_CODE_RE)) {
+    const matchStart = match.index;
+    const matchEnd = match.index + match[0].length;
+    lines.forEach((line, i) => {
+      const lineStart = lineOffsets[i] ?? 0;
+      const lineEnd = lineStart + line.length;
+      if (matchEnd <= lineStart || matchStart >= lineEnd) return;
+      const isStartLine = matchStart >= lineStart;
+      const isEndLine = matchEnd <= lineEnd;
+      const start = isStartLine ? matchStart - lineStart : 0;
+      const end = isEndLine ? matchEnd - lineStart : line.length;
+      const innerStart = isStartLine ? start + 1 : 0;
+      const innerEnd = isEndLine ? end - 1 : line.length;
+      result[i]?.push({
+        start,
+        end,
+        innerStart,
+        innerEnd,
+        hasStartDelimiter: isStartLine,
+        hasEndDelimiter: isEndLine,
+      });
+    });
+  }
+
+  return result;
+};
 
 const linksOf = (line: string, codeSpans: readonly CodeSpan[]): LinkSpan[] =>
   [...line.matchAll(LINK_RE)]
@@ -118,13 +156,61 @@ const anchorFor = (href: string): string => {
   return `<a class="lnk" href="${safe}" target="_blank" rel="noopener noreferrer">`;
 };
 
-const renderLine = (
+const splitTokens = (
   tokens: ReadonlyArray<ThemedToken>,
+  boundaries: readonly number[],
+): ThemedToken[] => {
+  const points = [...new Set(boundaries.filter((b) => b > 0))].sort(
+    (a, b) => a - b,
+  );
+  if (points.length === 0) return [...tokens];
+
+  const result: ThemedToken[] = [];
+  let currOffset = 0;
+  for (const token of tokens) {
+    const tokLen = token.content.length;
+    const tokStart = currOffset;
+    const tokEnd = currOffset + tokLen;
+    currOffset = tokEnd;
+
+    const cuts = points
+      .filter((p) => p > tokStart && p < tokEnd)
+      .map((p) => p - tokStart);
+    if (cuts.length === 0) {
+      result.push(token);
+      continue;
+    }
+
+    let prevCut = 0;
+    for (const cut of cuts) {
+      result.push({
+        ...token,
+        content: token.content.slice(prevCut, cut),
+      });
+      prevCut = cut;
+    }
+    result.push({
+      ...token,
+      content: token.content.slice(prevCut),
+    });
+  }
+  return result;
+};
+
+const renderLine = (
+  rawTokens: ReadonlyArray<ThemedToken>,
   source: string,
-  isMarkdown = false,
+  codeSpans: readonly CodeSpan[] = [],
 ): string => {
-  const codeSpans = isMarkdown ? codeSpansOf(source) : [];
   const links = linksOf(source, codeSpans);
+  const boundaries: number[] = [];
+  for (const span of codeSpans) {
+    boundaries.push(span.start, span.innerStart, span.innerEnd, span.end);
+  }
+  for (const link of links) {
+    boundaries.push(link.start, link.end);
+  }
+  const tokens = splitTokens(rawTokens, boundaries);
   let offset = 0;
   let openHref: string | null = null;
   let inCode = false;
@@ -155,10 +241,11 @@ const renderLine = (
       }
     }
     const isBacktickDelimiter =
-      isMarkdown &&
       token.content === "`" &&
       codeSpans.some(
-        (span) => offset === span.start || offset === span.end - 1,
+        (span) =>
+          (span.hasStartDelimiter && offset === span.start) ||
+          (span.hasEndDelimiter && offset === span.end - 1),
       );
     if (isBacktickDelimiter) {
       html += `<span style="color:#908CAA">${escapeHtml(token.content)}</span>`;
@@ -457,6 +544,9 @@ const build = async (): Promise<void> => {
         theme: "rose-pine",
       });
 
+      const codeSpansByLine =
+        lang === "markdown" ? codeSpansByLineOf(bodySourceLines) : [];
+
       const bodyLines: Line[] = bodySourceLines.map((text, index) => {
         if (GRAPH_RE.test(text))
           return { html: graphHtml(), indent: indentOf(text) };
@@ -466,7 +556,7 @@ const build = async (): Promise<void> => {
           return { html: imageHtml(alt, src), indent: indentOf(text) };
         }
         return {
-          html: renderLine(tokens[index] ?? [], text, lang === "markdown"),
+          html: renderLine(tokens[index] ?? [], text, codeSpansByLine[index]),
           indent: indentOf(text),
           ...(isNowrap(text) ? { nowrap: true } : {}),
         };
@@ -480,6 +570,8 @@ const build = async (): Promise<void> => {
         lang,
         theme: "rose-pine",
       });
+      const codeSpansByLine =
+        lang === "markdown" ? codeSpansByLineOf(sourceLines) : [];
 
       lines = sourceLines.map((text, index) => {
         if (GRAPH_RE.test(text))
@@ -490,7 +582,7 @@ const build = async (): Promise<void> => {
           return { html: imageHtml(alt, src), indent: indentOf(text) };
         }
         return {
-          html: renderLine(tokens[index] ?? [], text, lang === "markdown"),
+          html: renderLine(tokens[index] ?? [], text, codeSpansByLine[index]),
           indent: indentOf(text),
           ...(isNowrap(text) ? { nowrap: true } : {}),
         };
