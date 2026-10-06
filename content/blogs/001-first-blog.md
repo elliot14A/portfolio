@@ -26,9 +26,9 @@ come across something I don't understand, I have Mr. Claude, who loves burning
 tokens like an elephant gulping water after a marathon. It's either way too broad
 for my liking or way too vague. The AI bros might argue,
 
-_"Akshually, you just need to give the model better context, use the right
+`Ackchyually, you just need to give the model better context, use the right
 skills, provide relevant reference material, define your constraints properly
-and iterate on the prompt until you get the result you want."_
+and iterate on the prompt until you get the result you want.`
 
 ![Akshually nerd meme](https://media.elliot14a.work/memes/akshually-nerd.png)
 
