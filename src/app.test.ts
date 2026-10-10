@@ -41,13 +41,16 @@ describe("GET /", () => {
 
     expect(entries.map((entry) => entry[2])).toEqual([
       "r",
-      "b",
+      "a",
       "p",
       "c",
       "h",
       "g",
       "e",
     ]);
+    expect(entries.find((entry) => entry[2] === "a")?.[1]).toBe(
+      "/b/README.md#ask",
+    );
     for (const [, href] of entries) {
       expect(href).toMatch(/^(\/b\/|https:\/\/|mailto:)/);
     }
@@ -66,6 +69,7 @@ describe("GET /b/README.md", () => {
     expect(html).toContain('data-path="README.md"');
     expect(html).toContain('id="statusline"');
     expect(html).toContain('id="neotree"');
+    expect(html).toContain('class="chat"');
     expect(html).toContain("NORMAL");
   });
 
