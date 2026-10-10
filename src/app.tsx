@@ -38,8 +38,7 @@ import { makeClient } from "@/infra/openai/client";
 import { type D1Database, makeD1SocialStore } from "@/infra/social/d1Store";
 import { errorToHttp } from "@/interfaces/web/errorMapper";
 import { makeBufferRoutes } from "@/interfaces/web/routes/buffer";
-// Intentionally dead code: chat routes deactivated and preserved for future revival
-// import { makeChatRoutes } from "@/interfaces/web/routes/chat";
+import { makeChatRoutes } from "@/interfaces/web/routes/chat";
 import { makeContributionRoutes } from "@/interfaces/web/routes/contributions";
 import { makeSocialRoutes } from "@/interfaces/web/routes/social";
 import { ErrorPage } from "@/interfaces/web/views/pages/errorPage";
@@ -112,8 +111,7 @@ export const makeApp = (env: unknown): Hono => {
   const addComment = makeAddComment(socialStore);
 
   const app = new Hono();
-  // Intentionally dead code: chat endpoint is deactivated and preserved for future revival.
-  // app.route("/", makeChatRoutes({ answer: makeChatAnswer(env) }));
+  app.route("/", makeChatRoutes({ answer: makeChatAnswer(env) }));
   app.route(
     "/api",
     makeSocialRoutes({
