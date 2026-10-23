@@ -31,7 +31,6 @@ const parseProfile = (
   const workSection = sections.find((s) => s.startsWith("selected work")) ?? "";
   const expSection = sections.find((s) => s.startsWith("experience")) ?? "";
 
-  // 1. Parse hero & bio
   const heroLines = heroSection.split("\n");
   let name = "";
   let role = "";
@@ -84,7 +83,6 @@ const parseProfile = (
     }
   }
 
-  // 2. Parse selected work
   const workBlocks = workSection
     .replace(/^selected work\s*/, "")
     .trim()
@@ -99,7 +97,6 @@ const parseProfile = (
       .filter((l) => l.length > 0);
     if (lines.length < 3) continue;
 
-    // Line 0: "01 Gaur | GAURDATA · 2026-PRESENT"
     const headerMatch = lines[0]?.match(/^(\d+)\s+([^|]+)\|\s*(.+?)\s*[·•-]\s*(.+)$/);
     if (!headerMatch) continue;
 
@@ -107,15 +104,11 @@ const parseProfile = (
     const title = headerMatch[2]?.trim() ?? "";
     const company = headerMatch[3]?.trim() ?? "";
     const period = headerMatch[4]?.trim() ?? "";
-
-    // Line 1: Summary description
     const summary = lines[1] ?? "";
 
-    // Line 2: Highlights in brackets "[built solo] [Rust]"
     const highlightsLine = lines[2] ?? "";
     const highlights = [...highlightsLine.matchAll(/\[(.*?)\]/g)].map((m) => m[1]?.trim() ?? "");
 
-    // Line 3: slug: gaur
     let slug = "";
     const slugLine = lines.find((l) => l.startsWith("slug:"));
     if (slugLine) {
@@ -133,7 +126,6 @@ const parseProfile = (
     });
   }
 
-  // 3. Parse experience
   const expLines = expSection
     .replace(/^experience\s*/, "")
     .trim()
@@ -144,7 +136,6 @@ const parseProfile = (
   for (const line of expLines) {
     const trimmed = line.trim();
     if (!trimmed.startsWith("-")) continue;
-    // Format: - Feb 2026 - now       GaurData · Technical Cofounder
     const match = trimmed.match(/^-\s+(.+?)\s{2,}(.+?)\s*[·•-]\s*(.+)$/);
     if (match) {
       experience.push({
@@ -176,7 +167,6 @@ const runBuild = Effect.gen(function* () {
 
   const parsed = parseProfile(profileRaw);
 
-  // Validate with Effect Schemas at build time
   const validatedProfile = yield* Schema.decodeUnknownEffect(ProfileSchema)(parsed.profile);
   const validatedWork = yield* Schema.decodeUnknownEffect(Schema.Array(SelectedWorkItemSchema))(
     parsed.selectedWork,
@@ -249,7 +239,6 @@ export const AGENT_CONTEXT = ${JSON.stringify(agentContext)};
     catch: (cause) => new Error(`Failed to write generated.ts: ${String(cause)}`),
   });
 
-  // Format generated file with Biome
   yield* Effect.tryPromise({
     try: async () => {
       const proc = Bun.spawn(["bun", "x", "biome", "format", "--write", OUT_FILE], {
