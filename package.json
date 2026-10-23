@@ -19,6 +19,7 @@
   "dependencies": {
     "@effect/ai-openai": "4.0.0-rc.115",
     "@effect/sql-d1": "4.0.0-rc.115",
+    "@vanilla-extract/css": "1.21.3",
     "effect": "4.0.0-rc.115",
     "preact": "10.29.8"
   },
@@ -26,6 +27,8 @@
     "@biomejs/biome": "2.5.10",
     "@types/bun": "1.4.0",
     "@types/node": "26.1.1",
+    "@vanilla-extract/esbuild-plugin": "2.3.22",
+    "esbuild": "0.28.2",
     "typescript": "6.0.3"
   }
 }
