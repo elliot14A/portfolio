@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
-  "main": "src/worker.ts",
+  "main": "apps/server/src/index.ts",
   "compatibility_date": "2026-07-22",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
@@ -22,18 +22,12 @@
     "PORTFOLIO_GITHUB_API_URL": "https://api.github.com/graphql",
     "PORTFOLIO_GITHUB_LOGIN": "elliot14A"
   },
-  "kv_namespaces": [
-    {
-      "binding": "CHAT",
-      "id": "46eb82aaed3c4074a4721d47e320e008",
-      "remote": true
-    }
-  ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "portfolio-db",
-      "database_id": "ce60229a-53b4-45c6-b219-94b42496e731"
+      "database_id": "ce60229a-53b4-45c6-b219-94b42496e731",
+      "migrations_dir": "migrations"
     }
   ],
   "observability": {
