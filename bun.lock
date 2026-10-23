@@ -4,30 +4,22 @@
   "workspaces": {
     "": {
       "name": "portfolio",
+      "dependencies": {
+        "effect": "4.0.0-rc.115",
+        "preact": "10.29.8",
+      },
       "devDependencies": {
         "@biomejs/biome": "2.5.10",
         "@types/bun": "1.4.0",
         "typescript": "6.0.3",
       },
     },
-    "packages/chat": {
-      "name": "@portfolio/chat",
-      "version": "0.1.0",
-      "dependencies": {
-        "effect": "4.0.0-rc.115",
-      },
-      "devDependencies": {
-        "@portfolio/tsconfig": "workspace:*",
-      },
-    },
     "packages/content": {
       "name": "@portfolio/content",
       "version": "0.1.0",
-      "dependencies": {
-        "effect": "4.0.0-rc.115",
-      },
       "devDependencies": {
         "@portfolio/tsconfig": "workspace:*",
+        "typescript": "6.0.3",
       },
     },
     "packages/tsconfig": {
@@ -54,8 +46,6 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.10", "", { "os": "win32", "cpu": "x64" }, "sha512-M+2dgBsl3lXRiTfgPVc2p3anS4Tocojke4rzFLScZ2Y/wmF+36dRb1iHCLiyGqOzQGyTplZH1HnEYviiAqi3nA=="],
 
-    "@portfolio/chat": ["@portfolio/chat@workspace:packages/chat"],
-
     "@portfolio/content": ["@portfolio/content@workspace:packages/content"],
 
     "@portfolio/tsconfig": ["@portfolio/tsconfig@workspace:packages/tsconfig"],
@@ -67,6 +57,8 @@
     "bun-types": ["bun-types@1.4.0", "", { "dependencies": { "@types/node": "*" } }, "sha512-iIKw23BspnQQYd3prITOBxeUsxBHnwzX6YJfGMuNOZzeNcMmVqzIIVGRm1l69ogaPQmb4wB6BN8mA5bE9YuC5Q=="],
 
     "effect": ["effect@4.0.0-rc.115", "", {}, "sha512-ogYulZ5ffeOzrJqQrG0XOkDO5lKn2s9KNHhoxJy/6wKUkF0i12dlVXWA9TgsgQ+zV/JzizyG0+XMPepZEQX6vw=="],
+
+    "preact": ["preact@10.29.8", "", { "peerDependencies": { "preact-render-to-string": ">=5" }, "optionalPeers": ["preact-render-to-string"] }, "sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q=="],
 
     "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
 
