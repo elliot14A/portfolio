@@ -5,17 +5,28 @@
     "": {
       "name": "portfolio",
       "dependencies": {
+        "@effect/ai-openai": "4.0.0-rc.115",
+        "@effect/sql-d1": "4.0.0-rc.115",
         "effect": "4.0.0-rc.115",
         "preact": "10.29.8",
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.10",
         "@types/bun": "1.4.0",
+        "@types/node": "26.1.1",
         "typescript": "6.0.3",
       },
     },
     "packages/content": {
       "name": "@portfolio/content",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@portfolio/tsconfig": "workspace:*",
+        "typescript": "6.0.3",
+      },
+    },
+    "packages/d1": {
+      "name": "@portfolio/d1",
       "version": "0.1.0",
       "devDependencies": {
         "@portfolio/tsconfig": "workspace:*",
@@ -46,7 +57,15 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.10", "", { "os": "win32", "cpu": "x64" }, "sha512-M+2dgBsl3lXRiTfgPVc2p3anS4Tocojke4rzFLScZ2Y/wmF+36dRb1iHCLiyGqOzQGyTplZH1HnEYviiAqi3nA=="],
 
+    "@cloudflare/workers-types": ["@cloudflare/workers-types@5.20261023.1", "", {}, "sha512-jRaMsWUF/08dd0dWnX3zPGPOjakkkA2JPnK5vLsCQFmYC40kbMPZ02fvOPO8kqjqgljoMZrKsRiXpR1u1Lp0Qg=="],
+
+    "@effect/ai-openai": ["@effect/ai-openai@4.0.0-rc.115", "", { "peerDependencies": { "effect": "^4.0.0-rc.115" } }, "sha512-b/+hnvukeD8a8k9mevgz8X4HnzPV09bllRlij4NGIJGW/wIYkDtCEyzbjM6kxaQRWjOKRSz5wsI8XsWLgGvg3A=="],
+
+    "@effect/sql-d1": ["@effect/sql-d1@4.0.0-rc.115", "", { "dependencies": { "@cloudflare/workers-types": "^5.20260905.1" }, "peerDependencies": { "effect": "^4.0.0-rc.115" } }, "sha512-o2JkGjN02NBMxwDtJbwcC4teyMiOApqN085fdVMid4FUC6ixj/WyKyPpe51QGOMQQTTl2BkXccA/IwDIywGXlA=="],
+
     "@portfolio/content": ["@portfolio/content@workspace:packages/content"],
+
+    "@portfolio/d1": ["@portfolio/d1@workspace:packages/d1"],
 
     "@portfolio/tsconfig": ["@portfolio/tsconfig@workspace:packages/tsconfig"],
 

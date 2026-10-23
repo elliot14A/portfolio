@@ -2,5 +2,9 @@
   "name": "@portfolio/tsconfig",
   "version": "0.1.0",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "exports": {
+    "./base.json": "./base.json",
+    "./worker.json": "./worker.json"
+  }
 }
