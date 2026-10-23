@@ -2,10 +2,10 @@ import { Effect, Schema } from "effect";
 import { D1Client } from "./client";
 import { D1Error, mapD1Error, RateLimitError } from "./error";
 
-export interface RateLimitConfig {
+export type RateLimitConfig = {
   readonly maxRequests?: number;
   readonly windowSeconds?: number;
-}
+};
 
 export const RateLimitRecord = Schema.Struct({
   ip: Schema.String,

@@ -1,45 +1,42 @@
 import { Schema } from "effect";
 
-export const ProjectSchema = Schema.Struct({
-  number: Schema.String,
-  title: Schema.String,
-  company: Schema.String,
-  period: Schema.String,
-  summary: Schema.String,
-  metrics: Schema.Array(Schema.String),
-  link: Schema.String,
+export const ContactLinksSchema = Schema.Struct({
+  email: Schema.NonEmptyString,
+  github: Schema.NonEmptyString,
+  linkedin: Schema.NonEmptyString,
 });
-export type Project = typeof ProjectSchema.Type;
-
-export const ExperienceSubItemSchema = Schema.Struct({
-  period: Schema.String,
-  role: Schema.String,
-});
-export type ExperienceSubItem = typeof ExperienceSubItemSchema.Type;
-
-export const ExperienceNodeSchema = Schema.Struct({
-  period: Schema.String,
-  company: Schema.String,
-  role: Schema.String,
-  items: Schema.optional(Schema.Array(ExperienceSubItemSchema)),
-});
-export type ExperienceNode = typeof ExperienceNodeSchema.Type;
+export type ContactLinks = typeof ContactLinksSchema.Type;
 
 export const ProfileSchema = Schema.Struct({
-  name: Schema.String,
-  role: Schema.String,
-  tagline: Schema.String,
-  email: Schema.String,
-  github: Schema.String,
-  linkedin: Schema.String,
-  location: Schema.String,
-  asciiBanner: Schema.Array(Schema.String),
+  name: Schema.NonEmptyString,
+  role: Schema.NonEmptyString,
+  location: Schema.NonEmptyString,
+  links: ContactLinksSchema,
+  bio: Schema.Array(Schema.NonEmptyString),
 });
 export type Profile = typeof ProfileSchema.Type;
 
-export const decodeProject = (raw: unknown) => Schema.decodeUnknownEffect(ProjectSchema)(raw);
+export const SelectedWorkItemSchema = Schema.Struct({
+  number: Schema.NonEmptyString,
+  title: Schema.NonEmptyString,
+  company: Schema.NonEmptyString,
+  period: Schema.NonEmptyString,
+  summary: Schema.NonEmptyString,
+  highlights: Schema.Array(Schema.NonEmptyString),
+  slug: Schema.NonEmptyString,
+});
+export type SelectedWorkItem = typeof SelectedWorkItemSchema.Type;
 
-export const decodeExperienceNode = (raw: unknown) =>
-  Schema.decodeUnknownEffect(ExperienceNodeSchema)(raw);
+export const ExperienceItemSchema = Schema.Struct({
+  period: Schema.NonEmptyString,
+  company: Schema.NonEmptyString,
+  role: Schema.NonEmptyString,
+});
+export type ExperienceItem = typeof ExperienceItemSchema.Type;
 
-export const decodeProfile = (raw: unknown) => Schema.decodeUnknownEffect(ProfileSchema)(raw);
+export const ProjectDocSchema = Schema.Struct({
+  slug: Schema.NonEmptyString,
+  title: Schema.NonEmptyString,
+  content: Schema.NonEmptyString,
+});
+export type ProjectDoc = typeof ProjectDocSchema.Type;
