@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "test": "bun test",
+    "check": "bun run typecheck && bun run lint",
     "typecheck": "bun --filter \"*\" typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
