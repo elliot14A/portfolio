@@ -10,6 +10,7 @@
         "@vanilla-extract/css": "1.21.3",
         "effect": "4.0.0-rc.115",
         "preact": "10.29.8",
+        "preact-render-to-string": "6.8.1",
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.10",
@@ -17,6 +18,20 @@
         "@types/node": "26.1.1",
         "@vanilla-extract/esbuild-plugin": "2.3.22",
         "esbuild": "0.28.2",
+        "typescript": "6.0.3",
+      },
+    },
+    "apps/server": {
+      "name": "@portfolio/server",
+      "version": "0.1.0",
+      "dependencies": {
+        "@portfolio/content": "workspace:*",
+        "@portfolio/d1": "workspace:*",
+        "@portfolio/web": "workspace:*",
+        "preact-render-to-string": "6.8.1",
+      },
+      "devDependencies": {
+        "@portfolio/tsconfig": "workspace:*",
         "typescript": "6.0.3",
       },
     },
@@ -183,6 +198,8 @@
 
     "@portfolio/d1": ["@portfolio/d1@workspace:packages/d1"],
 
+    "@portfolio/server": ["@portfolio/server@workspace:apps/server"],
+
     "@portfolio/tsconfig": ["@portfolio/tsconfig@workspace:packages/tsconfig"],
 
     "@portfolio/web": ["@portfolio/web@workspace:apps/web"],
@@ -276,6 +293,8 @@
     "pkg-types": ["pkg-types@1.3.1", "", { "dependencies": { "confbox": "^0.1.8", "mlly": "^1.7.4", "pathe": "^2.0.1" } }, "sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ=="],
 
     "preact": ["preact@10.29.8", "", { "peerDependencies": { "preact-render-to-string": ">=5" }, "optionalPeers": ["preact-render-to-string"] }, "sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q=="],
+
+    "preact-render-to-string": ["preact-render-to-string@6.8.1", "", { "peerDependencies": { "preact": ">=10 || >= 11.0.0-0" } }, "sha512-EIaLVlarET55f737gG/g1bK1UfjAgT3Z7Ch1Z7UX4/TwHh1O7EI5sCtwhVP+cs0n37SyV2HjZCSRtrpMm4Bujw=="],
 
     "require-like": ["require-like@0.1.2", "", {}, "sha512-oyrU88skkMtDdauHDuKVrgR+zuItqr6/c//FXzvmxRGMexSDc6hNvJInGW3LL46n+8b50RykrvwSUIIQH2LQ5A=="],
 

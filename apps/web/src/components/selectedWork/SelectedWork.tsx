@@ -1,16 +1,18 @@
 import type { SelectedWorkItem } from "@portfolio/content";
 import type { JSX } from "preact";
 import {
-  cardContainer,
-  cardHeader,
-  cardMeta,
-  cardNumber,
-  cardSummary,
-  cardTitle,
-  highlightBadge,
-  highlightsContainer,
+  arrowPrefix,
+  highlightPill,
+  itemContainer,
+  itemHeader,
+  itemMeta,
+  itemNumber,
+  itemSummary,
+  itemTitle,
+  linkText,
   sectionContainer,
   sectionHeading,
+  slashPrefix,
   viewProjectLink,
   workList,
 } from "./selectedWork.css";
@@ -19,31 +21,42 @@ type SelectedWorkProps = {
   readonly items: readonly SelectedWorkItem[];
 };
 
+const renderSummaryWithPills = (text: string): (string | JSX.Element)[] => {
+  const parts = text.split(/(\[.*?\])/);
+  return parts.map((part, index) => {
+    if (part.startsWith("[") && part.endsWith("]")) {
+      return (
+        <span key={index} className={highlightPill}>
+          {part.slice(1, -1)}
+        </span>
+      );
+    }
+    return part;
+  });
+};
+
 export const SelectedWork = ({ items }: SelectedWorkProps): JSX.Element => (
-  <section className={sectionContainer}>
-    <h2 className={sectionHeading}>{"// selected work"}</h2>
+  <section id="selected-work" className={sectionContainer}>
+    <h2 className={sectionHeading}>
+      <span className={slashPrefix}>{"// "}</span>
+      {"selected work"}
+    </h2>
     <div className={workList}>
       {items.map((item) => (
-        <article key={item.slug} className={cardContainer}>
-          <div className={cardHeader}>
-            <span className={cardTitle}>
-              <span className={cardNumber}>{item.number}</span>
+        <article key={item.slug} className={itemContainer}>
+          <div className={itemHeader}>
+            <span className={itemTitle}>
+              <span className={itemNumber}>{item.number}</span>
               {item.title}
             </span>
-            <span className={cardMeta}>
-              | {item.company} · {item.period}
+            <span className={itemMeta}>
+              {item.company} · {item.period}
             </span>
           </div>
-          <p className={cardSummary}>{item.summary}</p>
-          <div className={highlightsContainer}>
-            {item.highlights.map((highlight, index) => (
-              <span key={index} className={highlightBadge}>
-                {highlight}
-              </span>
-            ))}
-          </div>
+          <p className={itemSummary}>{renderSummaryWithPills(item.summary)}</p>
           <a className={viewProjectLink} href={`/projects/${item.slug}`}>
-            ▸ view project
+            <span className={arrowPrefix}>▸</span>
+            <span className={linkText}>view project</span>
           </a>
         </article>
       ))}

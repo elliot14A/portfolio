@@ -10,7 +10,7 @@ export const promptStyle = style({
 });
 
 export const userStyle = style({
-  color: vars.color.iris,
+  color: vars.color.accent,
 });
 
 export const commandStyle = style({

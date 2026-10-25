@@ -4,49 +4,76 @@ import { vars } from "../../styles/tokens.css";
 export const sectionContainer = style({
   display: "flex",
   flexDirection: "column",
-  gap: vars.space.md,
-  marginBottom: vars.space.xl,
+  gap: vars.space.lg,
+  marginBottom: vars.space.xxl,
 });
 
 export const sectionHeading = style({
   fontFamily: vars.typography.fontMono,
   fontSize: vars.typography.sizeSm,
-  color: vars.color.muted,
+  color: vars.color.accent,
   margin: 0,
 });
 
-export const treeList = style({
+export const slashPrefix = style({
+  color: vars.color.accent,
+});
+
+export const experienceList = style({
   display: "flex",
   flexDirection: "column",
-  gap: vars.space.xs,
+});
+
+export const companyBlock = style({
+  display: "flex",
+  alignItems: "flex-start",
+  gap: vars.space.xl,
+  padding: `${vars.space.xl} 0`,
+  borderBottom: `1px solid ${vars.color.border}`,
   fontFamily: vars.typography.fontMono,
   fontSize: vars.typography.sizeSm,
-  listStyle: "none",
-  padding: 0,
-  margin: 0,
+  "@media": {
+    "(max-width: 640px)": {
+      flexDirection: "column",
+      gap: vars.space.sm,
+    },
+  },
 });
 
-export const treeNode = style({
+export const periodCol = style({
+  color: vars.color.accent,
+  minWidth: "120px",
+  flexShrink: 0,
+  fontSize: vars.typography.sizeSm,
+});
+
+export const contentCol = style({
   display: "flex",
-  alignItems: "baseline",
+  flexDirection: "column",
   gap: vars.space.sm,
-  flexWrap: "wrap",
+  flexGrow: 1,
 });
 
-export const treeBranch = style({
+export const companyName = style({
+  color: vars.color.text,
+  fontWeight: 600,
+  fontSize: vars.typography.sizeBase,
+});
+
+export const roleRow = style({
+  display: "flex",
+  alignItems: "center",
+  gap: vars.space.sm,
+  color: vars.color.subtle,
+  fontSize: vars.typography.sizeSm,
+  lineHeight: vars.typography.lineHeightBase,
+});
+
+export const branchSymbol = style({
   color: vars.color.muted,
   userSelect: "none",
 });
 
-export const treePeriod = style({
+export const roleTitle = style({
   color: vars.color.subtle,
-  minWidth: "160px",
-});
-
-export const treeDetails = style({
-  color: vars.color.text,
-});
-
-export const treeRole = style({
-  color: vars.color.foam,
 });

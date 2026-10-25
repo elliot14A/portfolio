@@ -1,14 +1,13 @@
 import type { Profile } from "@portfolio/content";
 import type { JSX } from "preact";
 import { AsciiBanner } from "../asciiBanner";
-import { CatAscii } from "../catAscii";
 import { TerminalPrompt } from "../terminalPrompt";
 import {
+  bioSection,
   bioText,
   heroContainer,
   highlightPill,
   linkItem,
-  linksList,
   linksRow,
   roleBadge,
 } from "./hero.css";
@@ -32,34 +31,27 @@ const renderBioText = (text: string): (string | JSX.Element)[] => {
 };
 
 export const Hero = ({ profile }: HeroProps): JSX.Element => (
-  <header className={heroContainer}>
+  <header id="intro" className={heroContainer}>
     <TerminalPrompt />
     <AsciiBanner />
     <div className={roleBadge}>{profile.role}</div>
-    {profile.bio.map((paragraph, index) => (
-      <p key={index} className={bioText}>
-        {renderBioText(paragraph)}
-      </p>
-    ))}
+    <div className={bioSection}>
+      {profile.bio.map((paragraph, index) => (
+        <p key={index} className={bioText}>
+          {renderBioText(paragraph)}
+        </p>
+      ))}
+    </div>
     <div className={linksRow}>
-      <ul className={linksList}>
-        <li>
-          <a className={linkItem} href={`mailto:${profile.links.email}`}>
-            email
-          </a>
-        </li>
-        <li>
-          <a className={linkItem} href={profile.links.github} target="_blank" rel="noreferrer">
-            github
-          </a>
-        </li>
-        <li>
-          <a className={linkItem} href={profile.links.linkedin} target="_blank" rel="noreferrer">
-            linkedin
-          </a>
-        </li>
-      </ul>
-      <CatAscii />
+      <a className={linkItem} href={`mailto:${profile.links.email}`}>
+        email
+      </a>
+      <a className={linkItem} href={profile.links.github} target="_blank" rel="noreferrer">
+        github
+      </a>
+      <a className={linkItem} href={profile.links.linkedin} target="_blank" rel="noreferrer">
+        linkedin
+      </a>
     </div>
   </header>
 );

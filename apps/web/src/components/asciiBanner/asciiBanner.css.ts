@@ -3,12 +3,13 @@ import { vars } from "../../styles/tokens.css";
 
 export const bannerStyle = style({
   fontFamily: vars.typography.fontMono,
-  fontSize: vars.typography.sizeXs,
+  fontSize: "clamp(5.5px, 1.8vw, 11px)",
   lineHeight: 1.15,
-  color: vars.color.iris,
-  margin: `${vars.space.sm} 0 ${vars.space.md} 0`,
+  color: vars.color.accent,
+  margin: `${vars.space.sm} 0 ${vars.space.lg} 0`,
   whiteSpace: "pre",
-  overflowX: "auto",
   userSelect: "none",
-  letterSpacing: "0.05em",
+  letterSpacing: "-0.01em",
+  maxWidth: "100%",
+  overflowX: "hidden",
 });

@@ -1,7 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
-  "main": "apps/server/src/index.ts",
+  "main": "dist/worker.js",
+  "build": {
+    "command": "bun run build"
+  },
   "compatibility_date": "2026-07-22",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
@@ -27,7 +30,7 @@
       "binding": "DB",
       "database_name": "portfolio-db",
       "database_id": "ce60229a-53b4-45c6-b219-94b42496e731",
-      "migrations_dir": "migrations"
+      "migrations_dir": "packages/d1/migrations"
     }
   ],
   "observability": {

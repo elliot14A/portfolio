@@ -81,7 +81,7 @@ export const ProjectPage = ({ project }: ProjectPageProps): JSX.Element => (
       </nav>
       <header className={projectHeader}>
         <div className={terminalCommand}>
-          akshith@portfolio ~/projects/{project.slug} % cat writeup.md
+          elliot14a@portfolio ~/projects/{project.slug} % cat writeup.md
         </div>
         <h1 className={projectTitle}>{project.title}</h1>
       </header>

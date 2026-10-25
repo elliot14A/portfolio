@@ -3,18 +3,20 @@
 import type { ExperienceItem, Profile, ProjectDoc, SelectedWorkItem } from "./schema";
 
 export const PROFILE: Profile = {
-  name: "Akshith Katkuri",
-  role: "backend engineer & cofounder",
-  location: "Hyderabad, India",
+  name: "elliot14a",
+  role: "Fullstack & Distributed Systems Engineer",
+  location: "Hyderabad, Telangana, India",
   links: {
-    email: "akshithkatkuri14@gmail.com",
+    email: "akshithmadhur0072@gmail.com",
     github: "https://github.com/elliot14A",
-    linkedin: "https://linkedin.com/in/akshithkatkuri",
+    linkedin: "https://www.linkedin.com/in/akshith-katkuri-14am",
   },
   bio: [
-    "More than 4 years of experience across distributed systems, data engines, and cloud infrastructure. Currently technical cofounder at [GaurData].",
-    "I build high-throughput backends, data engines, and distributed systems that power reliable real-world systems.",
+    "I'm a backend engineer who likes working close to the hard parts of a system: concurrency, correctness, and performance decide the design. Rust is where I have the most fun, though I don't box myself into one language.",
+    "I learn by building things from scratch rather than reaching for a framework, working across [Rust], [Go], and [TypeScript]. Co-founder at [GaurData].",
   ],
+  about:
+    "I'm [elliot14a] - a distributed systems and backend engineer based in Hyderabad, India, with 4+ years of experience across high-throughput data engines, stream processing, and developer infrastructure. I build high-concurrency systems that power real-world analytics, metering billions of events reliably.",
 };
 
 export const SELECTED_WORK: readonly SelectedWorkItem[] = [
@@ -22,83 +24,94 @@ export const SELECTED_WORK: readonly SelectedWorkItem[] = [
     number: "01",
     title: "Gaur",
     company: "GAURDATA",
-    period: "2026-PRESENT",
+    period: "2026",
     summary:
-      "The default backend for data apps. Defines metrics once and serves them to dashboards, web apps, and AI agents with identical numbers everywhere.",
-    highlights: ["built solo from scratch", "Rust data engine", "DuckDB + Postgres + NATS"],
+      "AI data platform and infrastructure taking raw customer data to queryable apps in under 10 minutes: [built solo from scratch in Rust].",
+    highlights: ["built solo from scratch in Rust"],
     slug: "gaur",
   },
   {
     number: "02",
+    title: "Gopie",
+    company: "FACTLY",
+    period: "2024-2026",
+    summary:
+      "AI data analyst translating conversational questions into verified SQL queries against DuckDB and ClickHouse: [natural-language-to-SQL agent].",
+    highlights: ["natural-language-to-SQL agent"],
+    slug: "gopie",
+  },
+  {
+    number: "03",
     title: "Meterus",
     company: "FACTLY",
     period: "2024-2026",
     summary:
-      "In-house usage metering and API key management platform in Rust replacing expensive SaaS, metering dozens of production applications.",
-    highlights: [
-      "2+ years in production",
-      "dozens of apps metered",
-      "ClickHouse + Redpanda streaming",
-    ],
+      "In-house usage metering and telemetry platform in Rust and Go streaming high-volume events into ClickHouse: [99.99% uptime over 2+ years in production].",
+    highlights: ["99.99% uptime over 2+ years in production"],
     slug: "meterus",
   },
   {
-    number: "03",
-    title: "Fincher",
+    number: "04",
+    title: "Tagore AI",
     company: "FACTLY",
-    period: "2024-2025",
+    period: "2023-2024",
     summary:
-      "High-throughput financial and regulatory data pipeline processing millions of corporate records with verifiable lineage.",
-    highlights: ["millions of records processed", "distributed ETL", "verifiable lineage"],
-    slug: "fincher",
+      "Research platform and streaming backend delivering cited, verified answers across [2,000,000+ government documents and 500,000+ tables].",
+    highlights: ["2,000,000+ government documents and 500,000+ tables"],
+    slug: "tagore",
   },
   {
-    number: "04",
+    number: "05",
     title: "Ruspie",
     company: "FACTLY",
-    period: "2022-2024",
+    period: "2022-2023",
     summary:
-      "High-performance embeddable key-value store and cache engine implemented in Rust, optimized for flash storage and read-heavy workloads.",
-    highlights: ["served 25,000+ datasets", "Apache Arrow + DataFusion", "open-sourced"],
+      "Embeddable query engine on Apache Arrow and DataFusion querying CSV and Parquet straight from cloud storage: [served 25,000+ datasets on dataful.in].",
+    highlights: ["served 25,000+ datasets on dataful.in"],
     slug: "ruspie",
   },
 ];
 
 export const EXPERIENCE: readonly ExperienceItem[] = [
   {
-    period: "Feb 2026 - now",
+    period: "Feb 2026 - Aug 2026",
     company: "GaurData",
-    role: "Technical Cofounder",
+    role: "Co-Founder",
   },
   {
-    period: "Apr 2024 - Jan 2026",
-    company: "Factly",
-    role: "Lead Backend Engineer",
+    period: "May 2024 - Jan 2026",
+    company: "Factly Media & Research",
+    role: "Senior Backend Developer",
   },
   {
-    period: "Feb 2023 - Mar 2024",
-    company: "Factly",
-    role: "Backend Developer",
+    period: "Feb 2023 - Apr 2024",
+    company: "Factly Media & Research",
+    role: "Back End Developer",
   },
   {
     period: "Sep 2022 - Jan 2023",
-    company: "Factly",
-    role: "Backend Developer Intern",
+    company: "Factly Media & Research",
+    role: "Back End Developer Intern",
+  },
+  {
+    period: "Jan 2022 - Apr 2022",
+    company: "AI Kalpa",
+    role: "Flutter & IoT Developer",
   },
 ];
 
 export const PROJECTS_BY_SLUG: Readonly<Record<string, ProjectDoc>> = {
-  fincher: {
-    slug: "fincher",
-    title: "Fincher",
-    content:
-      "# Fincher\n\nMedia post-production release pipelines face constant supply chain defects: audio sync drift, revised master cuts, SLA breaches, and failed QC packages across global territories. Resolving them before premiere deadlines usually means operators scrambling across spreadsheets and emails to reassign vendors and place delivery holds.\n\nBuilt as an autonomous operations engine that detects defects, investigates root causes, and executes remediation in a closed loop.\n\n## What I Built\n\n- **Asynchronous workflow graphs in Go**: Event-driven execution graphs for incident triage, asset allocation, and auto-resolution running over Echo, with SSE streaming live execution traces.\n- **Read-only AI agents with Gemini**: Agents never mutate state directly, querying ClickHouse and operational SQLite through structured tools to draft action plans.\n- **Deterministic policy verifier**: Every LLM proposal must pass strict Go invariants (market isolation, vendor accuracy >= 90%, turnaround countdown limits) before execution.\n- **Closed-loop execution and scheduler**: A time-compressed scheduler runs turnaround tasks and triggers simulated QC callbacks to auto-resolve deliveries and title health.\n\n## Technical Details\n\n- **Backend**: Go, Echo\n- **AI**: Gemini, ClickHouse MCP\n- **Data**: SQLite, ClickHouse\n- **Deploy**: NixOS, Caddy, Docker\n",
-  },
   gaur: {
     slug: "gaur",
     title: "Gaur",
     content:
       "# Gaur\n\nTwo things stand between an app and the analytics it needs. You have to stand up a data stack and learn a data engineer's job first. And once more than one thing queries your data, a dashboard, the app, an AI agent, the same metric gets redefined in each place and the numbers quietly drift apart.\n\nGaur fixes both. You define your metrics, dimensions, and access rules once as a contract, and every consumer queries that same contract, so the numbers match everywhere. A query returns a correct answer or a clear error, never a silently wrong number.\n\n## What I Built\n\nThe whole product, solo: backend, frontend, and the infrastructure under it.\n\n- **Backend, entirely in Rust**: Vectorized execution engine using Apache Arrow and DataFusion for fast in-memory query processing.\n- **The contract layer**: Define metrics, dimensions, and row-level security once, and Gaur validates the model so a contract cannot fan out into a wrong aggregate.\n- **Three ways to consume a contract**: A REST query API, an OpenAI-compatible chat endpoint that streams answers, and an MCP server so agents query it directly.\n- **Data and infrastructure**: Postgres for state catalogs, embedded DuckDB for fast OLAP query execution, and NATS for service discovery and real-time cache invalidation across distributed worker nodes.\n\n## Technical Details\n\n- **Language**: Rust\n- **OLAP Engine**: DuckDB, Apache Arrow, DataFusion\n- **State & Messaging**: Postgres, NATS\n- **Deploy**: Cloudflare Workers, Hetzner, NixOS\n",
+  },
+  gopie: {
+    slug: "gopie",
+    title: "Gopie",
+    content:
+      "# Gopie\n\nAn AI data analyst for non-technical users, translating natural language questions into verified analytical queries executed against high-performance analytical storage.\n\n## What I Built\n\n- **Natural Language to SQL Agent**: Built using FastAPI, LangChain, and LangGraph, translating conversational user prompts into verified, deterministic SQL queries executed against DuckDB.\n- **Multi-OLAP Backend**: Designed and implemented database abstractions supporting both DuckDB and ClickHouse, isolating analytical workloads from primary transactional systems.\n- **Hexagonal Architecture**: Established company-wide architectural guidelines separating business logic from transport drivers, database engines, and third-party APIs.\n\n## Technical Details\n\n- **Language & Frameworks**: Python, FastAPI, LangChain, LangGraph\n- **Query Engines**: DuckDB, ClickHouse\n- **Storage**: PostgreSQL, SQLite\n",
   },
   meterus: {
     slug: "meterus",
@@ -112,7 +125,13 @@ export const PROJECTS_BY_SLUG: Readonly<Record<string, ProjectDoc>> = {
     content:
       "# Ruspie\n\nTeams sit on large volumes of CSV and Parquet files with no fast way to query them without loading everything into a heavy database or data warehouse first. Ruspie skips that step: point it at files in cloud object storage or local disk, and query them directly in place.\n\n## What I Built\n\nEngineered solo as an intern at Factly and transitioned into production:\n\n- **Query engine in Rust**: Built on Apache Arrow and DataFusion, reading CSV and Parquet directly from cloud storage and serving them over REST, SQL, and GraphQL.\n- **Natural language to SQL endpoint**: An early nl2sql implementation allowing analysts to query tabular files using plain English prompts.\n- **Conversion pipeline**: Scripts and batch workers converting legacy CSV datasets into Parquet format for faster analytical queries and smaller storage footprints.\n- **Production impact**: Served more than 25,000 public datasets straight from Google Cloud Storage without loading into a relational database, powering dataful.in for data journalists.\n\n## Technical Details\n\n- **Engine**: Rust, Apache Arrow, DataFusion\n- **Formats**: CSV, Parquet\n- **Storage**: AWS S3, Google Cloud Storage, Local Filesystem\n- **Protocols**: REST, SQL, GraphQL\n",
   },
+  tagore: {
+    slug: "tagore",
+    title: "Tagore AI",
+    content:
+      "# Tagore AI\n\nFactly's government and policy research platform delivering cited, verified answers across millions of public records, structured data tables, and fact-checks.\n\n## What I Built\n\n- **Go Backend & Streaming API**: Built high-performance streaming services delivering hallucination-free answers across 2,000,000+ official government documents and 500,000+ structured tables.\n- **Session & History Persistence**: Architected a centralized chat and session storage engine in Go and MongoDB for high-concurrency ingestion and low-latency context retrieval.\n- **AI Gateway Layer**: Integrated Portkey and LiteLLM for intelligent model routing, automated provider fallbacks, latency tracking, and prompt evaluations across LLM providers.\n\n## Technical Details\n\n- **Language & Runtime**: Go\n- **Persistence**: MongoDB, PostgreSQL\n- **AI Gateway**: Portkey, LiteLLM\n- **Authentication**: Ory Kratos, Keto, Oathkeeper\n",
+  },
 };
 
 export const AGENT_CONTEXT =
-  "# PROFILE\n\n# Akshith Katkuri\nrole: backend engineer & cofounder\nlocation: Hyderabad, India\nlinks:\n  email: akshithkatkuri14@gmail.com\n  github: https://github.com/elliot14A\n  linkedin: https://linkedin.com/in/akshithkatkuri\n\nMore than 4 years of experience across distributed systems, data engines, and cloud infrastructure. Currently technical cofounder at [GaurData].\n\nI build high-throughput backends, data engines, and distributed systems that power reliable real-world systems.\n\n## selected work\n\n01 Gaur | GAURDATA · 2026-PRESENT\nThe default backend for data apps. Defines metrics once and serves them to dashboards, web apps, and AI agents with identical numbers everywhere.\n[built solo from scratch] [Rust data engine] [DuckDB + Postgres + NATS]\nslug: gaur\n\n02 Meterus | FACTLY · 2024-2026\nIn-house usage metering and API key management platform in Rust replacing expensive SaaS, metering dozens of production applications.\n[2+ years in production] [dozens of apps metered] [ClickHouse + Redpanda streaming]\nslug: meterus\n\n03 Fincher | FACTLY · 2024-2025\nHigh-throughput financial and regulatory data pipeline processing millions of corporate records with verifiable lineage.\n[millions of records processed] [distributed ETL] [verifiable lineage]\nslug: fincher\n\n04 Ruspie | FACTLY · 2022-2024\nHigh-performance embeddable key-value store and cache engine implemented in Rust, optimized for flash storage and read-heavy workloads.\n[served 25,000+ datasets] [Apache Arrow + DataFusion] [open-sourced]\nslug: ruspie\n\n## experience\n\n- Feb 2026 - now       GaurData · Technical Cofounder\n- Apr 2024 - Jan 2026  Factly · Lead Backend Engineer\n- Feb 2023 - Mar 2024  Factly · Backend Developer\n- Sep 2022 - Jan 2023  Factly · Backend Developer Intern\n\n---\n\n# PROJECT: fincher\n\n# Fincher\n\nMedia post-production release pipelines face constant supply chain defects: audio sync drift, revised master cuts, SLA breaches, and failed QC packages across global territories. Resolving them before premiere deadlines usually means operators scrambling across spreadsheets and emails to reassign vendors and place delivery holds.\n\nBuilt as an autonomous operations engine that detects defects, investigates root causes, and executes remediation in a closed loop.\n\n## What I Built\n\n- **Asynchronous workflow graphs in Go**: Event-driven execution graphs for incident triage, asset allocation, and auto-resolution running over Echo, with SSE streaming live execution traces.\n- **Read-only AI agents with Gemini**: Agents never mutate state directly, querying ClickHouse and operational SQLite through structured tools to draft action plans.\n- **Deterministic policy verifier**: Every LLM proposal must pass strict Go invariants (market isolation, vendor accuracy >= 90%, turnaround countdown limits) before execution.\n- **Closed-loop execution and scheduler**: A time-compressed scheduler runs turnaround tasks and triggers simulated QC callbacks to auto-resolve deliveries and title health.\n\n## Technical Details\n\n- **Backend**: Go, Echo\n- **AI**: Gemini, ClickHouse MCP\n- **Data**: SQLite, ClickHouse\n- **Deploy**: NixOS, Caddy, Docker\n\n---\n\n# PROJECT: gaur\n\n# Gaur\n\nTwo things stand between an app and the analytics it needs. You have to stand up a data stack and learn a data engineer's job first. And once more than one thing queries your data, a dashboard, the app, an AI agent, the same metric gets redefined in each place and the numbers quietly drift apart.\n\nGaur fixes both. You define your metrics, dimensions, and access rules once as a contract, and every consumer queries that same contract, so the numbers match everywhere. A query returns a correct answer or a clear error, never a silently wrong number.\n\n## What I Built\n\nThe whole product, solo: backend, frontend, and the infrastructure under it.\n\n- **Backend, entirely in Rust**: Vectorized execution engine using Apache Arrow and DataFusion for fast in-memory query processing.\n- **The contract layer**: Define metrics, dimensions, and row-level security once, and Gaur validates the model so a contract cannot fan out into a wrong aggregate.\n- **Three ways to consume a contract**: A REST query API, an OpenAI-compatible chat endpoint that streams answers, and an MCP server so agents query it directly.\n- **Data and infrastructure**: Postgres for state catalogs, embedded DuckDB for fast OLAP query execution, and NATS for service discovery and real-time cache invalidation across distributed worker nodes.\n\n## Technical Details\n\n- **Language**: Rust\n- **OLAP Engine**: DuckDB, Apache Arrow, DataFusion\n- **State & Messaging**: Postgres, NATS\n- **Deploy**: Cloudflare Workers, Hetzner, NixOS\n\n---\n\n# PROJECT: meterus\n\n# Meterus\n\nFactly runs dozens of applications, and we wanted to track their usage and bill on it. Third-party metering products on the market felt bloated and expensive for what we needed. So we engineered our own in-house platform in Rust: cheaper, tailored to our actual workload, and combined with centralized API key management.\n\n## What I Built\n\nOwned the backend and led the project end to end from initial architecture to production:\n\n- **Metering engine in Rust**: Asynchronous usage events stream in over Redpanda and land in ClickHouse, where aggregation queries are fast and cheap enough to execute on demand.\n- **API-key management built in**: Tracks per-key usage with fine-grained access control and quota enforcement, combining metering and authentication in one unified service.\n- **Production reliability**: Stable in production for over two years, metering dozens of user-facing production microservices with high availability and minimal maintenance.\n\n## Technical Details\n\n- **Language**: Rust\n- **Event Streaming**: Redpanda (Kafka-compatible)\n- **Analytical Storage**: ClickHouse (sparse indexes and collapsing merge trees)\n- **Metadata**: Postgres\n\n---\n\n# PROJECT: ruspie\n\n# Ruspie\n\nTeams sit on large volumes of CSV and Parquet files with no fast way to query them without loading everything into a heavy database or data warehouse first. Ruspie skips that step: point it at files in cloud object storage or local disk, and query them directly in place.\n\n## What I Built\n\nEngineered solo as an intern at Factly and transitioned into production:\n\n- **Query engine in Rust**: Built on Apache Arrow and DataFusion, reading CSV and Parquet directly from cloud storage and serving them over REST, SQL, and GraphQL.\n- **Natural language to SQL endpoint**: An early nl2sql implementation allowing analysts to query tabular files using plain English prompts.\n- **Conversion pipeline**: Scripts and batch workers converting legacy CSV datasets into Parquet format for faster analytical queries and smaller storage footprints.\n- **Production impact**: Served more than 25,000 public datasets straight from Google Cloud Storage without loading into a relational database, powering dataful.in for data journalists.\n\n## Technical Details\n\n- **Engine**: Rust, Apache Arrow, DataFusion\n- **Formats**: CSV, Parquet\n- **Storage**: AWS S3, Google Cloud Storage, Local Filesystem\n- **Protocols**: REST, SQL, GraphQL";
+  "# PROFILE\n\n# elliot14a\nrole: Fullstack & Distributed Systems Engineer\nlocation: Hyderabad, Telangana, India\nlinks:\n  email: akshithmadhur0072@gmail.com\n  github: https://github.com/elliot14A\n  linkedin: https://www.linkedin.com/in/akshith-katkuri-14am\n\nI'm a backend engineer who likes working close to the hard parts of a system: concurrency, correctness, and performance decide the design. Rust is where I have the most fun, though I don't box myself into one language.\n\nI learn by building things from scratch rather than reaching for a framework, working across [Rust], [Go], and [TypeScript]. Co-founder at [GaurData].\n\n## selected work\n\n01 Gaur | GAURDATA · 2026\nAI data platform and infrastructure taking raw customer data to queryable apps in under 10 minutes: [built solo from scratch in Rust].\n[built solo from scratch in Rust]\nslug: gaur\n\n02 Gopie | FACTLY · 2024-2026\nAI data analyst translating conversational questions into verified SQL queries against DuckDB and ClickHouse: [natural-language-to-SQL agent].\n[natural-language-to-SQL agent]\nslug: gopie\n\n03 Meterus | FACTLY · 2024-2026\nIn-house usage metering and telemetry platform in Rust and Go streaming high-volume events into ClickHouse: [99.99% uptime over 2+ years in production].\n[99.99% uptime over 2+ years in production]\nslug: meterus\n\n04 Tagore AI | FACTLY · 2023-2024\nResearch platform and streaming backend delivering cited, verified answers across [2,000,000+ government documents and 500,000+ tables].\n[2,000,000+ government documents and 500,000+ tables]\nslug: tagore\n\n05 Ruspie | FACTLY · 2022-2023\nEmbeddable query engine on Apache Arrow and DataFusion querying CSV and Parquet straight from cloud storage: [served 25,000+ datasets on dataful.in].\n[served 25,000+ datasets on dataful.in]\nslug: ruspie\n\n## about\n\nI'm [elliot14a] - a distributed systems and backend engineer based in Hyderabad, India, with 4+ years of experience across high-throughput data engines, stream processing, and developer infrastructure. I build high-concurrency systems that power real-world analytics, metering billions of events reliably.\n\n## experience\n\n- Feb 2026 - Aug 2026   GaurData · Co-Founder\n- May 2024 - Jan 2026   Factly Media & Research · Senior Backend Developer\n- Feb 2023 - Apr 2024   Factly Media & Research · Back End Developer\n- Sep 2022 - Jan 2023   Factly Media & Research · Back End Developer Intern\n- Jan 2022 - Apr 2022   AI Kalpa · Flutter & IoT Developer\n\n---\n\n# PROJECT: gaur\n\n# Gaur\n\nTwo things stand between an app and the analytics it needs. You have to stand up a data stack and learn a data engineer's job first. And once more than one thing queries your data, a dashboard, the app, an AI agent, the same metric gets redefined in each place and the numbers quietly drift apart.\n\nGaur fixes both. You define your metrics, dimensions, and access rules once as a contract, and every consumer queries that same contract, so the numbers match everywhere. A query returns a correct answer or a clear error, never a silently wrong number.\n\n## What I Built\n\nThe whole product, solo: backend, frontend, and the infrastructure under it.\n\n- **Backend, entirely in Rust**: Vectorized execution engine using Apache Arrow and DataFusion for fast in-memory query processing.\n- **The contract layer**: Define metrics, dimensions, and row-level security once, and Gaur validates the model so a contract cannot fan out into a wrong aggregate.\n- **Three ways to consume a contract**: A REST query API, an OpenAI-compatible chat endpoint that streams answers, and an MCP server so agents query it directly.\n- **Data and infrastructure**: Postgres for state catalogs, embedded DuckDB for fast OLAP query execution, and NATS for service discovery and real-time cache invalidation across distributed worker nodes.\n\n## Technical Details\n\n- **Language**: Rust\n- **OLAP Engine**: DuckDB, Apache Arrow, DataFusion\n- **State & Messaging**: Postgres, NATS\n- **Deploy**: Cloudflare Workers, Hetzner, NixOS\n\n---\n\n# PROJECT: gopie\n\n# Gopie\n\nAn AI data analyst for non-technical users, translating natural language questions into verified analytical queries executed against high-performance analytical storage.\n\n## What I Built\n\n- **Natural Language to SQL Agent**: Built using FastAPI, LangChain, and LangGraph, translating conversational user prompts into verified, deterministic SQL queries executed against DuckDB.\n- **Multi-OLAP Backend**: Designed and implemented database abstractions supporting both DuckDB and ClickHouse, isolating analytical workloads from primary transactional systems.\n- **Hexagonal Architecture**: Established company-wide architectural guidelines separating business logic from transport drivers, database engines, and third-party APIs.\n\n## Technical Details\n\n- **Language & Frameworks**: Python, FastAPI, LangChain, LangGraph\n- **Query Engines**: DuckDB, ClickHouse\n- **Storage**: PostgreSQL, SQLite\n\n---\n\n# PROJECT: meterus\n\n# Meterus\n\nFactly runs dozens of applications, and we wanted to track their usage and bill on it. Third-party metering products on the market felt bloated and expensive for what we needed. So we engineered our own in-house platform in Rust: cheaper, tailored to our actual workload, and combined with centralized API key management.\n\n## What I Built\n\nOwned the backend and led the project end to end from initial architecture to production:\n\n- **Metering engine in Rust**: Asynchronous usage events stream in over Redpanda and land in ClickHouse, where aggregation queries are fast and cheap enough to execute on demand.\n- **API-key management built in**: Tracks per-key usage with fine-grained access control and quota enforcement, combining metering and authentication in one unified service.\n- **Production reliability**: Stable in production for over two years, metering dozens of user-facing production microservices with high availability and minimal maintenance.\n\n## Technical Details\n\n- **Language**: Rust\n- **Event Streaming**: Redpanda (Kafka-compatible)\n- **Analytical Storage**: ClickHouse (sparse indexes and collapsing merge trees)\n- **Metadata**: Postgres\n\n---\n\n# PROJECT: ruspie\n\n# Ruspie\n\nTeams sit on large volumes of CSV and Parquet files with no fast way to query them without loading everything into a heavy database or data warehouse first. Ruspie skips that step: point it at files in cloud object storage or local disk, and query them directly in place.\n\n## What I Built\n\nEngineered solo as an intern at Factly and transitioned into production:\n\n- **Query engine in Rust**: Built on Apache Arrow and DataFusion, reading CSV and Parquet directly from cloud storage and serving them over REST, SQL, and GraphQL.\n- **Natural language to SQL endpoint**: An early nl2sql implementation allowing analysts to query tabular files using plain English prompts.\n- **Conversion pipeline**: Scripts and batch workers converting legacy CSV datasets into Parquet format for faster analytical queries and smaller storage footprints.\n- **Production impact**: Served more than 25,000 public datasets straight from Google Cloud Storage without loading into a relational database, powering dataful.in for data journalists.\n\n## Technical Details\n\n- **Engine**: Rust, Apache Arrow, DataFusion\n- **Formats**: CSV, Parquet\n- **Storage**: AWS S3, Google Cloud Storage, Local Filesystem\n- **Protocols**: REST, SQL, GraphQL\n\n---\n\n# PROJECT: tagore\n\n# Tagore AI\n\nFactly's government and policy research platform delivering cited, verified answers across millions of public records, structured data tables, and fact-checks.\n\n## What I Built\n\n- **Go Backend & Streaming API**: Built high-performance streaming services delivering hallucination-free answers across 2,000,000+ official government documents and 500,000+ structured tables.\n- **Session & History Persistence**: Architected a centralized chat and session storage engine in Go and MongoDB for high-concurrency ingestion and low-latency context retrieval.\n- **AI Gateway Layer**: Integrated Portkey and LiteLLM for intelligent model routing, automated provider fallbacks, latency tracking, and prompt evaluations across LLM providers.\n\n## Technical Details\n\n- **Language & Runtime**: Go\n- **Persistence**: MongoDB, PostgreSQL\n- **AI Gateway**: Portkey, LiteLLM\n- **Authentication**: Ory Kratos, Keto, Oathkeeper";

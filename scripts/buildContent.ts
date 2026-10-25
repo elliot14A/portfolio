@@ -29,6 +29,7 @@ const parseProfile = (
   const sections = raw.split(/^##\s+/m);
   const heroSection = sections[0] ?? "";
   const workSection = sections.find((s) => s.startsWith("selected work")) ?? "";
+  const aboutSection = sections.find((s) => s.startsWith("about")) ?? "";
   const expSection = sections.find((s) => s.startsWith("experience")) ?? "";
 
   const heroLines = heroSection.split("\n");
@@ -82,6 +83,8 @@ const parseProfile = (
       bioLines.push(trimmed);
     }
   }
+
+  const about = aboutSection.replace(/^about\s*/, "").trim();
 
   const workBlocks = workSection
     .replace(/^selected work\s*/, "")
@@ -153,6 +156,7 @@ const parseProfile = (
       location,
       links,
       bio: bioLines,
+      about,
     },
     selectedWork,
     experience,

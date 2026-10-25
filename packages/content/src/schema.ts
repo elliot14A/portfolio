@@ -13,6 +13,7 @@ export const ProfileSchema = Schema.Struct({
   location: Schema.NonEmptyString,
   links: ContactLinksSchema,
   bio: Schema.Array(Schema.NonEmptyString),
+  about: Schema.NonEmptyString,
 });
 export type Profile = typeof ProfileSchema.Type;
 

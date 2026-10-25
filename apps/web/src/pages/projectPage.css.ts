@@ -4,30 +4,30 @@ import { vars } from "../styles/tokens.css";
 export const pageContainer = style({
   display: "flex",
   flexDirection: "column",
-  gap: vars.space.lg,
+  gap: vars.space.xl,
 });
 
 export const backLink = style({
   fontFamily: vars.typography.fontMono,
   fontSize: vars.typography.sizeSm,
-  color: vars.color.foam,
-  textDecoration: "none",
+  color: vars.color.iris,
+  textDecoration: "underline",
+  textUnderlineOffset: "4px",
   display: "inline-flex",
   alignItems: "center",
   gap: vars.space.xs,
   marginBottom: vars.space.md,
   ":hover": {
     color: vars.color.linkHover,
-    textDecoration: "underline",
   },
 });
 
 export const projectHeader = style({
   display: "flex",
   flexDirection: "column",
-  gap: vars.space.xs,
+  gap: vars.space.sm,
   borderBottom: `1px solid ${vars.color.border}`,
-  paddingBottom: vars.space.lg,
+  paddingBottom: vars.space.xl,
   marginBottom: vars.space.md,
 });
 
@@ -50,7 +50,7 @@ export const terminalCommand = style({
 export const proseSection = style({
   display: "flex",
   flexDirection: "column",
-  gap: vars.space.md,
+  gap: vars.space.lg,
 });
 
 export const proseHeading = style({
@@ -58,7 +58,7 @@ export const proseHeading = style({
   fontSize: vars.typography.sizeLg,
   fontWeight: 600,
   color: vars.color.iris,
-  margin: `${vars.space.lg} 0 ${vars.space.xs} 0`,
+  margin: `${vars.space.xl} 0 ${vars.space.xs} 0`,
 });
 
 export const proseParagraph = style({
