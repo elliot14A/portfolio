@@ -1,5 +1,5 @@
 import type { JSX } from "preact";
-import { bannerStyle } from "./asciiBanner.css";
+import { bannerStyle, bannerWrapper } from "./asciiBanner.css";
 
 const BANNER = `███████╗██╗     ██╗     ██╗ ██████╗ ████████╗ ██╗██╗  ██╗ █████╗ 
 ██╔════╝██║     ██║     ██║██╔═══██╗╚══██╔══╝███║██║  ██║██╔══██╗
@@ -9,7 +9,9 @@ const BANNER = `███████╗██╗     ██╗     ██╗ �
 ╚══════╝╚══════╝╚══════╝╚═╝ ╚═════╝    ╚═╝    ╚═╝     ╚═╝╚═╝  ╚═╝`;
 
 export const AsciiBanner = (): JSX.Element => (
-  <pre className={bannerStyle} role="img" aria-label="elliot14a">
-    {BANNER}
-  </pre>
+  <div className={bannerWrapper}>
+    <pre className={bannerStyle} role="img" aria-label="elliot14a">
+      {BANNER}
+    </pre>
+  </div>
 );

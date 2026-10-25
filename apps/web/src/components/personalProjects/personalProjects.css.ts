@@ -46,6 +46,12 @@ export const nameCol = style({
   display: "flex",
   flexDirection: "column",
   gap: vars.space.xs,
+  "@media": {
+    "(max-width: 680px)": {
+      minWidth: 0,
+      width: "100%",
+    },
+  },
 });
 
 export const projectName = style({
@@ -80,6 +86,7 @@ export const contentCol = style({
   flexDirection: "column",
   gap: vars.space.sm,
   flexGrow: 1,
+  minWidth: 0,
 });
 
 export const projectDesc = style({
@@ -87,6 +94,8 @@ export const projectDesc = style({
   fontSize: vars.typography.sizeSm,
   lineHeight: "1.8",
   margin: 0,
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
 });
 
 export const bulletList = style({
@@ -105,6 +114,8 @@ export const bulletItem = style({
   color: vars.color.subtle,
   fontSize: vars.typography.sizeSm,
   lineHeight: "1.7",
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
 });
 
 export const bulletMarker = style({

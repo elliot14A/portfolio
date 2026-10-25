@@ -7,6 +7,14 @@ export const promptStyle = style({
   color: vars.color.muted,
   marginBottom: vars.space.md,
   userSelect: "none",
+  maxWidth: "100%",
+  overflowWrap: "break-word",
+  "@media": {
+    "(max-width: 640px)": {
+      fontSize: vars.typography.sizeXs,
+      marginBottom: vars.space.sm,
+    },
+  },
 });
 
 export const userStyle = style({

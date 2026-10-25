@@ -46,6 +46,12 @@ export const periodCol = style({
   flexShrink: 0,
   fontSize: vars.typography.sizeSm,
   letterSpacing: "0.02em",
+  "@media": {
+    "(max-width: 680px)": {
+      minWidth: 0,
+      width: "100%",
+    },
+  },
 });
 
 export const contentCol = style({
@@ -53,6 +59,7 @@ export const contentCol = style({
   flexDirection: "column",
   gap: vars.space.md,
   flexGrow: 1,
+  minWidth: 0,
 });
 
 export const roleHeader = style({
@@ -93,6 +100,8 @@ export const bulletItem = style({
   color: vars.color.text,
   fontSize: vars.typography.sizeSm,
   lineHeight: "1.9",
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
 });
 
 export const bulletMarker = style({
@@ -103,6 +112,7 @@ export const bulletMarker = style({
 
 export const bulletContent = style({
   flexGrow: 1,
+  minWidth: 0,
 });
 
 export const highlightPill = style({
@@ -163,14 +173,7 @@ export const hoverCardPopup = style({
   },
   "@media": {
     "(max-width: 640px)": {
-      left: "0",
-      transform: "translateX(0) translateY(4px)",
-      maxWidth: "260px",
-      selectors: {
-        [`${hoverCardContainer}:hover &`]: {
-          transform: "translateX(0) translateY(0)",
-        },
-      },
+      display: "none",
     },
   },
 });

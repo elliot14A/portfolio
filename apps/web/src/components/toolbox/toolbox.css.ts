@@ -62,6 +62,8 @@ export const itemsCol = style({
   color: vars.color.text,
   padding: "8px 0",
   verticalAlign: "top",
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
   "@media": {
     "(max-width: 640px)": {
       padding: "0 0 8px 0",

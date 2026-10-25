@@ -1,5 +1,6 @@
 import type { SystemProject } from "@portfolio/content";
 import type { JSX } from "preact";
+import { AiAssistant } from "../components/aiAssistant";
 import { PageLayout } from "../layout";
 import {
   backLink,
@@ -124,6 +125,9 @@ export const ProjectPage = ({ project }: ProjectPageProps): JSX.Element => (
           </ul>
         </div>
       </div>
+    </div>
+    <div id="ai-assistant-root">
+      <AiAssistant />
     </div>
   </PageLayout>
 );

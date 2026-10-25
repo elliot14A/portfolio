@@ -19,6 +19,9 @@ export const sbarContainer = style({
   WebkitBackdropFilter: "blur(6px)",
   borderTop: `1px solid ${vars.color.border}`,
   fontFamily: vars.typography.fontMono,
+  maxWidth: "100vw",
+  boxSizing: "border-box",
+  overflow: "hidden",
 });
 
 export const host = style({

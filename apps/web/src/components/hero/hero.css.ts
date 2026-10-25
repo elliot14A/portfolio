@@ -51,6 +51,8 @@ export const bioText = style({
   lineHeight: "2.1",
   color: vars.color.text,
   margin: 0,
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
 });
 
 export const highlightPill = style({

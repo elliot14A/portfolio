@@ -23,12 +23,24 @@ export const kvTable = style({
   borderCollapse: "collapse",
   fontFamily: vars.typography.fontMono,
   fontSize: vars.typography.sizeBase,
+  "@media": {
+    "(max-width: 640px)": {
+      display: "block",
+    },
+  },
 });
 
 export const kvRow = style({
   borderTop: `1px solid ${vars.color.border}`,
   ":first-child": {
     borderTop: "none",
+  },
+  "@media": {
+    "(max-width: 640px)": {
+      display: "flex",
+      flexDirection: "column",
+      padding: "10px 0",
+    },
   },
 });
 
@@ -39,18 +51,36 @@ export const keyCell = style({
   whiteSpace: "nowrap",
   width: "1%",
   fontWeight: 500,
+  "@media": {
+    "(max-width: 640px)": {
+      padding: "0 0 4px 0",
+      width: "100%",
+      fontSize: vars.typography.sizeSm,
+    },
+  },
 });
 
 export const valueCell = style({
   padding: "12px 0",
   verticalAlign: "top",
   color: vars.color.text,
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
+  "@media": {
+    "(max-width: 640px)": {
+      padding: "0 0 6px 0",
+      width: "100%",
+      fontSize: vars.typography.sizeSm,
+    },
+  },
 });
 
 export const link = style({
   color: vars.color.accent,
   textDecoration: "underline",
   textUnderlineOffset: "4px",
+  overflowWrap: "anywhere",
+  wordBreak: "break-word",
   ":hover": {
     color: vars.color.linkHover,
   },

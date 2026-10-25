@@ -30,6 +30,9 @@ globalStyle("html, body", {
   fontFamily: vars.typography.fontMono,
   WebkitFontSmoothing: "antialiased",
   MozOsxFontSmoothing: "grayscale",
+  overflowX: "hidden",
+  width: "100%",
+  maxWidth: "100%",
 });
 
 globalStyle("*, *::before, *::after", {
@@ -66,9 +69,12 @@ export const layoutContainer = style({
   margin: "0 auto",
   padding: `${vars.space.xxl} ${vars.space.md} 80px ${vars.space.md}`,
   minHeight: "100vh",
+  width: "100%",
+  boxSizing: "border-box",
+  overflowX: "hidden",
   "@media": {
     "(max-width: 640px)": {
-      padding: `${vars.space.xl} 20px 80px 20px`,
+      padding: `${vars.space.xl} 16px 80px 16px`,
     },
   },
 });
