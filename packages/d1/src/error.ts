@@ -1,4 +1,4 @@
-import { Data } from "effect";
+import { Data, Schema } from "effect";
 
 export class D1Error extends Data.TaggedError("D1Error")<{
   readonly cause: unknown;
@@ -11,11 +11,24 @@ export class D1Error extends Data.TaggedError("D1Error")<{
   }
 }
 
-export class RateLimitError extends Data.TaggedError("RateLimitError")<{
-  readonly ip: string;
-  readonly retryAfterSeconds: number;
-  readonly message: string;
-}> {}
+export class DeviceDailyLimitExceededError extends Schema.TaggedError<DeviceDailyLimitExceededError>()(
+  "DeviceDailyLimitExceededError",
+  {
+    deviceId: Schema.String,
+    date: Schema.String,
+    maxRequests: Schema.Number,
+    message: Schema.String,
+  },
+) {}
+
+export class GlobalDailyQuotaExceededError extends Schema.TaggedError<GlobalDailyQuotaExceededError>()(
+  "GlobalDailyQuotaExceededError",
+  {
+    date: Schema.String,
+    maxRequests: Schema.Number,
+    message: Schema.String,
+  },
+) {}
 
 export const mapD1Error = (cause: unknown, query?: string, op?: string): D1Error => {
   if (cause instanceof D1Error) {

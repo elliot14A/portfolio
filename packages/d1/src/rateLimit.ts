@@ -1,106 +1,140 @@
+import { D1Client } from "@effect/sql-d1";
 import { Effect, Schema } from "effect";
-import { D1Client } from "./client";
-import { D1Error, mapD1Error, RateLimitError } from "./error";
+import {
+  D1Error,
+  DeviceDailyLimitExceededError,
+  GlobalDailyQuotaExceededError,
+  mapD1Error,
+} from "./error";
 
 export type RateLimitConfig = {
-  readonly maxRequests?: number;
-  readonly windowSeconds?: number;
+  readonly maxDeviceRequests?: number;
+  readonly maxGlobalRequests?: number;
 };
 
-export const RateLimitRecord = Schema.Struct({
-  ip: Schema.String,
-  count: Schema.Number,
-  reset_at: Schema.Number,
+export const RateLimitCounts = Schema.Struct({
+  global_count: Schema.Number,
+  device_count: Schema.Number,
 });
-export type RateLimitRecord = typeof RateLimitRecord.Type;
+export type RateLimitCounts = typeof RateLimitCounts.Type;
 
-export const checkRateLimit = (
-  ip: string,
-  config: RateLimitConfig = {},
-): Effect.Effect<void, RateLimitError | D1Error, D1Client.D1Client> =>
+export const checkDeviceAndGlobalLimit = (
+  deviceId: string,
+  config?: RateLimitConfig,
+): Effect.Effect<
+  void,
+  DeviceDailyLimitExceededError | GlobalDailyQuotaExceededError | D1Error,
+  D1Client.D1Client
+> =>
   Effect.gen(function* () {
-    const maxRequests = config.maxRequests ?? 10;
-    const windowSeconds = config.windowSeconds ?? 600;
-    const now = Math.floor(Date.now() / 1000);
+    const maxDeviceRequests = config?.maxDeviceRequests ?? 10;
+    const maxGlobalRequests = config?.maxGlobalRequests ?? 150;
+    const today = new Date().toISOString().slice(0, 10);
 
     const sql = yield* D1Client.D1Client;
 
     const rows = yield* sql`
-      select ip, count, reset_at
-      from chat_rate_limits
-      where ip = ${ip}
+      select
+        coalesce((select count from chat_global_daily_usage where date = ${today}), 0) as global_count,
+        coalesce((select count from chat_device_limits where device_id = ${deviceId} and date = ${today}), 0) as device_count
     `.pipe(
-      Effect.mapError((cause) =>
-        mapD1Error(cause, "select from chat_rate_limits", "rateLimit.check"),
-      ),
+      Effect.mapError((cause) => mapD1Error(cause, "select usage counts", "rateLimit.getCounts")),
     );
 
-    const row = rows[0];
-
-    if (!row) {
-      const resetAt = now + windowSeconds;
-      yield* sql`
-        insert into chat_rate_limits (ip, count, reset_at, updated_at)
-        values (${ip}, 1, ${resetAt}, current_timestamp)
-        on conflict(ip) do update set
-          count = 1,
-          reset_at = ${resetAt},
-          updated_at = current_timestamp
-      `.pipe(
-        Effect.mapError((cause) =>
-          mapD1Error(cause, "insert into chat_rate_limits", "rateLimit.reset"),
-        ),
-      );
-      return;
-    }
-
-    const record = yield* Schema.decodeUnknownEffect(RateLimitRecord)(row).pipe(
+    const record = yield* Schema.decodeUnknownEffect(RateLimitCounts)(rows[0]).pipe(
       Effect.mapError(
         (cause) =>
           new D1Error({
             cause,
-            query: "select from chat_rate_limits",
-            op: "rateLimit.decode",
-            message: "failed to decode rate limit record from database",
+            query: "select usage counts",
+            op: "rateLimit.decodeCounts",
+            message: "failed to decode rate limit counts from database",
           }),
       ),
     );
 
-    if (record.reset_at <= now) {
-      const resetAt = now + windowSeconds;
-      yield* sql`
-        update chat_rate_limits
-        set count = 1,
-            reset_at = ${resetAt},
-            updated_at = current_timestamp
-        where ip = ${ip}
-      `.pipe(
-        Effect.mapError((cause) =>
-          mapD1Error(cause, "update chat_rate_limits", "rateLimit.resetExpired"),
-        ),
-      );
-      return;
-    }
-
-    if (record.count >= maxRequests) {
-      const retryAfterSeconds = Math.max(1, record.reset_at - now);
+    if (record.global_count >= maxGlobalRequests) {
       return yield* Effect.fail(
-        new RateLimitError({
-          ip,
-          retryAfterSeconds,
-          message: `Rate limit exceeded. Try again in ${retryAfterSeconds} seconds.`,
+        new GlobalDailyQuotaExceededError({
+          date: today,
+          maxRequests: maxGlobalRequests,
+          message: `Daily global quota of ${maxGlobalRequests} requests reached for ${today}.`,
         }),
       );
     }
 
-    yield* sql`
-      update chat_rate_limits
-      set count = count + 1,
-          updated_at = current_timestamp
-      where ip = ${ip}
+    if (record.device_count >= maxDeviceRequests) {
+      return yield* Effect.fail(
+        new DeviceDailyLimitExceededError({
+          deviceId,
+          date: today,
+          maxRequests: maxDeviceRequests,
+          message: `Daily device limit of ${maxDeviceRequests} requests reached for ${today}.`,
+        }),
+      );
+    }
+  });
+
+export const consumeDeviceAndGlobalLimit = (
+  deviceId: string,
+  config?: RateLimitConfig,
+): Effect.Effect<
+  void,
+  DeviceDailyLimitExceededError | GlobalDailyQuotaExceededError | D1Error,
+  D1Client.D1Client
+> =>
+  Effect.gen(function* () {
+    const maxDeviceRequests = config?.maxDeviceRequests ?? 10;
+    const maxGlobalRequests = config?.maxGlobalRequests ?? 150;
+    const today = new Date().toISOString().slice(0, 10);
+    const sql = yield* D1Client.D1Client;
+
+    const deviceRows = yield* sql`
+      insert into chat_device_limits (device_id, date, count, created_at, updated_at)
+      values (${deviceId}, ${today}, 1, current_timestamp, current_timestamp)
+      on conflict(device_id, date) do update set
+        count = count + 1,
+        updated_at = current_timestamp
+      where count < ${maxDeviceRequests}
+      returning count
     `.pipe(
       Effect.mapError((cause) =>
-        mapD1Error(cause, "update chat_rate_limits", "rateLimit.increment"),
+        mapD1Error(cause, "upsert chat_device_limits", "rateLimit.consumeDevice"),
       ),
     );
+
+    if (deviceRows.length === 0) {
+      return yield* Effect.fail(
+        new DeviceDailyLimitExceededError({
+          deviceId,
+          date: today,
+          maxRequests: maxDeviceRequests,
+          message: `Daily device limit of ${maxDeviceRequests} requests reached for ${today}.`,
+        }),
+      );
+    }
+
+    const globalRows = yield* sql`
+      insert into chat_global_daily_usage (date, count, created_at, updated_at)
+      values (${today}, 1, current_timestamp, current_timestamp)
+      on conflict(date) do update set
+        count = count + 1,
+        updated_at = current_timestamp
+      where count < ${maxGlobalRequests}
+      returning count
+    `.pipe(
+      Effect.mapError((cause) =>
+        mapD1Error(cause, "upsert chat_global_daily_usage", "rateLimit.consumeGlobal"),
+      ),
+    );
+
+    if (globalRows.length === 0) {
+      return yield* Effect.fail(
+        new GlobalDailyQuotaExceededError({
+          date: today,
+          maxRequests: maxGlobalRequests,
+          message: `Daily global quota of ${maxGlobalRequests} requests reached for ${today}.`,
+        }),
+      );
+    }
   });
