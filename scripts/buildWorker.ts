@@ -15,7 +15,7 @@ const main = async (): Promise<void> => {
     platform: "browser",
     conditions: ["workerd", "worker", "browser"],
     external: ["cloudflare:*", "/fonts/*"],
-    plugins: [vanillaExtractPlugin({ processCss: false })],
+    plugins: [vanillaExtractPlugin({ identifiers: "debug", processCss: false })],
     write: true,
   });
 

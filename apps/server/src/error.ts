@@ -1,6 +1,6 @@
 import { ErrorPage } from "@portfolio/web";
 import { Schema } from "effect";
-import { HttpServerResponse } from "effect/unstable/http";
+import { HttpServerError, HttpServerResponse } from "effect/unstable/http";
 import { h } from "preact";
 import { renderToString } from "preact-render-to-string";
 import { renderDocument } from "./template";
@@ -17,11 +17,21 @@ export class RenderError extends Schema.TaggedError<RenderError>()("RenderError"
 export type AppError = NotFoundError | RenderError;
 
 export const errorToResponse = (error: unknown): HttpServerResponse.HttpServerResponse => {
-  if (error instanceof NotFoundError) {
+  const isRouteNotFound =
+    error instanceof NotFoundError ||
+    (error instanceof HttpServerError.HttpServerError &&
+      error.reason instanceof HttpServerError.RouteNotFound);
+
+  if (isRouteNotFound) {
+    const message =
+      error instanceof NotFoundError
+        ? `The requested resource "${error.identifier ?? error.resource}" could not be found.`
+        : "The requested route could not be found.";
+
     const contentHtml = renderToString(
       h(ErrorPage, {
         statusCode: 404,
-        message: `The requested resource "${error.identifier ?? error.resource}" could not be found.`,
+        message,
       }),
     );
     const html = renderDocument({

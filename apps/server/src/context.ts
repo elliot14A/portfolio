@@ -16,3 +16,7 @@ export class WorkerExecutionContext extends Context.Service<
   WorkerExecutionContext,
   ExecutionContext
 >()("portfolio/server/WorkerExecutionContext") {}
+
+export class DeviceId extends Context.Service<DeviceId, string>()("portfolio/server/DeviceId") {}
+
+export type AppServices = WorkerEnv | WorkerExecutionContext | DeviceId;

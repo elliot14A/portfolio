@@ -87,5 +87,6 @@ export const renderDocument = ({
       upd();
     })();
   </script>
+  <script type="module" src="/js/client.js"></script>
 </body>
 </html>`;

@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@portfolio/chat": "workspace:*",
     "@portfolio/content": "workspace:*",
     "@portfolio/d1": "workspace:*",
     "@portfolio/web": "workspace:*",
