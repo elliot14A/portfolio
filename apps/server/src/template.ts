@@ -47,9 +47,9 @@ export const renderDocument = ({
 
       var anchors = [
         { id: "intro", name: "intro" },
-        { id: "selected-work", name: "selected work" },
-        { id: "about", name: "about" },
+        { id: "toolbox", name: "toolbox" },
         { id: "experience", name: "experience" },
+        { id: "projects", name: "projects" },
         { id: "contact", name: "contact" }
       ];
 

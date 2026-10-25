@@ -46,7 +46,7 @@ export const SelectedWork = ({ items }: SelectedWorkProps): JSX.Element => (
         <article key={item.slug} className={itemContainer}>
           <div className={itemHeader}>
             <span className={itemTitle}>
-              <span className={itemNumber}>{item.number}</span>
+              {item.number && <span className={itemNumber}>{item.number}</span>}
               {item.title}
             </span>
             <span className={itemMeta}>

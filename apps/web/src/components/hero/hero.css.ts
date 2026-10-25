@@ -8,8 +8,14 @@ export const heroContainer = style({
   marginBottom: vars.space.xxl,
 });
 
+export const badgeRow = style({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: vars.space.xs,
+  marginTop: vars.space.xs,
+});
+
 export const roleBadge = style({
-  alignSelf: "flex-start",
   display: "inline-block",
   padding: `4px ${vars.space.sm}`,
   backgroundColor: vars.color.badgeBg,
@@ -18,6 +24,19 @@ export const roleBadge = style({
   fontSize: vars.typography.sizeSm,
   borderRadius: vars.radii.sm,
   fontWeight: 600,
+});
+
+export const heroBodyGrid = style({
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  gap: vars.space.xl,
+  alignItems: "start",
+  marginTop: vars.space.sm,
+  "@media": {
+    "(min-width: 680px)": {
+      gridTemplateColumns: "1.8fr 1fr",
+    },
+  },
 });
 
 export const bioSection = style({
@@ -43,6 +62,40 @@ export const highlightPill = style({
   fontWeight: 600,
   boxDecorationBreak: "clone",
   WebkitBoxDecorationBreak: "clone",
+});
+
+export const portraitSlot = style({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "@media": {
+    "(min-width: 680px)": {
+      justifyContent: "flex-end",
+    },
+  },
+});
+
+export const portraitFrame = style({
+  position: "relative",
+  width: "min(180px, 50vw)",
+  aspectRatio: "1 / 1",
+  borderRadius: vars.radii.md,
+  overflow: "hidden",
+  border: `1px solid ${vars.color.border}`,
+  backgroundColor: vars.color.surface,
+  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4)",
+});
+
+export const portraitImage = style({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  display: "block",
+  filter: "grayscale(20%) contrast(105%)",
+  transition: "filter 0.3s ease",
+  ":hover": {
+    filter: "grayscale(0%) contrast(100%)",
+  },
 });
 
 export const linksRow = style({

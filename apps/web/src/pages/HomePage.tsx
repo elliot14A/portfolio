@@ -1,27 +1,23 @@
-import type { ExperienceItem, Profile, SelectedWorkItem } from "@portfolio/content";
+import type { Profile } from "@portfolio/content";
 import type { JSX } from "preact";
-import { About } from "../components/about";
 import { Contact } from "../components/contact";
-import { DogAscii } from "../components/dogAscii";
-import { ExperienceTree } from "../components/experienceTree";
+import { ExperienceTimeline } from "../components/experienceTimeline";
 import { Hero } from "../components/hero";
-import { SelectedWork } from "../components/selectedWork";
+import { PersonalProjects } from "../components/personalProjects";
 import { StatusBar } from "../components/statusBar";
+import { Toolbox } from "../components/toolbox";
 import { PageLayout } from "../layout";
 
 type HomePageProps = {
   readonly profile: Profile;
-  readonly selectedWork: readonly SelectedWorkItem[];
-  readonly experience: readonly ExperienceItem[];
 };
 
-export const HomePage = ({ profile, selectedWork, experience }: HomePageProps): JSX.Element => (
+export const HomePage = ({ profile }: HomePageProps): JSX.Element => (
   <PageLayout>
     <Hero profile={profile} />
-    <SelectedWork items={selectedWork} />
-    <About text={profile.about} />
-    <ExperienceTree items={experience} />
-    <DogAscii />
+    <Toolbox items={profile.toolbox} />
+    <ExperienceTimeline roles={profile.experience} />
+    <PersonalProjects projects={profile.personalProjects} />
     <Contact profile={profile} />
     <StatusBar />
   </PageLayout>

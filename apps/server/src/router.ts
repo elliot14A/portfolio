@@ -1,4 +1,4 @@
-import { EXPERIENCE, PROFILE, PROJECTS_BY_SLUG, SELECTED_WORK } from "@portfolio/content";
+import { PROFILE, PROJECTS_BY_SLUG } from "@portfolio/content";
 import { HomePage, ProjectPage } from "@portfolio/web";
 import { Effect } from "effect";
 import { HttpRouter, HttpServerResponse } from "effect/unstable/http";
@@ -24,12 +24,10 @@ export const makeRouter = Effect.gen(function* () {
       const contentHtml = renderToString(
         h(HomePage, {
           profile: PROFILE,
-          selectedWork: SELECTED_WORK,
-          experience: EXPERIENCE,
         }),
       );
       const html = renderDocument({
-        title: "elliot14a: backend engineer & cofounder",
+        title: "elliot14a: fullstack engineer & cofounder",
         description: PROFILE.bio[0] ?? "Portfolio of elliot14a",
         contentHtml,
       });
