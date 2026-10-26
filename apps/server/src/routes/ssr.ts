@@ -7,7 +7,7 @@ import { renderToString } from "preact-render-to-string";
 import { WorkerEnv } from "../context";
 import { errorToResponse, NotFoundError } from "../error";
 import { renderDocument } from "../template";
-import { getOrFetchContributions } from "./contributions";
+import { fetchContributions } from "./contributions";
 
 const defaultHtmlHeaders = {
   "cache-control": "public, max-age=0, must-revalidate",
@@ -23,7 +23,7 @@ export const makeSsrRoutes = (router: HttpRouter.HttpRouter) =>
       "/",
       Effect.gen(function* () {
         const env = yield* WorkerEnv;
-        const contributions = yield* getOrFetchContributions(env);
+        const contributions = yield* fetchContributions(env);
         const contentHtml = renderToString(
           h(HomePage, {
             profile: PROFILE,

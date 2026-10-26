@@ -196,7 +196,7 @@ const parseCalendar = (body: unknown): Calendar | null => {
 const GITHUB_GRAPHQL_QUERY =
   "query($login:String!){user(login:$login){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{date weekday contributionCount}}}}}}";
 
-export const getOrFetchContributions = (
+export const fetchContributions = (
   env: Record<string, unknown>,
 ): Effect.Effect<ContributionGraph> =>
   Effect.gen(function* () {
@@ -252,7 +252,7 @@ export const makeContributionRoutes = (router: HttpRouter.HttpRouter) =>
       "/api/contributions",
       Effect.gen(function* () {
         const env = yield* WorkerEnv;
-        const graph = yield* getOrFetchContributions(env);
+        const graph = yield* fetchContributions(env);
         return yield* HttpServerResponse.json(graph, {
           status: 200,
           headers: {
