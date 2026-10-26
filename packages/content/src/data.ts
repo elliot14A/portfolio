@@ -265,9 +265,9 @@ export const PORTFOLIO_PROJECT: SystemProject = {
   period: "2026",
   repoUrl: "https://github.com/elliot14A/portfolio.git",
   tagline:
-    "Type-safe portfolio and streaming AI agent built with Effect 4.x and Antigravity, deployed to a single Cloudflare Worker",
+    "Type-safe portfolio and streaming AI agent built with Effect 4.x, deployed to a single Cloudflare Worker",
   summary:
-    "High-performance personal portfolio and conversational AI agent deployed as a single Cloudflare Worker, combining Effect 4.x type safety, Preact SSR, D1 rate limiting, and Antigravity pair programming.",
+    "High-performance personal portfolio and conversational AI agent deployed as a single Cloudflare Worker, combining Effect 4.x type safety, Preact SSR, and D1 rate limiting.",
   highlights: [
     "End-to-end typed schema contract with [Effect 4.x HttpApi] and zero manual fetch calls",
     "Interactive streaming AI agent with [typed tool calling] over structured portfolio data",
@@ -281,7 +281,6 @@ export const PORTFOLIO_PROJECT: SystemProject = {
     "Cloudflare Workers",
     "Cloudflare D1",
     "Vanilla Extract",
-    "Antigravity",
     "Bun",
     "Nix",
   ],
@@ -292,7 +291,6 @@ export const PORTFOLIO_PROJECT: SystemProject = {
   whatIBuilt: [
     "Grounded AI Terminal Assistant: Engineered a conversational agent powered by Effect AI tools that query structured portfolio models directly, streaming verified answers, related links, and recruiter-focused suggestions with [zero vector database overhead].",
     "End-to-End Type Safety with Effect 4.x: Defined the complete API contract using [HttpApiEndpoint and HttpApiClient], replacing all manual fetch calls with validated schemas across request bodies, SSE byte streams, and tagged domain errors.",
-    "Pair Programming with Antigravity: Designed and implemented the system architecture using Antigravity, keeping code changes surgical, adhering to strict coding rules, and iterating on mobile layouts and edge cases.",
     "Edge Compute & D1 Rate Limiting: Deployed the app to a single Cloudflare Worker using Cloudflare D1 to track [per-device sliding-window limits and global daily quotas], protecting LLM API spend from abuse.",
     "Zero-Runtime Styling & Performance: Co-located design tokens and styles using [Vanilla Extract], achieving sub-millisecond SSR times and 60kb total CSS output served directly through Cloudflare Workers Static Assets CDN.",
   ],
@@ -387,7 +385,7 @@ export const PERSONAL_PROJECTS: readonly PersonalProject[] = [
     repoUrl: "https://github.com/elliot14A/portfolio.git",
     writeupSlug: "portfolio",
     description:
-      "Type-safe portfolio and streaming AI agent built with Effect 4.x and Antigravity, deployed to a single Cloudflare Worker.",
+      "Type-safe portfolio and streaming AI agent built with Effect 4.x, deployed to a single Cloudflare Worker.",
     highlights: [
       "End-to-end typed contract with [Effect 4.x HttpApi] and zero manual fetch calls.",
       "Grounded conversational AI agent with [streaming SSE tool execution] and D1 rate limiting.",
@@ -400,7 +398,6 @@ export const PERSONAL_PROJECTS: readonly PersonalProject[] = [
       "Cloudflare Workers",
       "Cloudflare D1",
       "Vanilla Extract",
-      "Antigravity",
       "Bun",
     ],
   },
