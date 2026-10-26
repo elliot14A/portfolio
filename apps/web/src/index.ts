@@ -1,4 +1,5 @@
 export * from "./components/about";
+export * from "./components/aiAssistant";
 export * from "./components/asciiBanner";
 export * from "./components/contact";
 export * from "./components/experienceTimeline";

@@ -5,15 +5,18 @@ import esbuild from "esbuild";
 
 const ROOT = process.cwd();
 const ENTRY = join(ROOT, "apps/web/src/index.ts");
+const CLIENT_ENTRY = join(ROOT, "apps/web/src/client.tsx");
 const CSS_DIR = join(ROOT, "public/css");
 const CSS_OUT = join(CSS_DIR, "style.css");
+const JS_DIR = join(ROOT, "public/js");
+const JS_OUT = join(JS_DIR, "client.js");
 
 const main = async (): Promise<void> => {
   const result = await esbuild.build({
     entryPoints: [ENTRY],
     bundle: true,
     outfile: join(ROOT, "node_modules/.cache/style.js"),
-    plugins: [vanillaExtractPlugin()],
+    plugins: [vanillaExtractPlugin({ identifiers: "debug" })],
     external: ["/fonts/*"],
     write: false,
     format: "esm",
@@ -31,6 +34,22 @@ const main = async (): Promise<void> => {
 
   const sizeKb = (cssFile.contents.length / 1024).toFixed(1);
   console.log(`CSS bundle generated: public/css/style.css (${sizeKb}kb)`);
+
+  await mkdir(JS_DIR, { recursive: true });
+  await esbuild.build({
+    entryPoints: [CLIENT_ENTRY],
+    bundle: true,
+    outfile: JS_OUT,
+    format: "esm",
+    platform: "browser",
+    target: ["es2022"],
+    minify: false,
+    jsx: "automatic",
+    jsxImportSource: "preact",
+    plugins: [vanillaExtractPlugin({ identifiers: "debug", processCss: false })],
+  });
+
+  console.log(`Client bundle generated: public/js/client.js`);
 };
 
 await main();

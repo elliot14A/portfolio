@@ -19,6 +19,7 @@ export const vars = createGlobalTheme(":root", {
     highlightHigh: "#403d52",
     border: "rgba(110, 106, 134, 0.2)",
     borderHover: "rgba(196, 167, 231, 0.4)",
+    scrim: "rgba(4, 4, 7, 0.82)",
     accent: "var(--theme-accent, #c4a7e7)",
     accentMuted: "var(--theme-accent-muted, rgba(196, 167, 231, 0.15))",
     accentBorder: "var(--theme-accent-border, rgba(196, 167, 231, 0.35))",
@@ -52,7 +53,8 @@ export const vars = createGlobalTheme(":root", {
   },
   radii: {
     sm: "2px",
-    md: "4px",
+    md: "6px",
+    lg: "10px",
     full: "9999px",
   },
 });

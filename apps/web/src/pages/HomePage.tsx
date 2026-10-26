@@ -1,5 +1,6 @@
 import type { Profile } from "@portfolio/content";
 import type { JSX } from "preact";
+import { AiAssistant } from "../components/aiAssistant";
 import { Contact } from "../components/contact";
 import { ExperienceTimeline } from "../components/experienceTimeline";
 import { Hero } from "../components/hero";
@@ -19,6 +20,9 @@ export const HomePage = ({ profile }: HomePageProps): JSX.Element => (
     <ExperienceTimeline roles={profile.experience} />
     <PersonalProjects projects={profile.personalProjects} />
     <Contact profile={profile} />
+    <div id="ai-assistant-root">
+      <AiAssistant />
+    </div>
     <StatusBar />
   </PageLayout>
 );
