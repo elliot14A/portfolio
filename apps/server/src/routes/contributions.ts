@@ -196,18 +196,10 @@ const parseCalendar = (body: unknown): Calendar | null => {
 const GITHUB_GRAPHQL_QUERY =
   "query($login:String!){user(login:$login){contributionsCollection{contributionCalendar{totalContributions weeks{contributionDays{date weekday contributionCount}}}}}}";
 
-let cachedGraph: { readonly graph: ContributionGraph; readonly timestamp: number } | null = null;
-const CACHE_TTL_MS = 15 * 60 * 1000;
-
 export const getOrFetchContributions = (
   env: Record<string, unknown>,
 ): Effect.Effect<ContributionGraph> =>
   Effect.gen(function* () {
-    const now = Date.now();
-    if (cachedGraph && now - cachedGraph.timestamp < CACHE_TTL_MS) {
-      return cachedGraph.graph;
-    }
-
     const apiUrl =
       typeof env.PORTFOLIO_GITHUB_API_URL === "string" && env.PORTFOLIO_GITHUB_API_URL.trim()
         ? env.PORTFOLIO_GITHUB_API_URL.trim()
@@ -250,9 +242,7 @@ export const getOrFetchContributions = (
       return toGraph(sampleCalendar(), true);
     }
 
-    const graph = toGraph(calendar, false);
-    cachedGraph = { graph, timestamp: now };
-    return graph;
+    return toGraph(calendar, false);
   });
 
 export const makeContributionRoutes = (router: HttpRouter.HttpRouter) =>

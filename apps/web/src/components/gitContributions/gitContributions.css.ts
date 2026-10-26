@@ -183,10 +183,3 @@ export const cgLegendCell = style({
   height: "11px",
   borderRadius: vars.radii.sm,
 });
-
-export const slotNotice = style({
-  color: vars.color.muted,
-  fontFamily: vars.typography.fontMono,
-  fontSize: vars.typography.sizeSm,
-  padding: "12px 0",
-});

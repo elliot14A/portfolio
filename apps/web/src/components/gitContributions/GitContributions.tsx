@@ -1,5 +1,4 @@
 import type { JSX } from "preact";
-import { useEffect, useState } from "preact/hooks";
 import {
   cgBadge,
   cgCell,
@@ -23,7 +22,6 @@ import {
   sectionContainer,
   sectionHeading,
   slashPrefix,
-  slotNotice,
 } from "./gitContributions.css";
 
 export type Cell = Readonly<{
@@ -72,32 +70,8 @@ const dayTooltip = (cell: Cell): string =>
     cell.count === 1 ? "" : "s"
   } on ${cell.date}`;
 
-export const GitContributions = ({
-  graph: initialGraph,
-}: GitContributionsProps = {}): JSX.Element => {
-  const [graph, setGraph] = useState<ContributionGraph | null>(initialGraph ?? null);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    if (graph) return;
-
-    let unmounted = false;
-    fetch("/api/contributions")
-      .then((res) => {
-        if (!res.ok) throw new Error(`status: ${res.status}`);
-        return res.json() as Promise<ContributionGraph>;
-      })
-      .then((data) => {
-        if (!unmounted) setGraph(data);
-      })
-      .catch(() => {
-        if (!unmounted) setFailed(true);
-      });
-
-    return () => {
-      unmounted = true;
-    };
-  }, [graph]);
+export const GitContributions = ({ graph }: GitContributionsProps): JSX.Element | null => {
+  if (!graph) return null;
 
   return (
     <section id="contributions" className={sectionContainer}>
@@ -106,67 +80,61 @@ export const GitContributions = ({
         {"git contributions"}
       </h2>
 
-      {!graph && !failed && <div className={slotNotice}>{"// loading contributions..."}</div>}
-
-      {failed && <div className={slotNotice}>{"// failed to load contributions"}</div>}
-
-      {graph && (
-        <div className={scrollArea}>
-          <div className={gridWrapper}>
-            <div
-              className={cgGrid}
-              role="img"
-              aria-label={`${graph.total} contributions in the last year`}
-            >
-              <span className={cgCorner} />
-              {graph.months.map((m, idx) => (
-                <span
-                  key={`m-${idx}`}
-                  className={`${cgMonth} ${monthSpans[m.span] ?? monthSpans[1]}`}
-                >
-                  {m.label}
-                </span>
-              ))}
-
-              {graph.rows.map((row, weekday) => (
-                <>
-                  <span key={`wd-${weekday}`} className={cgWeekday}>
-                    {WEEKDAYS[weekday]}
-                  </span>
-                  {row.map((cell, weekIdx) => {
-                    if (cell === null) {
-                      return (
-                        <span key={`c-${weekday}-${weekIdx}`} className={`${cgCell} ${cgGap}`} />
-                      );
-                    }
-                    return (
-                      <span
-                        key={`c-${weekday}-${weekIdx}`}
-                        className={`${cgCell} ${getLevelClass(cell.level)}`}
-                        title={dayTooltip(cell)}
-                      />
-                    );
-                  })}
-                </>
-              ))}
-            </div>
-
-            <div className={cgFoot}>
-              <span className={cgCount}>
-                <span>{`${graph.total} contributions in the last year`}</span>
-                {graph.sample && <span className={cgBadge}>[sample data]</span>}
+      <div className={scrollArea}>
+        <div className={gridWrapper}>
+          <div
+            className={cgGrid}
+            role="img"
+            aria-label={`${graph.total} contributions in the last year`}
+          >
+            <span className={cgCorner} />
+            {graph.months.map((m, idx) => (
+              <span
+                key={`m-${idx}`}
+                className={`${cgMonth} ${monthSpans[m.span] ?? monthSpans[1]}`}
+              >
+                {m.label}
               </span>
-              <div className={cgLegend} aria-hidden="true">
-                <span>less</span>
-                {LEGEND_LEVELS.map((lvl) => (
-                  <span key={`leg-${lvl}`} className={`${cgLegendCell} ${getLevelClass(lvl)}`} />
-                ))}
-                <span>more</span>
-              </div>
+            ))}
+
+            {graph.rows.map((row, weekday) => (
+              <>
+                <span key={`wd-${weekday}`} className={cgWeekday}>
+                  {WEEKDAYS[weekday]}
+                </span>
+                {row.map((cell, weekIdx) => {
+                  if (cell === null) {
+                    return (
+                      <span key={`c-${weekday}-${weekIdx}`} className={`${cgCell} ${cgGap}`} />
+                    );
+                  }
+                  return (
+                    <span
+                      key={`c-${weekday}-${weekIdx}`}
+                      className={`${cgCell} ${getLevelClass(cell.level)}`}
+                      title={dayTooltip(cell)}
+                    />
+                  );
+                })}
+              </>
+            ))}
+          </div>
+
+          <div className={cgFoot}>
+            <span className={cgCount}>
+              <span>{`${graph.total} contributions in the last year`}</span>
+              {graph.sample && <span className={cgBadge}>[sample data]</span>}
+            </span>
+            <div className={cgLegend} aria-hidden="true">
+              <span>less</span>
+              {LEGEND_LEVELS.map((lvl) => (
+                <span key={`leg-${lvl}`} className={`${cgLegendCell} ${getLevelClass(lvl)}`} />
+              ))}
+              <span>more</span>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </section>
   );
 };
