@@ -4,8 +4,10 @@ import { Effect } from "effect";
 import { HttpRouter, HttpServerResponse } from "effect/unstable/http";
 import { h } from "preact";
 import { renderToString } from "preact-render-to-string";
+import { WorkerEnv } from "../context";
 import { errorToResponse, NotFoundError } from "../error";
 import { renderDocument } from "../template";
+import { getOrFetchContributions } from "./contributions";
 
 const defaultHtmlHeaders = {
   "cache-control": "public, max-age=0, must-revalidate",
@@ -19,10 +21,13 @@ export const makeSsrRoutes = (router: HttpRouter.HttpRouter) =>
     yield* router.add(
       "GET",
       "/",
-      Effect.sync(() => {
+      Effect.gen(function* () {
+        const env = yield* WorkerEnv;
+        const contributions = yield* getOrFetchContributions(env);
         const contentHtml = renderToString(
           h(HomePage, {
             profile: PROFILE,
+            contributions,
           }),
         );
         const html = renderDocument({
@@ -36,7 +41,7 @@ export const makeSsrRoutes = (router: HttpRouter.HttpRouter) =>
           headers: defaultHtmlHeaders,
         });
       }),
-    );
+    ) as Effect.Effect<void>;
 
     yield* router.add(
       "GET",

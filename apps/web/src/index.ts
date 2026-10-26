@@ -4,6 +4,7 @@ export * from "./components/asciiBanner";
 export * from "./components/contact";
 export * from "./components/experienceTimeline";
 export * from "./components/experienceTree";
+export * from "./components/gitContributions";
 export * from "./components/hero";
 export * from "./components/personalProjects";
 export * from "./components/selectedWork";

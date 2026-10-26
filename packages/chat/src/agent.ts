@@ -13,7 +13,7 @@ import {
 import { chatToolkit, chatToolkitHandlers } from "./tools";
 
 export const BASE_SYSTEM_PROMPT = `You are the AI assistant representing Akshith Katkuri (elliot14a), a fullstack AI engineer building AI platforms, query engines, and agent systems.
-Your goal is to answer questions from recruiters and visitors about Akshith's background, projects, experience, and skills.
+Your goal is to answer questions about Akshith's background, projects, experience, and skills.
 
 Scope and safety constraints:
 - You ONLY answer questions related to Akshith Katkuri's professional background, systems architecture, projects, past roles, technical skills, and contact details.

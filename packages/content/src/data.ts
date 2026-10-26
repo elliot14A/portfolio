@@ -289,7 +289,7 @@ export const PORTFOLIO_PROJECT: SystemProject = {
     "The entire application is built on top of [Effect 4.x] for strict functional type safety, and deployed as a single Cloudflare Worker that combines server-side rendering, static asset CDN caching, and an SSE streaming AI agent without any container overhead.",
   ],
   whatIBuilt: [
-    "Grounded AI Terminal Assistant: Engineered a conversational agent powered by Effect AI tools that query structured portfolio models directly, streaming verified answers, related links, and recruiter-focused suggestions with [zero vector database overhead].",
+    "Grounded AI Terminal Assistant: Engineered a conversational agent powered by Effect AI tools that query structured portfolio models directly, streaming verified answers, related links, and contextual suggestions with [zero vector database overhead].",
     "End-to-End Type Safety with Effect 4.x: Defined the complete API contract using [HttpApiEndpoint and HttpApiClient], replacing all manual fetch calls with validated schemas across request bodies, SSE byte streams, and tagged domain errors.",
     "Edge Compute & D1 Rate Limiting: Deployed the app to a single Cloudflare Worker using Cloudflare D1 to track [per-device sliding-window limits and global daily quotas], protecting LLM API spend from abuse.",
     "Zero-Runtime Styling & Performance: Co-located design tokens and styles using [Vanilla Extract], achieving sub-millisecond SSR times and 60kb total CSS output served directly through Cloudflare Workers Static Assets CDN.",

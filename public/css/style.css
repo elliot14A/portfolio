@@ -909,6 +909,185 @@
   }
 }
 
+/* vanilla-extract-css-ns:apps/web/src/components/gitContributions/gitContributions.css.ts.vanilla.css?source=#H4sIAAAAAAAAA9VXTW-cOBi-51f4slIiLSOYr6T00t1I3T1sViv10N4iAwbcGJsak2Gyyn_va8MYksET6PTSE2Ds5_1-3teLjKpbwZWkUa2o4NV9RWL9ohcx5UTe3wdB1GD16KP_LxAqsMwo9yKhlChC9IjlpedVJY6J1zQMNi83T4Lf7K7ew-YdTVQeosD3f9OfkWi8ij5RnoXwLhMiAad5f_F8sXCp8TfBCey3SgRGiRS2eikuKNsfVFD7UmQSl_ne03_vBBdWmb1RxhwC8WTkiF6-S-yBYNmf2BGa5SpEW9_Xa7FgQh4QzIenSKPs0Y05ecJLRS9GXTlsZ7jK_5MkpY01fGkMH5FOJa0sYuRCjKVg7A9JsAVcGcBXERKPRKZM7LwmRLhWQq-BB6IHqjz7rwUzUVSijnO9qcSJjpO1-KZs9LL572ETyhA2ca-ZnQgjqofhQan2b4SlsSbvYrUuzwPzlMTxg4GM4CWTouYJWCsxhyBKwtWZ8HldREfww6jmYAjTxtyRPl-Sq9Z5xmESCqOuDqf0F_Wqok_ha0cqZJImnyHry0Fpr40uCa1KhqGiUkZMmPTTS6gkXfxAtbrgg8IucAP6cmUcglCGyy7yY4Lj7C8QbWVuXsrUahkMeEJFFbCqiNdKBCtXcY4kKQlWl5vV7yiACF9Zkes22caUGlOkgK_8EyRjZZXZGmWM7FZkiCDQHAWTEa7PRrhxICwnI7xzIKwmI2AHwnoyQuRA2ExGiB0I28kIiQPhejICcSDcuFL7Vshhr0xdbF3UalDQq0mN6dOgqv3-xNz-B4xNvANDBnqlroBHKsKgvkPEBScu6-60h6xx2S9hnO7KHgYOhdgxkqphewtRTpOEtFSWUyAa05u1E3YgZpZvPhPykOC99U7-S3jHOEbblwKtA1MS-dpnUu8etnY56K0z_HNLGLPOoS9JP2IifhgOih24VbX7ntHyUNuladuxzHsqZIH8RVAhgquJeoa5zhWjrcUADogxI5fBYunordDicGlBvs4fIOLsH_JImG8xjoeQSVPCCezAYrOT2EdzJZQPFAlVEDd_sXTweSdkaYUUZwg5LWNlZfAzZFyfFrK2QsQ8IeOYH4VQFrEcn7ra0gRSKqphbX6tK0XT_WG0MQ0JrhMRUTvSMpmZhYJtWzLdDUSJfj76SZz0pTf06UcpydVEa96755uLSKs6UoxYvLVRwrqRcsN2b3jzrVH1T5xkxKoiXapkgvXuc03cOpUywvvRt5oV-OGIO5l1W4kvOE29wb3BK-4NZnPv-F1WqH-FonHvzXp2h_zZV_3jtto1OTB7WTbI17Z8KEhCMbrU94nOR9u1D_cOo_7E-83kC03QXWi6eK9a5z87JI001aNAHofy-eL5O08xSUrwEQAA */
+.gitContributions_sectionContainer__11bxatv0 {
+  margin-bottom: var(--space-xxl__125zon8w);
+  width: 100%;
+  box-sizing: border-box;
+}
+.gitContributions_sectionHeading__11bxatv1 {
+  font-family: var(--typography-fontMono__125zon8y);
+  font-size: var(--typography-sizeMd__125zon812);
+  font-weight: 600;
+  color: var(--color-text__125zon85);
+  margin-bottom: var(--space-md__125zon8t);
+}
+.gitContributions_slashPrefix__11bxatv2 {
+  color: var(--color-iris__125zon8b);
+}
+.gitContributions_scrollArea__11bxatv3 {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  touch-action: pan-x;
+  box-sizing: border-box;
+}
+.gitContributions_scrollArea__11bxatv3::-webkit-scrollbar {
+  height: 4px;
+}
+.gitContributions_scrollArea__11bxatv3::-webkit-scrollbar-track {
+  background: transparent;
+}
+.gitContributions_scrollArea__11bxatv3::-webkit-scrollbar-thumb {
+  background: var(--color-highlightMed__125zon8d);
+  border-radius: var(--radii-sm__125zon817);
+}
+.gitContributions_gridWrapper__11bxatv4 {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  gap: 8px;
+}
+.gitContributions_cgGrid__11bxatv5 {
+  display: grid;
+  grid-template-columns: 3ch repeat(53, 14px);
+  gap: 4px;
+  width: max-content;
+}
+.gitContributions_monthSpans__11bxatv6 {
+  grid-column: span 1;
+}
+.gitContributions_monthSpans__11bxatv7 {
+  grid-column: span 1;
+}
+.gitContributions_monthSpans__11bxatv8 {
+  grid-column: span 2;
+}
+.gitContributions_monthSpans__11bxatv9 {
+  grid-column: span 3;
+}
+.gitContributions_monthSpans__11bxatva {
+  grid-column: span 4;
+}
+.gitContributions_monthSpans__11bxatvb {
+  grid-column: span 5;
+}
+.gitContributions_monthSpans__11bxatvc {
+  grid-column: span 6;
+}
+.gitContributions_monthSpans__11bxatvd {
+  grid-column: span 7;
+}
+.gitContributions_monthSpans__11bxatve {
+  grid-column: span 8;
+}
+.gitContributions_cgCorner__11bxatvf {
+  color: var(--color-muted__125zon83);
+  font-size: var(--typography-sizeSm__125zon810);
+  font-family: var(--typography-fontMono__125zon8y);
+  line-height: 1;
+  user-select: none;
+}
+.gitContributions_cgMonth__11bxatvg {
+  color: var(--color-muted__125zon83);
+  font-size: var(--typography-sizeSm__125zon810);
+  font-family: var(--typography-fontMono__125zon8y);
+  line-height: 1;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+}
+.gitContributions_cgWeekday__11bxatvh {
+  color: var(--color-muted__125zon83);
+  font-size: var(--typography-sizeSm__125zon810);
+  font-family: var(--typography-fontMono__125zon8y);
+  line-height: 1;
+  align-self: center;
+  text-align: right;
+  padding-right: 4px;
+  user-select: none;
+}
+.gitContributions_cgCell__11bxatvi {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radii-sm__125zon817);
+  transition: transform 0.1s ease;
+}
+.gitContributions_cgCell__11bxatvi:hover {
+  transform: scale(1.2);
+}
+.gitContributions_cgGap__11bxatvj {
+  background: transparent;
+}
+.gitContributions_cgLevel0__11bxatvk {
+  background: var(--color-highlightMed__125zon8d);
+}
+.gitContributions_cgLevel1__11bxatvl {
+  background: var(--color-iris__125zon8b);
+  opacity: 0.25;
+}
+.gitContributions_cgLevel2__11bxatvm {
+  background: var(--color-iris__125zon8b);
+  opacity: 0.5;
+}
+.gitContributions_cgLevel3__11bxatvn {
+  background: var(--color-iris__125zon8b);
+  opacity: 0.75;
+}
+.gitContributions_cgLevel4__11bxatvo {
+  background: var(--color-iris__125zon8b);
+}
+.gitContributions_cgFoot__11bxatvp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 4px;
+  color: var(--color-muted__125zon83);
+  font-size: var(--typography-sizeXs__125zon8z);
+  font-family: var(--typography-fontMono__125zon8y);
+}
+.gitContributions_cgCount__11bxatvq {
+  color: var(--color-subtle__125zon84);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.gitContributions_cgBadge__11bxatvr {
+  color: var(--color-gold__125zon87);
+}
+.gitContributions_cgLegend__11bxatvs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+.gitContributions_cgLegendCell__11bxatvt {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: var(--radii-sm__125zon817);
+}
+.gitContributions_slotNotice__11bxatvu {
+  color: var(--color-muted__125zon83);
+  font-family: var(--typography-fontMono__125zon8y);
+  font-size: var(--typography-sizeSm__125zon810);
+  padding: 12px 0;
+}
+@media (max-width: 640px) {
+  .gitContributions_cgGrid__11bxatv5 {
+    grid-template-columns: 3ch repeat(53, 11px);
+    gap: 3px;
+  }
+  .gitContributions_cgCell__11bxatvi {
+    width: 11px;
+    height: 11px;
+  }
+}
+
 /* vanilla-extract-css-ns:apps/web/src/components/terminalPrompt/terminalPrompt.css.ts.vanilla.css?source=LnRlcm1pbmFsUHJvbXB0X3Byb21wdFN0eWxlX19jdHl0NWIwIHsKICBmb250LWZhbWlseTogdmFyKC0tdHlwb2dyYXBoeS1mb250TW9ub19fMTI1em9uOHkpOwogIGZvbnQtc2l6ZTogdmFyKC0tdHlwb2dyYXBoeS1zaXplU21fXzEyNXpvbjgxMCk7CiAgY29sb3I6IHZhcigtLWNvbG9yLW11dGVkX18xMjV6b244Myk7CiAgbWFyZ2luLWJvdHRvbTogdmFyKC0tc3BhY2UtbWRfXzEyNXpvbjh0KTsKICB1c2VyLXNlbGVjdDogbm9uZTsKICBtYXgtd2lkdGg6IDEwMCU7CiAgb3ZlcmZsb3ctd3JhcDogYnJlYWstd29yZDsKfQoudGVybWluYWxQcm9tcHRfdXNlclN0eWxlX19jdHl0NWIxIHsKICBjb2xvcjogdmFyKC0tY29sb3ItYWNjZW50X18xMjV6b244aSk7Cn0KLnRlcm1pbmFsUHJvbXB0X2NvbW1hbmRTdHlsZV9fY3R5dDViMiB7CiAgY29sb3I6IHZhcigtLWNvbG9yLXRleHRfXzEyNXpvbjg1KTsKICBmb250LXdlaWdodDogNjAwOwp9CkBtZWRpYSAobWF4LXdpZHRoOiA2NDBweCkgewogIC50ZXJtaW5hbFByb21wdF9wcm9tcHRTdHlsZV9fY3R5dDViMCB7CiAgICBmb250LXNpemU6IHZhcigtLXR5cG9ncmFwaHktc2l6ZVhzX18xMjV6b244eik7CiAgICBtYXJnaW4tYm90dG9tOiB2YXIoLS1zcGFjZS1zbV9fMTI1em9uOHMpOwogIH0KfQ */
 .terminalPrompt_promptStyle__ctyt5b0 {
   font-family: var(--typography-fontMono__125zon8y);

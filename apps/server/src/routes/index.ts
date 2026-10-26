@@ -1,10 +1,12 @@
 import { Effect } from "effect";
 import { HttpRouter } from "effect/unstable/http";
 import { makeChatRoutes } from "./chat";
+import { makeContributionRoutes } from "./contributions";
 import { makeHealthRoutes } from "./health";
 import { makeSsrRoutes } from "./ssr";
 
 export { makeChatRoutes } from "./chat";
+export { makeContributionRoutes } from "./contributions";
 export { makeHealthRoutes } from "./health";
 export { makeSsrRoutes } from "./ssr";
 
@@ -13,5 +15,6 @@ export const makeAppRouter = Effect.gen(function* () {
   yield* makeHealthRoutes(router);
   yield* makeSsrRoutes(router);
   yield* makeChatRoutes(router);
+  yield* makeContributionRoutes(router);
   return router;
 });
