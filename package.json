@@ -13,10 +13,9 @@
     "typecheck": "bun --filter \"*\" typecheck",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
-    "build:content": "bun run scripts/buildContent.ts",
     "build:client": "node scripts/buildClient.ts",
     "build:worker": "node scripts/buildWorker.ts",
-    "build": "bun run build:content && bun run build:client && bun run build:worker"
+    "build": "bun run build:client && bun run build:worker"
   },
   "dependencies": {
     "@effect/ai-openai": "4.0.0-rc.115",
