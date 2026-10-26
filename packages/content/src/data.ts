@@ -257,6 +257,47 @@ export const ROCKY_PROJECT: SystemProject = {
   ],
 };
 
+export const PORTFOLIO_PROJECT: SystemProject = {
+  slug: "portfolio",
+  title: "Portfolio",
+  role: "Author & Creator",
+  company: "Personal Project",
+  period: "2026",
+  repoUrl: "https://github.com/elliot14A/portfolio.git",
+  tagline:
+    "Type-safe portfolio and streaming AI agent built with Effect 4.x and Antigravity, deployed to a single Cloudflare Worker",
+  summary:
+    "High-performance personal portfolio and conversational AI agent deployed as a single Cloudflare Worker, combining Effect 4.x type safety, Preact SSR, D1 rate limiting, and Antigravity pair programming.",
+  highlights: [
+    "End-to-end typed schema contract with [Effect 4.x HttpApi] and zero manual fetch calls",
+    "Interactive streaming AI agent with [typed tool calling] over structured portfolio data",
+    "Single Cloudflare Worker bundling [Preact SSR, static asset CDN, and D1 rate limiting]",
+    "Zero-runtime CSS with [Vanilla Extract] in a distraction-free Rosé Pine terminal design",
+  ],
+  techStack: [
+    "TypeScript",
+    "Effect 4.x",
+    "Preact",
+    "Cloudflare Workers",
+    "Cloudflare D1",
+    "Vanilla Extract",
+    "Antigravity",
+    "Bun",
+    "Nix",
+  ],
+  overview: [
+    "Most developer portfolios fall into two extremes: either a static brochure page that quickly goes stale, or a heavy SPA framework bundle running client-side API requests with fragile fetch wrappers. I wanted something fast, scannable, and robust: a minimal Rosé Pine terminal interface that renders cleanly on the server, paired with a personal AI assistant that can accurately answer questions about my background without hallucinating.",
+    "The entire application is built on top of [Effect 4.x] for strict functional type safety, and deployed as a single Cloudflare Worker that combines server-side rendering, static asset CDN caching, and an SSE streaming AI agent without any container overhead.",
+  ],
+  whatIBuilt: [
+    "Grounded AI Terminal Assistant: Engineered a conversational agent powered by Effect AI tools that query structured portfolio models directly, streaming verified answers, related links, and recruiter-focused suggestions with [zero vector database overhead].",
+    "End-to-End Type Safety with Effect 4.x: Defined the complete API contract using [HttpApiEndpoint and HttpApiClient], replacing all manual fetch calls with validated schemas across request bodies, SSE byte streams, and tagged domain errors.",
+    "Pair Programming with Antigravity: Designed and implemented the system architecture using Antigravity, keeping code changes surgical, adhering to strict coding rules, and iterating on mobile layouts and edge cases.",
+    "Edge Compute & D1 Rate Limiting: Deployed the app to a single Cloudflare Worker using Cloudflare D1 to track [per-device sliding-window limits and global daily quotas], protecting LLM API spend from abuse.",
+    "Zero-Runtime Styling & Performance: Co-located design tokens and styles using [Vanilla Extract], achieving sub-millisecond SSR times and 60kb total CSS output served directly through Cloudflare Workers Static Assets CDN.",
+  ],
+};
+
 export const ALL_PROJECTS: readonly SystemProject[] = [
   GAUR_PROJECT,
   GOPIE_PROJECT,
@@ -264,6 +305,7 @@ export const ALL_PROJECTS: readonly SystemProject[] = [
   TAGORE_PROJECT,
   RUSPIE_PROJECT,
   ROCKY_PROJECT,
+  PORTFOLIO_PROJECT,
 ];
 
 export const PROJECTS_BY_SLUG: Readonly<Record<string, SystemProject>> = {
@@ -273,6 +315,7 @@ export const PROJECTS_BY_SLUG: Readonly<Record<string, SystemProject>> = {
   tagore: TAGORE_PROJECT,
   ruspie: RUSPIE_PROJECT,
   rocky: ROCKY_PROJECT,
+  portfolio: PORTFOLIO_PROJECT,
 };
 
 export const ROLE_EXPERIENCES: readonly RoleExperience[] = [
@@ -338,6 +381,28 @@ export const PERSONAL_PROJECTS: readonly PersonalProject[] = [
       "Atomic deployments and automated rollbacks powered by [deploy-rs over Tailscale].",
     ],
     techStack: ["Rust", "Nix / NixOS", "Disko", "deploy-rs", "Tailscale", "Agenix"],
+  },
+  {
+    name: "portfolio",
+    repoUrl: "https://github.com/elliot14A/portfolio.git",
+    writeupSlug: "portfolio",
+    description:
+      "Type-safe portfolio and streaming AI agent built with Effect 4.x and Antigravity, deployed to a single Cloudflare Worker.",
+    highlights: [
+      "End-to-end typed contract with [Effect 4.x HttpApi] and zero manual fetch calls.",
+      "Grounded conversational AI agent with [streaming SSE tool execution] and D1 rate limiting.",
+      "Fast Preact SSR with [Vanilla Extract zero-runtime styles] and static asset CDN caching.",
+    ],
+    techStack: [
+      "TypeScript",
+      "Effect 4.x",
+      "Preact",
+      "Cloudflare Workers",
+      "Cloudflare D1",
+      "Vanilla Extract",
+      "Antigravity",
+      "Bun",
+    ],
   },
   {
     name: "fincher",

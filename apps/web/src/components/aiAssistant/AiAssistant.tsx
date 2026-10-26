@@ -431,10 +431,10 @@ export const AiAssistant = (): JSX.Element => {
         type="button"
         className={triggerButton}
         onClick={() => setIsOpen(true)}
-        aria-label="Open Ask AI"
+        aria-label="Open Ask Elliot"
       >
         <span className={triggerDot} />
-        <span>Ask AI</span>
+        <span>Ask Elliot</span>
       </button>
 
       {isOpen && (
