@@ -48,6 +48,16 @@ export const Contact = ({ profile }: ContactProps): JSX.Element => (
             </a>
           </td>
         </tr>
+        {profile.links.resume && (
+          <tr className={kvRow}>
+            <td className={keyCell}>resume</td>
+            <td className={valueCell}>
+              <a className={link} href={profile.links.resume} target="_blank" rel="noreferrer">
+                resume.pdf
+              </a>
+            </td>
+          </tr>
+        )}
         <tr className={kvRow}>
           <td className={keyCell}>based</td>
           <td className={valueCell}>{profile.location}</td>

@@ -4,6 +4,7 @@ export const ContactLinksSchema = Schema.Struct({
   email: Schema.NonEmptyString,
   github: Schema.NonEmptyString,
   linkedin: Schema.NonEmptyString,
+  resume: Schema.optional(Schema.NonEmptyString),
 });
 export type ContactLinks = typeof ContactLinksSchema.Type;
 

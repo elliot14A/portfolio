@@ -31,7 +31,7 @@ export const makeSsrRoutes = (router: HttpRouter.HttpRouter) =>
           }),
         );
         const html = renderDocument({
-          title: "elliot14a: fullstack engineer & cofounder",
+          title: "elliot14a: fullstack engineer",
           description: PROFILE.bio[0] ?? "Portfolio of elliot14a",
           contentHtml,
         });

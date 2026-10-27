@@ -63,6 +63,11 @@ export const Hero = ({ profile }: HeroProps): JSX.Element => (
           <a className={linkItem} href={profile.links.linkedin} target="_blank" rel="noreferrer">
             linkedin
           </a>
+          {profile.links.resume && (
+            <a className={linkItem} href={profile.links.resume} target="_blank" rel="noreferrer">
+              resume
+            </a>
+          )}
         </div>
       </div>
       <div className={portraitSlot}>

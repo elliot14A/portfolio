@@ -470,6 +470,7 @@ export const PROFILE: Profile = {
     email: "akshithmadhur0072@gmail.com",
     github: "https://github.com/elliot14A",
     linkedin: "https://www.linkedin.com/in/akshith-katkuri-14am",
+    resume: "/resume.pdf",
   },
   photoUrl: "/fightclub.jpg",
   bio: [
